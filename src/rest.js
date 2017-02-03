@@ -177,6 +177,30 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route to update a parking log.
+     * Only the currentParked value can be changed.
+     */
+    router.put("/parkinglogs", function(req, res) {
+        console.log(req.body.currentParked);
+        console.log(req.body.id);
+        var query = "UPDATE parkingLog SET currentParked = ? WHERE id = ?";
+        var table = [req.body.currentParked, req.body.id];
+
+        query = mysql.format(query, table);
+        connection.query(query, function(err, rows)
+        {
+            if (err)
+            {
+                res.json({"Error" : true, "Message" : err});
+            }
+            else
+            {
+                res.json({"Error" : false, "Message" : "Parking Log Updated"});
+            }
+        });
+    });
+
 }
 
 module.exports = restRouter;
