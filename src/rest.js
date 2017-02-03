@@ -35,6 +35,31 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route for creating new parking lots.
+     */
+    router.post("/parkinglots", function(req, res) {
+        console.log(req.body.name);
+        console.log(req.body.capacity);
+        console.log(req.body.reservedSpaces);
+
+        var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+        var table = ["parkingLot", "name", "capacity", "reservedSpaces",
+            req.body.name, req.body.capacity, req.body.reservedSpaces];
+        query = mysql.format(query, table);
+        connection.query(query, function(err, rows)
+        {
+            if (err)
+            {
+                res.json({"Error" : true, "Message" : err});
+            }
+            else
+            {
+                res.json({"Error" : false, "Message" : "Parking Lot Added"});
+            }
+        });
+    });
+
 }
 
 module.exports = restRouter;
