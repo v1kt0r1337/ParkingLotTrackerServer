@@ -122,6 +122,24 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route to get the latest parking log.
+     */
+    router.get("/parkinglogs/latest", function(req, res) {
+        var query = "SELECT * FROM ?? ORDER BY logDate DESC LIMIT 1";
+        var table = ["parkingLog"];
+        query = mysql.format(query, table);
+        connection.query(query, function(err,rows) {
+            if(err) {
+                res.json({"Error" : true, "Message" : err})
+            }
+            else {
+                res.json({"parkinglogs" : rows});
+            }
+        });
+    });
+
+
 }
 
 module.exports = restRouter;
