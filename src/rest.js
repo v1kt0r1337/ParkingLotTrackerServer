@@ -156,6 +156,27 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route to create new parking logs.
+     */
+    router.post("/parkinglogs", function(req, res) {
+        var query = "INSERT INTO ??(??,??) VALUES (?,?)";
+        var table = ["parkingLog", "currentParked", "parkingLot_id",
+            req.body.currentParked, req.body.parkingLot_id];
+        query = mysql.format(query, table);
+        connection.query(query, function(err, rows)
+        {
+            if (err)
+            {
+                res.json({"Error" : true, "Message" : err});
+            }
+            else
+            {
+                res.json({"Error" : false, "Message" : "Parking Lot Added"});
+            }
+        });
+    });
+
 }
 
 module.exports = restRouter;
