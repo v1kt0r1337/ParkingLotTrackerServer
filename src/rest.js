@@ -201,6 +201,24 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route to delete a parking log with the corresponding id.
+     */
+    router.delete("/parkinglogs/:id", function(req, res) {
+        console.log(req.params.id)
+        var query = "DELETE FROM ?? WHERE id = ?";
+        var table = ["parkingLog", req.params.id];
+        query = mysql.format(query, table);
+        connection.query(query, function(err, rows) {
+            if(err) {
+                res.json({"Error": true, "Message": err});
+            }
+            else {
+                res.json({"Error" : false, "Message" : "Deleted parking log with id " + req.params.id});
+            }
+        });
+    });
+
 }
 
 module.exports = restRouter;
