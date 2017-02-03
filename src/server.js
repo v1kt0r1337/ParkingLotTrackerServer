@@ -9,6 +9,7 @@ var mysql = require("mysql");
 var bodyParser = require("body-parser");
 var rest = require("./rest.js");
 var app = express();
+var config = require("config"); //db location from the JSON files
 
 function server(){
     var self = this;
@@ -20,10 +21,10 @@ server.prototype.connectMysql = function() {
     // Such information should not be available in our public repo when we start using an actual database.
     var pool      =    mysql.createPool({
         connectionLimit : 100,
-        host     : 'localhost',
-        user     : 'root',
-        password : '',
-        database : 'shitdatabase',
+        host     : config.DBHost,
+        user     : config.DBUser,
+        password : config.DBPassword,
+        database : config.database,
         debug    :  false
     });
     pool.getConnection(function(err,connection){
@@ -57,3 +58,5 @@ server.prototype.stop = function(err) {
 }
 
 new server();
+
+//module.exports server; // required for testing
