@@ -103,6 +103,25 @@ restRouter.prototype.handleRoutes = function(router, connection) {
             }
         });
     });
+
+    /**
+     * Route to get all parking logs.
+     */
+    router.get("/parkinglogs", function(req, res) {
+        var query = "SELECT * FROM ??";
+        var table = ["parkingLog"];
+        query = mysql.format(query, table);
+        connection.query(query,function(err, rows) {
+            if (err) {
+                res.json({"Error" : true, "Message" : err});
+            }
+            else {
+                res.json({"Parkinglogs" : rows});
+            }
+
+        });
+    });
+
 }
 
 module.exports = restRouter;
