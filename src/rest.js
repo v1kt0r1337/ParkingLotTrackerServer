@@ -139,6 +139,22 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route to get a specific parking log based on id.
+     */
+    router.get("/parkinglogs/:id", function(req, res) {
+        var query = "SELECT * FROM ?? WHERE ??=?";
+        var table = ["parkingLog", "id", req.params.id];
+        query = mysql.format(query, table);
+        connection.query(query, function(err,rows) {
+            if(err) {
+                res.json({"Error" : true, "Message" : err})
+            }
+            else {
+                res.json({"parkinglogs" : rows});
+            }
+        });
+    });
 
 }
 
