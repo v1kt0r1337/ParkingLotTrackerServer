@@ -77,6 +77,32 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route to update an existing parking lot.
+     * All fields needs to be provided.
+     */
+    router.put("/parkinglots", function(req, res) {
+        console.log(req.body.name);
+        console.log(req.body.capacity);
+        console.log(req.body.reservedSpaces);
+        console.log(req.body.id);
+        console.log(req.body.tull == null);
+        var query = "UPDATE parkingLot SET name = ?, capacity = ?, reservedSpaces = ? WHERE id = ?";
+        var table = [req.body.name, req.body.capacity, req.body.reservedSpaces, req.body.id];
+
+        query = mysql.format(query, table);
+        connection.query(query, function(err, rows)
+        {
+            if (err)
+            {
+                res.json({"Error" : true, "Message" : err});
+            }
+            else
+            {
+                res.json({"Error" : false, "Message" : "Parking Lot Updated"});
+            }
+        });
+    });
 }
 
 module.exports = restRouter;
