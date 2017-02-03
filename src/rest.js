@@ -60,6 +60,23 @@ restRouter.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    /**
+     * Route to get a specific parking lot based on id.
+     */
+    router.get("/parkinglots/:id", function(req, res) {
+        var query = "SELECT * FROM ?? WHERE ??=?";
+        var table = ["parkingLot", "id", req.params.id];
+        query = mysql.format(query, table);
+        connection.query(query, function(err,rows) {
+            if(err) {
+                res.json({"Error" : true, "Message" : err})
+            }
+            else {
+                res.json({"ParkingLots" : rows});
+            }
+        });
+    });
+
 }
 
 module.exports = restRouter;
