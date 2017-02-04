@@ -3,60 +3,59 @@
  */
 /* jshint node: true */
 "use strict";
-
+// External dependencies
 var express = require("express");
-var mysql = require("mysql");
 var bodyParser = require("body-parser");
-var rest = require("./rest.js");
+// Our files
+var parkingLots = require("./routes/parkingLots");
+var parkingLogs = require("./routes/parkingLogs");
+
 var app = express();
-var config = require("config"); //db location from the JSON files
 
-function server(){
-    var self = this;
-    self.connectMysql();
-};
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-server.prototype.connectMysql = function() {
-    var self = this;
-    // Such information should not be available in our public repo when we start using an actual database.
-    var pool      =    mysql.createPool({
-        connectionLimit : 100,
-        host     : config.DBHost,
-        user     : config.DBUser,
-        password : config.DBPassword,
-        database : config.database,
-        debug    :  false
-    });
-    pool.getConnection(function(err,connection){
-        if(err) {
-            self.stop(err);
-        } else {
-            self.configureExpress(connection);
-        }
-    });
-}
+app.use('/api/v0/parkinglots', parkingLots);
+app.use('/api/v0/parkinglogs', parkingLogs);
 
-server.prototype.configureExpress = function(connection) {
-    var self = this;
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-    var router = express.Router();
-    app.use('/api/v0', router);
-    var restRouter = new rest(router,connection);
-    self.startServer();
-}
 
-server.prototype.startServer = function() {
-    app.listen(3000,function(){
-        console.log("Server is listening on Port 3000.");
+app.listen(3000);
+console.log("Server is listening to port 3000");
+
+module.exports = app;
+
+/*
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'dev') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
     });
 }
 
-server.prototype.stop = function(err) {
-    console.log("ISSUE WITH MYSQL n" + err);
-    process.exit(1);
-}
+else if (app.get('env') !== 'test')
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
 
-new server();
+*/
 
-//module.exports server; // required for testing
