@@ -8,18 +8,6 @@ var express = require('express');
 var router = express.Router();
 var parkingLot = require('../models/parkingLot');
 
-
-/**
- * Funky api welcome message,
- * perhaps we can use this route to something more useful?
- */
-/*
-router.get("/", function(req,res)
-{
-    res.json({"Message" : "Hello fellow API users!"});
-});
-*/
-
 /**
  * Route to get all parking lots.
  */
