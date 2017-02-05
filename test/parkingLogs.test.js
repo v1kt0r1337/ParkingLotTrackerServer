@@ -3,9 +3,10 @@
  */
 process.env.NODE_ENV = "test";
 
-
+// this ensures that parkingLots.test runs first.
+require("./parkingLots.test");
 let server = require('../src/server');
-let connection = require("../src/dbconnection")
+let connection = require("../src/dbconnection");
 let parkingLogs = require("../src/routes/parkingLogs");
 let parkingLot= require("../src/models/parkingLot");
 
@@ -18,19 +19,19 @@ let config = require("config");
 
 chai.use(chaiHttp);
 
-console.log(config.Database);
-console.log(config.util.getEnv('NODE_ENV'));
-
 let parkinglot;
-prepareDatabase(startTests());
+describe('hooks', function() {
+    before((done) => {
+        prepareDatabase(() => {
+            done();
+        });
+    });
 
-function startTests()
-{
     /**
      * Tests the prepareDatabase functions have executed correctly
      */
     describe('/GET parkinglots', () => {
-        it('Tests the prepareDatabase functions have executed correctly', () => {
+        it('Tests the prepareDatabase functions in parkingLogs.test.js have executed correctly', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglots/')
                 .then((res) => {
@@ -44,13 +45,15 @@ function startTests()
     /**
      * Test the /GET route
      */
+
+
     describe('/GET parkingLogs', () => {
         it('This GET test should get an empty parkingLogs object', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglogs/')
                 .then((res) => {
                     res.should.have.status(200);
-                    console.log(res.body.parkingLogs);
+                    //console.log(res.body.parkingLogs);
                     res.body.should.be.a('object');
                     expect(res.body.parkingLogs).to.be.empty;
                 })
@@ -78,6 +81,7 @@ function startTests()
                 "currentParked": 800,
                 "parkingLot_id": parkinglot.id
             }
+            console.log(parkingLog);
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
@@ -105,7 +109,6 @@ function startTests()
 
     describe('/GET/:id parkinglogs', () => {
         it('it should GET a parkinglog by the given id', () => {
-
             return chai.request(server)
                 .get('/api/v0/parkinglogs/' + id)
                 .then((res) => {
@@ -116,8 +119,6 @@ function startTests()
                     res.body.parkingLogs[0].should.have.property('parkingLot_id');
                     res.body.parkingLogs[0].should.have.property('logDate');
                     res.body.parkingLogs[0].should.have.property('id');
-
-
                 })
         });
     });
@@ -144,54 +145,66 @@ function startTests()
         it('GET :id Test checking that last test actually updated the parking log', () => {
 
             return chai.request(server)
-                .get('/api/v0/parkinglogs/' + id)
+                .get('/api/v0/parkinglogs/') //+ id)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
-                    expect(res.body.parkingLogs).to.not.be.empty;
-                    res.body.parkingLogs[0].currentParked.should.be.equal(10);
-
-
                 })
         });
     });
 
-
-}
-
+});
 /**
  * Preparing the database for testing, minimum 1 parkingLot is required to test the parkinglogs api.
  * @param callback
  */
 function prepareDatabase(callback) {
-    deleteAllParkingLogsData(deleteAllParkingLotsData(addParkingLotData(setParkingLot(callback))));
+    deleteAllParkingLogData( () => {
+        deleteAllParkingLotData( () => {
+            addParkingLotData( () => {
+                setParkingLot(callback);
+           });
+        });
+    });
 }
 
-function deleteAllParkingLogsData(callback) {
+function deleteAllParkingLogData(callback) {
     let query = "DELETE FROM parkingLog";
     connection.query(query, callback);
+    console.log("deleteAllParkingLogsData");
 }
 
-function deleteAllParkingLotsData(callback) {
+function deleteAllParkingLotData(callback) {
     let query = "DELETE FROM parkingLot";
     connection.query(query, callback);
+    console.log("deleteAllParkingLotsData");
 }
 
 function addParkingLotData(callback) {
     let query =
     "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
     connection.query(query, callback);
-    parkinglot = "tull";
+    console.log("addParkingLotData");
 }
 
 function setParkingLot(callback) {
-    parkingLot.getParkingLots(function(err, rows) {
+    console.log("setParkingLot");
+    parkingLot.getParkingLots( (err, rows) => {
         if (err) {
-            parkinglot = JSON.parse(JSON.stringify(rows))[0];
+            parkinglot = parseRowDataIntoSingleEntity(rows);
         }
         else {
-            parkinglot = JSON.parse(JSON.stringify(rows))[0];
+            parkinglot = parseRowDataIntoSingleEntity(rows);
         }
-
+        console.log("setParkingLot => getParkingLots");
+        callback();
     });
+}
+
+function parseRowDataIntoSingleEntity(rowdata)
+{
+    rowdata = JSON.stringify(rowdata);
+    console.log(rowdata);
+    rowdata = JSON.parse(rowdata)[0];
+    return rowdata;
 }
