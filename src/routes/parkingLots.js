@@ -6,13 +6,13 @@
 
 var express = require('express');
 var router = express.Router();
-var parkingLot = require('../models/parkingLot');
+var ParkingLot = require('../models/ParkingLot');
 
 /**
  * Route to get all parking lots.
  */
 router.get("/", function(req, res) {
-    parkingLot.getParkingLots(function(err, rows) {
+    ParkingLot.getParkingLots(function(err, rows) {
         if (err) {
             res.json(err);
         }
@@ -26,7 +26,7 @@ router.get("/", function(req, res) {
  * Route for creating new parking lots.
  */
 router.post("/", function(req, res) {
-    parkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
+    ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
         function(err, rows) {
         if (err) {
             res.json({err});
@@ -41,7 +41,7 @@ router.post("/", function(req, res) {
  * Route to get a specific parking lot based on id.
  */
 router.get("/:id", function(req, res) {
-    parkingLot.getParkingLotById(req.params.id, function (err, rows) {
+    ParkingLot.getParkingLotById(req.params.id, function (err, rows) {
         if (err) {
             res.json({err})
         }
@@ -61,7 +61,7 @@ router.put("/", function(req, res) {
         res.json({"err" : "not all fields are defined"});
         return;
     }
-    parkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
+    ParkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
         function(err, rows) {
         if (err)
         {

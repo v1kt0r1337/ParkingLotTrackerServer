@@ -8,7 +8,7 @@ require("./parkingLots.test");
 let server = require('../src/server');
 let connection = require("../src/dbconnection");
 let parkingLogs = require("../src/routes/parkingLogs");
-let parkingLot= require("../src/models/parkingLot");
+let parkingLot= require("../src/models/ParkingLot");
 
 // Require the dev-dependencies
 let chai = require("chai");
@@ -45,8 +45,6 @@ describe('hooks', function() {
     /**
      * Test the /GET route
      */
-
-
     describe('/GET parkingLogs', () => {
         it('This GET test should get an empty parkingLogs object', () => {
             return chai.request(server)
@@ -70,6 +68,7 @@ describe('hooks', function() {
                 .send(parkingLog)
                 .then((res) => {
                     res.should.have.status(200);
+
                     res.body.should.have.property('err');
                 })
         });
@@ -137,6 +136,22 @@ describe('hooks', function() {
                     res.should.have.status(200);
                     console.log(res.body);
                     res.body.should.not.have.property('err');
+                })
+        });
+    });
+
+    describe('/PUT parkinglogs', () => {
+        it('it should fail to PUT/UPDATE a parking log due to missing field', () => {
+            parkingLog = {
+                "id": id
+            };
+            return chai.request(server)
+                .put('/api/v0/parkinglogs/')
+                .send(parkingLog)
+                .then((res) => {
+                    res.should.have.status(200);
+                    console.log(res.body);
+                    res.body.should.property('err');
                 })
         });
     });

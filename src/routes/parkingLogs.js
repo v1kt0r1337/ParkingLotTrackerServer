@@ -6,13 +6,13 @@
 
 var express = require('express');
 var router = express.Router();
-var parkingLog = require('../models/parkingLog');
+var ParkingLog = require('../models/ParkingLog');
 
 /**
  * Route to get all parking logs.
  */
 router.get("/", function(req, res) {
-    parkingLog.getParkingLogs(function(err, rows) {
+    ParkingLog.getParkingLogs(function(err, rows) {
         if (err) {
             res.json({err});
         }
@@ -26,7 +26,7 @@ router.get("/", function(req, res) {
  * Route to get the latest parking log.
  */
 router.get("/latest", function(req, res) {
-    parkingLog.getLatestParkingLog(function(err,rows) {
+    ParkingLog.getLatestParkingLog(function(err,rows) {
         if(err) {
             res.json({err})
         }
@@ -40,7 +40,7 @@ router.get("/latest", function(req, res) {
  * Route to get a specific parking log based on id.
  */
 router.get("/:id", function(req, res) {
-    parkingLog.getParkingLogById(req.params.id, function(err,rows) {
+    ParkingLog.getParkingLogById(req.params.id, function(err,rows) {
         if(err) {
             res.json({err})
         }
@@ -54,7 +54,7 @@ router.get("/:id", function(req, res) {
  * Route to create new parking logs.
  */
 router.post("/", function(req, res) {
-    parkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, function(err, rows)
+    ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, function(err, rows)
     {
         if (err) {
             res.json({err});
@@ -74,7 +74,8 @@ router.put("/", function(req, res) {
         res.json({"err" : "not all fields are defined"});
         return;
     }
-    parkingLog.updateParkingLog(req.body.id, req.body.currentParked, function(err, rows)
+
+    ParkingLog.updateParkingLog(req.body.id, req.body.currentParked, function(err, rows)
     {
         if (err) {
             res.json({err});
@@ -89,7 +90,7 @@ router.put("/", function(req, res) {
  * Route to delete a parking log with the corresponding id.
  */
 router.delete("/:id", function(req, res) {
-    parkingLog.deleteParkingLogById(req.params.id, function(err, rows) {
+    ParkingLog.deleteParkingLogById(req.params.id, function(err, rows) {
         if(err) {
             res.json({err});
         }

@@ -112,6 +112,23 @@ describe('hooks', function() {
         });
     });
 
+    describe('/PUT parkinglots', () => {
+        it('it should fail to PUT/UPDATE a parking lot due to missing field', () => {
+            parkingLot = {
+                "id": id,
+                "name": "newName",
+                "capacity": 10,
+            };
+            return chai.request(server)
+                .put('/api/v0/parkinglots/')
+                .send(parkingLot)
+                .then((res) => {
+                    res.should.have.status(200);
+                    console.log(res.body);
+                    res.body.should.have.property('err');
+                })
+        });
+    });
 
     describe('/PUT parkinglots', () => {
         it('it should PUT/UPDATE a parking lot', () => {
@@ -134,7 +151,6 @@ describe('hooks', function() {
 
     describe('/GET/:id parkinglots', () => {
         it('GET :id Test checking that last test actually updated the parking lot', () => {
-
             return chai.request(server)
                 .get('/api/v0/parkinglots/' + id)
                 .then((res) => {
