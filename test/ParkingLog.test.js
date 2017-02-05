@@ -1,18 +1,16 @@
 /**
  * Created by archheretic on 05.02.17.
  */
-/**
- * Created by archheretic on 05.02.17.
- */
 process.env.NODE_ENV = "test";
 
-// this ensures that parkingLots.test runs first.
+// this ensures that the other tests runs first.
 require("./parkingLots.test");
 require("./parkingLogs.test");
+require("./ParkingLot.test");
 
 let connection = require("../src/dbconnection");
-let ParkingLot= require("../src/models/ParkingLot");
-let ParkingLog= require("../src/models/ParkingLog");
+let ParkingLot = require("../src/models/ParkingLot");
+let ParkingLog = require("../src/models/ParkingLog");
 
 // Require the dev-dependencies
 let chai = require("chai");
