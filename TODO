@@ -1,9 +1,6 @@
-Before develop merge:
-Full test coverage.
-
-
 Before first release:
-Authorization on all non GET api endpoints.
-Add total historical amount of parked cars on that spesific parkingLot to the parkingLog
-fix api/v0/parkinglogs/latest to be spesific for each parkingLot foreignkey, perhaps also allow for non spesific?
-Add a version number (to the readme file?)
+- Authorization on all non GET api endpoints.
+- Add total historical amount of parked cars on that spesific parkingLot to the parkingLog
+- fix api/v0/parkinglogs/latest to be spesific for each parkingLot foreignkey, perhaps also allow for non spesific?
+- Tests that covers the three previous TODOs
+- Add a version number (to the readme file?)
