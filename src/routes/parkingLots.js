@@ -57,6 +57,10 @@ router.get("/:id", function(req, res) {
  * All fields needs to be provided.
  */
 router.put("/", function(req, res) {
+    if (!req.body.id || !req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
+        res.json({"err" : "not all fields are defined"});
+        return;
+    }
     parkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
         function(err, rows) {
         if (err)

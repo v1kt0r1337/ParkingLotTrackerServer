@@ -70,7 +70,10 @@ router.post("/", function(req, res) {
  * Only the currentParked value can be changed.
  */
 router.put("/", function(req, res) {
-    console.log("inside router, id is :" + req.body.id);
+    if (!req.body.id || !req.body.currentParked) {
+        res.json({"err" : "not all fields are defined"});
+        return;
+    }
     parkingLog.updateParkingLog(req.body.id, req.body.currentParked, function(err, rows)
     {
         if (err) {
