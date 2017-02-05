@@ -1,0 +1,28 @@
+{
+  "name": "parkinglottrackerserver",
+  "version": "0.0.1",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Archheretic/ParkingLotTrackerServer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Archheretic/ParkingLotTrackerServer/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "latest",
+    "config": "^1.25.1",
+    "express": "latest",
+    "mysql": "latest"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=dev node src/server.js",
+    "test": "mocha --timeout 10000"
+  }
+}
