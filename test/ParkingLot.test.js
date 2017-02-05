@@ -56,7 +56,32 @@ describe('hooks', function() {
                     data.should.be.not.empty;
                     firstRow = parseRowData(data);
                     firstRow = JSON.parse(data)[0];
+                    // variable extracted for another test.
+                    parkingLot = firstRow;
                     assert.notEqual(firstRow, undefined);
+                    secondRow = JSON.parse(data)[2];
+                    assert.equal(secondRow, undefined);
+                    done();
+                });
+            });
+        });
+
+        describe('/Test ParkingLot.getParkingLotById', () => {
+            it('Should get a parkingLot with same field values as the previously inserted parkingLot', (done) => {
+                ParkingLot.getParkingLotById(parkingLot.id ,function (err, rows) {
+                    let data;
+                    if (err) {
+                        data = parseRowData(err);
+                    }
+                    else {
+                        data = parseRowData(rows);
+                    }
+                    data.should.be.not.empty;
+                    firstRow = parseRowData(data);
+                    firstRow = JSON.parse(data)[0];
+                    assert.notEqual(firstRow, undefined);
+                    expect(firstRow.reservedSpaces).to.equal(parkingLot.reservedSpaces);
+                    expect(firstRow.capacity).to.equal(parkingLot.capacity);
                     secondRow = JSON.parse(data)[2];
                     assert.equal(secondRow, undefined);
                     done();
