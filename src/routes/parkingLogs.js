@@ -70,6 +70,7 @@ router.post("/", function(req, res) {
  * Only the currentParked value can be changed.
  */
 router.put("/", function(req, res) {
+    console.log("inside router, id is :" + req.body.id);
     parkingLog.updateParkingLog(req.body.id, req.body.currentParked, function(err, rows)
     {
         if (err) {

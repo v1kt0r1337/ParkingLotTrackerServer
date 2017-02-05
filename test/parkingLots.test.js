@@ -25,18 +25,20 @@ chai.use(chaiHttp);
 console.log(config.Database);
 console.log(config.util.getEnv('NODE_ENV'));
 
-deleteAllTableData();
+
+//deleteAllTableData();
+
 
 /**
  * Test the /GET route
  */
+/*
 describe('/GET parkinglots', () => {
     it('This GET test should get an empty parkingLots object', () => {
         return chai.request(server)
             .get('/api/v0/parkinglots/')
             .then((res) => {
                 res.should.have.status(200);
-                console.log(res.body.parkingLots);
                 res.body.should.be.a('object');
                 expect(res.body.parkingLots).to.be.empty;
             })
@@ -45,7 +47,7 @@ describe('/GET parkinglots', () => {
 
 describe('/POST parkinglots', () => {
     it('it should NOT POST, lacks capacity field', () => {
-        let parkingLot = {
+        var parkingLot = {
             "name": "tessst",
             "reservedSpaces": 10
         }
@@ -61,7 +63,7 @@ describe('/POST parkinglots', () => {
 
 describe('/POST parkinglots', () => {
     it('it should POST', () => {
-        let parkingLot = {
+        parkingLot = {
             "name": "tessst",
             "capacity": 100,
             "reservedSpaces": 10
@@ -146,6 +148,7 @@ describe('/GET/:id parkinglots', () => {
 
 function deleteAllTableData() {
     var query = "DELETE FROM parkingLot";
-    connection.query(query, function (err, rows) {
-    });
+    connection.query(query);
 }
+
+*/
