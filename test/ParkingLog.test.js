@@ -112,6 +112,37 @@ describe('hooks', function() {
             });
         });
     });
+
+    describe('hooks', function () {
+        before((done) => {
+            ParkingLog.updateParkingLog(parkingLog.id, 2, (err) => {
+                done();
+            })
+        });
+        describe('/Test ParkingLog.updateParkingLog', () => {
+            it('One row of parkingLog data should have been updated', (done) => {
+                ParkingLog.getParkingLogs(function (err, rows) {
+                    let data;
+                    if (err) {
+                        data = parseRowData(err);
+                    }
+                    else {
+                        data = parseRowData(rows);
+                    }
+                    data.should.be.not.empty;
+                    firstRow = parseRowData(data);
+                    firstRow = JSON.parse(data)[0];
+                    assert.notEqual(firstRow, undefined);
+                    expect(firstRow.currentParked).to.equal(2);
+                    expect(firstRow.logDate).to.equal(parkingLog.logDate);
+                    expect(firstRow.parkingLot_id).to.equal(parkingLog.parkingLot_id);
+
+
+                    done();
+                });
+            });
+        });
+    });
 });
 
 

@@ -95,8 +95,8 @@ describe('hooks', function() {
                         done();
                     })
             });
-            describe('/Test ParkingLot.addParkingLot', () => {
-                it('One more row of data should have been inserted', (done) => {
+            describe('/Test ParkingLot.updateParkingLot', () => {
+                it('One row of parkingLot data should have been updated', (done) => {
                     ParkingLot.getParkingLots(function (err, rows) {
                         let data;
                         if (err) {
@@ -147,12 +147,5 @@ function deleteAllParkingLotData(callback) {
 function parseRowData(rowdata)
 {
     rowdata = JSON.stringify(rowdata);
-    return rowdata;
-}
-
-function parseRowDataIntoSingleEntity(rowdata)
-{
-    rowdata = parseRowData(rowdata);
-    rowdata = JSON.parse(rowdata)[0];
     return rowdata;
 }
