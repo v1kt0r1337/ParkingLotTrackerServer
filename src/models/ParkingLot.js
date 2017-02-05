@@ -44,6 +44,7 @@ var parkingLot = {
         query = mysql.format(query, table);
         db.query(query, callback);
     }
+
 };
 
 module.exports = parkingLot;
