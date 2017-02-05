@@ -37,7 +37,7 @@ describe('hooks', function() {
         "capacity": 77,
         "reservedSpaces": 10
     };
-    describe('hooks', function() {
+    describe('hooks', function () {
         before((done) => {
             ParkingLot.addParkingLot(parkingLot.name, parkingLot.capacity, parkingLot.reservedSpaces, (err) => {
                 done();
@@ -68,7 +68,7 @@ describe('hooks', function() {
 
         describe('/Test ParkingLot.getParkingLotById', () => {
             it('Should get a parkingLot with same field values as the previously inserted parkingLot', (done) => {
-                ParkingLot.getParkingLotById(parkingLot.id ,function (err, rows) {
+                ParkingLot.getParkingLotById(parkingLot.id, function (err, rows) {
                     let data;
                     if (err) {
                         data = parseRowData(err);
@@ -88,10 +88,41 @@ describe('hooks', function() {
                 });
             });
         });
+
+        describe('hooks', function () {
+            before((done) => {
+                    ParkingLot.updateParkingLot(parkingLot.id, "lilleputt", 5, 1, (err) => {
+                        done();
+                    })
+            });
+            describe('/Test ParkingLot.addParkingLot', () => {
+                it('One more row of data should have been inserted', (done) => {
+                    ParkingLot.getParkingLots(function (err, rows) {
+                        let data;
+                        if (err) {
+                            data = parseRowData(err);
+                        }
+                        else {
+                            data = parseRowData(rows);
+                        }
+                        data.should.be.not.empty;
+                        firstRow = parseRowData(data);
+                        firstRow = JSON.parse(data)[0];
+                        assert.notEqual(firstRow, undefined);
+                        expect(firstRow.name).to.equal("lilleputt");
+                        expect(firstRow.reservedSpaces).to.equal(1);
+                        expect(firstRow.capacity).to.equal(5);
+
+
+                        done();
+                    });
+                });
+            });
+        });
+
     });
 
 });
-
 
 function prepareDatabase(callback)
 {
