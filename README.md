@@ -1,5 +1,6 @@
 # ParkingLotTrackerServer
 [![Coverage Status][coveralls-url]]
+
 Server application for the ParkingLotTracker project.
 
 ## Table of Contents
