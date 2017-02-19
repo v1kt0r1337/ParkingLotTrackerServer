@@ -32,7 +32,7 @@ To find out which options that are available look at:
 ```sh
 $ npm start
 ```
-To change which environmental mode that is used (including database) modify the package.json start script.
+To change which environmental mode that is used (including database) modify the [package.json](package.json) start script.
 
 ## API Documentation
 API Endpoint | Description
