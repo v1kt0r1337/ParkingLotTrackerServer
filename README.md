@@ -1,4 +1,5 @@
 # ParkingLotTrackerServer
+[![Coverage Status][coveralls-url]]
 Server application for the ParkingLotTracker project.
 
 ## Table of Contents
@@ -56,3 +57,7 @@ To run tests
 $ npm test
 ```
 This script uses the test database.
+
+
+
+[coveralls-url]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=master)](https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=develop
