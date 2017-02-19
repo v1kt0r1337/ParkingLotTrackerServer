@@ -3,12 +3,12 @@ Server application for the ParkingLotTracker project
 
 API Endpoint | Description
 ------------ | -------------
-parkingLots
+parkingLots |
 /api/v0/parkinglots | GET - All parkinglots
 /api/v0/parkinglots/:id | GET - Single parkinglot
 /api/v0/parkinglots | POST - Creates new parkinglot
 /api/v0/parkinglots | PUT - Updates a parkinglot
-parkingLogs
+parkingLogs |
 /api/v0/parkinglogs | GET - All parkinglogs
 /api/v0/parkinglogs/:id | GET/DELETE - Single parkinglog
 /api/v0/parkinglogs | POST - Creates new parkinglog
