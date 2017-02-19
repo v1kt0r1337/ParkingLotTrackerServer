@@ -4,3 +4,5 @@ Before first release:
 - fix api/v0/parkinglogs/latest to be spesific for each parkingLot foreignkey, perhaps also allow for non spesific?
 - Tests that covers the three previous TODOs
 - Add a version number (to the readme file?)
+- Checkout https://coveralls.io/ to integrate test coverage stat in our projects README file.
+- Set up a test suit like Jenkins or Travis (might be covered by coveralls.io?)
