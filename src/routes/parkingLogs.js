@@ -6,7 +6,7 @@
 
 var express = require('express');
 var router = express.Router();
-var ParkingLog = require('../models/ParkingLog');
+var ParkingLog = require('../models/parkingLog.model');
 
 /**
  * Route to get all parking logs.

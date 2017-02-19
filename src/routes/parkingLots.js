@@ -6,7 +6,7 @@
 
 var express = require('express');
 var router = express.Router();
-var ParkingLot = require('../models/ParkingLot');
+var ParkingLot = require('../models/parkingLot.model');
 
 /**
  * Route to get all parking lots.

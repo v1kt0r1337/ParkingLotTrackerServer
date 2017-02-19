@@ -6,11 +6,11 @@ process.env.NODE_ENV = "test";
 // this ensures that the other tests runs first.
 require("./parkingLots.test");
 require("./parkingLogs.test");
-require("./ParkingLot.test");
+require("./parkingLot.model.test.js");
 
 let connection = require("../src/dbconnection");
-let ParkingLot = require("../src/models/ParkingLot");
-let ParkingLog = require("../src/models/ParkingLog");
+let ParkingLot = require("../src/models/parkingLot.model");
+let ParkingLog = require("../src/models/parkingLog.model");
 
 // Require the dev-dependencies
 let chai = require("chai");

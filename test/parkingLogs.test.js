@@ -8,7 +8,7 @@ require("./parkingLots.test");
 let server = require('../src/server');
 let connection = require("../src/dbconnection");
 let parkingLogs = require("../src/routes/parkingLogs");
-let parkingLot= require("../src/models/ParkingLot");
+let parkingLot= require("../src/models/parkingLot.model");
 
 // Require the dev-dependencies
 let chai = require("chai");
