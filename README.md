@@ -14,13 +14,15 @@ Server application for the ParkingLotTracker project.
 $ npm install
 ```
 
-The database script is located at [scripts/database.sql](scripts/database.sql).\n
+The database script is located at [scripts/database.sql](scripts/database.sql).
+
 To change the database settings go to [config](config).
  - [config/default](config/default) is the production database.
  - [config/dev](config/dev) is the development database.
  - [config/test](config/test) is for the test database.
 
-To enable additional settings modify [src/dbconnection.js](src/dbconnection.js).\n
+To enable additional settings modify [src/dbconnection.js](src/dbconnection.js).
+
 To find out which options that are available look at:
 - https://github.com/mysqljs/mysql#connection-options
 - https://github.com/mysqljs/mysql#pool-options
