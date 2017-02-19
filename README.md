@@ -1,6 +1,44 @@
 # ParkingLotTrackerServer
-Server application for the ParkingLotTracker project
+Server application for the ParkingLotTracker project.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [How to run](#how-to-run)
+- [API Documentation](#api-documentation)
+
+## Installation
+
+```sh
+$ npm install
+```
+
+Change the database settings in Config directory.
+ - default is the production database.
+ - dev is the development database.
+ - test is for the test database.
+
+To enable additional settings modify src/dbconnection.js
+To find out which options that are available look at:
+- https://github.com/mysqljs/mysql#connection-options
+- https://github.com/mysqljs/mysql#pool-options
+
+## How to run
+
+```sh
+$ npm start
+```
+To change which database is used change the package.json start script.
+
+## Tests
+
+To run tests
+```sh
+$ npm test
+```
+This script uses the test database.
+
+## API Documentation
 API Endpoint | Description
 ------------ | -------------
 parkingLots |
