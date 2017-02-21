@@ -1,4 +1,6 @@
 # ParkingLotTrackerServer
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
+[![Build Status](https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=coveralls)](https://travis-ci.org/Archheretic/ParkingLotTrackerServer)
 [![Coverage Status](https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls)](https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls)
 
 Server application for the ParkingLotTracker project.
@@ -70,4 +72,8 @@ This script uses the test database.
 
 
 
-[coveralls-url]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls)](https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls)
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=coveralls
+[travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
+
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls

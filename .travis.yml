@@ -28,3 +28,5 @@ before_install:
       REFERENCES parkingLot(id)
       ) ENGINE=InnoDB;'
 
+after_success:
+- npm run coveralls
