@@ -8,6 +8,7 @@ Server application for the ParkingLotTracker project.
 - [Installation](#installation)
 - [How to run](#how-to-run)
 - [API Documentation](#api-documentation)
+- [Troubleshoot](#troubleshoot)
 - [Tests](#tests)
 
 ## Installation
@@ -35,6 +36,7 @@ To find out which options that are available look at:
 $ npm start
 ```
 To change which environmental mode that is used (including database) modify the [package.json](package.json) start script.
+If you have trouble starting the project look at 
 
 ## API Documentation
 API Endpoint | Description
@@ -50,6 +52,13 @@ parkingLogs |
 /api/v0/parkinglogs | POST - Creates new parkinglog
 /api/v0/parkinglogs | PUT - Updates a parkinglog, only the currentParked value can be changed.
 /api/v0/parkinglogs/latest | GET - Single parkinglog of latest date.
+
+## Troubleshoot
+
+If you have trouble starting the project try to run it by typing the command:
+```sh
+$ NODE_ENV=dev nodejs src/server.js"
+```
 
 ## Tests
 
