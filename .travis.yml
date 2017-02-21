@@ -6,3 +6,27 @@ node_js:
   - "node"
 services:
   - mysql
+
+  before_install:
+      - mysql -e 'create database IF NOT EXISTS shitdatabasetest;'
+      - mysql -e "USE shitdatabasetest;
+      CREATE TABLE parkingLot (
+        id int(11) NOT NULL AUTO_INCREMENT,
+        name varchar(50) NOT NULL,
+        #location varchar(50),
+        capacity int(11) NOT NULL,
+        reservedSpaces int(11) NOT NULL,
+        PRIMARY KEY (id)
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+      CREATE TABLE parkingLog (
+        id int (11) NOT NULL AUTO_INCREMENT,
+        currentParked int (11) NOT NULL,
+        logDate datetime NOT NULL DEFAULT NOW(),
+        parkingLot_id int NOT NULL,
+        #CONSTRAINT constraint_name
+        PRIMARY KEY (id),
+        FOREIGN KEY fk_parkingLot(parkingLot_id)
+        REFERENCES parkingLot(id)
+      ) ENGINE=InnoDB;
+
