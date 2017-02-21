@@ -21,7 +21,7 @@ before_install:
       CREATE TABLE parkingLog (
       id int (11) NOT NULL AUTO_INCREMENT,
       currentParked int (11) NOT NULL,
-      logDate datetime DEFAULT CURRENT_TIMESTAMP,
+      logDate datetime DEFAULT NOW(),
       parkingLot_id int NOT NULL,
       PRIMARY KEY (id),
       FOREIGN KEY fk_parkingLot(parkingLot_id)
