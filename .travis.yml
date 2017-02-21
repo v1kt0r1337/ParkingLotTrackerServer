@@ -16,8 +16,8 @@ before_install:
       capacity int(11) NOT NULL,
       reservedSpaces int(11) NOT NULL,
       PRIMARY KEY (id)
-      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;'
-    - mysql -e 'USE shitdatabasetest;
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
       CREATE TABLE parkingLog (
       id int (11) NOT NULL AUTO_INCREMENT,
       currentParked int (11) NOT NULL,
