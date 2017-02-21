@@ -1,5 +1,5 @@
 # ParkingLotTrackerServer
-[![Coverage Status][coveralls-url]]
+[![Coverage Status](https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls)](https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls)
 
 Server application for the ParkingLotTracker project.
 
