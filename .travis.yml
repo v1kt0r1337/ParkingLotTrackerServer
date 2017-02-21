@@ -7,6 +7,9 @@ node_js:
 services:
   - mysql
 
+script:
+  - npm run snyk-auth
+
 before_install:
     - mysql -e 'create database shitdatabasetest;'
     - mysql -e 'USE shitdatabasetest;

@@ -1,7 +1,7 @@
 # ParkingLotTrackerServer
 [![Build Status][travis-image]][travis-url] 
 [![Coverage Status][coveralls-image]][coveralls-url]
-
+[![Known Vulnerabilities][snyk-image][snyk-url]
 Server application for the ParkingLotTracker project.
 
 ## Table of Contents
@@ -71,8 +71,11 @@ This script uses the test database.
 
 
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=coveralls
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=snykIntegration
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=snykIntegration
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=snykIntegration
+
+[snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/snykIntegration/badge.svg
+[snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTracker
