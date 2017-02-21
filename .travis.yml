@@ -1,0 +1,32 @@
+language: node_js
+node_js:
+  - "7.5"
+  - "7"
+  - "6"
+  - "node"
+services:
+  - mysql
+
+before_install:
+    - mysql -e 'create database shitdatabasetest;'
+    - mysql -e 'USE shitdatabasetest;
+      CREATE TABLE parkingLot (
+      id int(11) NOT NULL AUTO_INCREMENT,
+      name varchar(50) NOT NULL,
+      capacity int(11) NOT NULL,
+      reservedSpaces int(11) NOT NULL,
+      PRIMARY KEY (id)
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+      CREATE TABLE parkingLog (
+      id int (11) NOT NULL AUTO_INCREMENT,
+      currentParked int (11) NOT NULL,
+      logDate timestamp DEFAULT NOW(),
+      parkingLot_id int NOT NULL,
+      PRIMARY KEY (id),
+      FOREIGN KEY fk_parkingLot(parkingLot_id)
+      REFERENCES parkingLot(id)
+      ) ENGINE=InnoDB;'
+
+after_success:
+- npm run coveralls

@@ -1,4 +1,7 @@
 # ParkingLotTrackerServer
+[![Build Status][travis-image]][travis-url] 
+[![Coverage Status][coveralls-image]][coveralls-url]
+
 Server application for the ParkingLotTracker project.
 
 ## Table of Contents
@@ -6,6 +9,7 @@ Server application for the ParkingLotTracker project.
 - [Installation](#installation)
 - [How to run](#how-to-run)
 - [API Documentation](#api-documentation)
+- [Troubleshoot](#troubleshoot)
 - [Tests](#tests)
 
 ## Installation
@@ -33,6 +37,7 @@ To find out which options that are available look at:
 $ npm start
 ```
 To change which environmental mode that is used (including database) modify the [package.json](package.json) start script.
+If you have trouble starting the project look at 
 
 ## API Documentation
 API Endpoint | Description
@@ -49,6 +54,13 @@ parkingLogs |
 /api/v0/parkinglogs | PUT - Updates a parkinglog, only the currentParked value can be changed.
 /api/v0/parkinglogs/latest | GET - Single parkinglog of latest date.
 
+## Troubleshoot
+
+If you have trouble starting the project try to run it by typing the command:
+```sh
+$ NODE_ENV=dev nodejs src/server.js"
+```
+
 ## Tests
 
 To run tests
@@ -56,3 +68,11 @@ To run tests
 $ npm test
 ```
 This script uses the test database.
+
+
+
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=coveralls
+[travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
+
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls
