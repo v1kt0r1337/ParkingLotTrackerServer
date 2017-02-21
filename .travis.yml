@@ -9,16 +9,16 @@ services:
 
 before_install:
     - mysql -e 'create database shitdatabasetest;'
-    - mysql -e 'USE shitdatabasetest;'
-    - mysql -e 'use mysql;'
-    - mysql -e 'CREATE TABLE parkingLot (
+    - mysql -e 'USE shitdatabasetest;
+      CREATE TABLE parkingLot (
       id int(11) NOT NULL AUTO_INCREMENT,
       name varchar(50) NOT NULL,
       capacity int(11) NOT NULL,
       reservedSpaces int(11) NOT NULL,
       PRIMARY KEY (id)
-      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8; '
-    - mysql -e 'CREATE TABLE parkingLog (
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;'
+    - mysql -e 'USE shitdatabasetest;
+      CREATE TABLE parkingLog (
       id int (11) NOT NULL AUTO_INCREMENT,
       currentParked int (11) NOT NULL,
       logDate datetime NOT NULL DEFAULT NOW(),
