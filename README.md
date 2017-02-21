@@ -70,4 +70,4 @@ This script uses the test database.
 
 
 
-[coveralls-url]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=master)](https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=develop
+[coveralls-url]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls)](https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls)
