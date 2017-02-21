@@ -1,7 +1,6 @@
 # ParkingLotTrackerServer
-[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
-[![Build Status](https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=coveralls)](https://travis-ci.org/Archheretic/ParkingLotTrackerServer)
-[![Coverage Status](https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=coveralls)](https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=coveralls)
+[![Build Status][travis-image]][travis-url] 
+[![Coverage Status][coveralls-image]][coveralls-url]
 
 Server application for the ParkingLotTracker project.
 
