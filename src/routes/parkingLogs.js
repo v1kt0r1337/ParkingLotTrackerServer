@@ -54,13 +54,13 @@ router.get("/:id", function(req, res) {
  * Route to create new parking logs.
  */
 router.post("/", function(req, res) {
-    ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, function(err, rows)
+    ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, req.body.logDate, function(err, rows)
     {
         if (err) {
             res.json({err});
         }
         else {
-            res.json({"Error" : false, "Message" : "Parking Lot Added"});
+            res.json({"Error" : false, "Message" : "Parking Log Added"});
         }
     });
 });

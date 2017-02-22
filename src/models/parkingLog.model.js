@@ -32,10 +32,23 @@ var parkingLog = {
     /**
      * Creates a new parkingLog.
      */
-    addParkingLog: function (id, currentParked, callback) {
-        var query = "INSERT INTO ??(??,??) VALUES (?,?)";
-        var table = ["parkingLog", "currentParked", "parkingLot_id",
-            currentParked, id];
+    addParkingLog: function (id, currentParked, logDate, callback) {
+
+       // console.log("inside addParkingLog");
+       /// console.log(logDate);
+        if(typeof logDate === "undefined")
+        {
+        //    console.log("inside if");
+            var query = "INSERT INTO ??(??,??) VALUES (?,?)";
+            var table = ["parkingLog", "currentParked", "parkingLot_id",
+                currentParked, id];
+        }
+        else {
+       //     console.log("inside else");
+            var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+            var table = ["parkingLog", "currentParked", "parkingLot_id", "logDate",
+                currentParked, id, logDate];
+        }
         query = mysql.format(query, table);
         db.query(query, callback);
     },
