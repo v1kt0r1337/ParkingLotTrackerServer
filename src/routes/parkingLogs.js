@@ -37,6 +37,21 @@ router.get("/latest", function(req, res) {
 });
 
 /**
+ * Route to get the latest parking log from a spesific parkinglot.
+ * Where :id is the id of the parkinglot.
+ */
+router.get("/latest/:id", function(req, res) {
+    ParkingLog.getAParkingLotsLatestParkingLog(req.params.id, function(err,rows) {
+        if(err) {
+            res.json({err})
+        }
+        else {
+            res.json({"parkingLogs" : rows});
+        }
+    });
+});
+
+/**
  * Route to get a specific parking log based on id.
  */
 router.get("/:id", function(req, res) {
