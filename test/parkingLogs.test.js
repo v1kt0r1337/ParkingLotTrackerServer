@@ -86,7 +86,7 @@ describe('hooks', function() {
                 .send(parkingLog)
                 .then((res) => {
                     res.should.have.status(200);
-                    console.log(res.body);
+                    //console.log(res.body);
                     res.body.should.not.have.property('err');
                 })
         });
@@ -118,6 +118,7 @@ describe('hooks', function() {
                     res.body.parkingLogs[0].should.have.property('parkingLot_id');
                     res.body.parkingLogs[0].should.have.property('logDate');
                     res.body.parkingLogs[0].should.have.property('id');
+                    console.log(res.body);
                 })
         });
     });
@@ -134,7 +135,7 @@ describe('hooks', function() {
                 .send(parkingLog)
                 .then((res) => {
                     res.should.have.status(200);
-                    console.log(res.body);
+                    //console.log(res.body);
                     res.body.should.not.have.property('err');
                 })
         });
@@ -150,7 +151,7 @@ describe('hooks', function() {
                 .send(parkingLog)
                 .then((res) => {
                     res.should.have.status(200);
-                    console.log(res.body);
+                    //console.log(res.body);
                     res.body.should.property('err');
                 })
         });
@@ -158,12 +159,41 @@ describe('hooks', function() {
 
     describe('/GET/:id parkinglogs', () => {
         it('GET :id Test checking that last test actually updated the parking log', () => {
-
             return chai.request(server)
-                .get('/api/v0/parkinglogs/') //+ id)
+                .get('/api/v0/parkinglogs/' + id)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
+                    res.body.parkingLogs[0].should.have.property('currentParked');
+                    res.body.parkingLogs[0].should.have.property('parkingLot_id');
+                    res.body.parkingLogs[0].should.have.property('logDate');
+                    res.body.parkingLogs[0].should.have.property('id');
+                    res.body.parkingLogs[0].currentParked.should.be.equal(10);
+                })
+        });
+    });
+
+    describe('/DELETE/:id parkinglogs', () => {
+        it('DELETE :id Tests that the DELETE parkinglogs route work', () => {
+            return chai.request(server)
+                .delete('/api/v0/parkinglogs/' + id)
+                .then((res) => {
+                    res.should.have.status(200);
+                    res.body.should.not.have.property('err');
+                    //console.log(res.body);
+                })
+        });
+    });
+
+    describe('/GET/:id parkinglogs', () => {
+        it('GET :id Tests that the DELETE route actually deleted the log', () => {
+            return chai.request(server)
+                .get('/api/v0/parkinglogs/' + id)
+                .then((res) => {
+                    res.should.have.status(200);
+                    res.body.should.not.have.property('err');
+                    expect(res.body.parkingLots).to.be.empty;
+                    //console.log(res.body);
                 })
         });
     });
