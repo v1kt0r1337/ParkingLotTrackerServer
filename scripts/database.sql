@@ -26,7 +26,7 @@ CREATE TABLE parkingLog (
 use shitdatabase
 INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES
 ('Student Organisasjonen', 100, 10),
-('Hokus Pokus Barnehage', 70, 7)
+('Hokus Pokus Barnehage', 70, 7);
 
 use shitdatabase;
 INSERT INTO parkingLog (currentParked, totalParked, logDate, parkingLot_id) VALUES
@@ -35,5 +35,5 @@ INSERT INTO parkingLog (currentParked, totalParked, logDate, parkingLot_id) VALU
 (30, 1339, NOW(), 1),
 (18, 600, '2016-12-31 10:59:59', 2),
 (19, 601, '2017-01-30 11:53:54', 2),
-(18, 601, NOW(), 2)
+(18, 601, NOW(), 2);
 

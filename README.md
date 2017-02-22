@@ -70,11 +70,11 @@ $ npm test
 This script uses the test database.
 
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=moreTestFeb22
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=historicalParkingData
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=moreTestFeb22
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=moreTestFeb22
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=historicalParkingData
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=historicalParkingData
 
-[snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/moreTestFeb22/badge.svg
+[snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/historicalParkingData/badge.svg
 [snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer
