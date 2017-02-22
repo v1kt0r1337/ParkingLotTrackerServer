@@ -20,10 +20,8 @@ var config = require("config");
 
 chai.use(chaiHttp);
 
-
 console.log(config.Database);
 console.log(config.util.getEnv('NODE_ENV'));
-
 
 describe('hooks', function() {
     before((done) => {
@@ -32,9 +30,6 @@ describe('hooks', function() {
         });
     });
 
-    /**
-     * Test the /GET route
-     */
     describe('/GET parkinglots', () => {
         it('This GET test should get an empty parkingLots object', () => {
             console.log("/GET parkinglots");
@@ -50,7 +45,7 @@ describe('hooks', function() {
 
     describe('/POST parkinglots', () => {
         it('it should NOT POST, lacks capacity field', () => {
-            var parkingLot = {
+            let parkingLot = {
                 "name": "tessst",
                 "reservedSpaces": 10
             }
@@ -185,5 +180,4 @@ function deleteAllParkingLotData(callback) {
     connection.query(query, callback);
     console.log("deleteAllParkingLotData");
 }
-
 

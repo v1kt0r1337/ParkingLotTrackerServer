@@ -62,7 +62,7 @@ describe('hooks', function() {
     describe('hooks', function() {
         before((done) => {
             let currentParked = 20;
-            ParkingLog.addParkingLog(parkingLot.id, currentParked, (err) => {
+            ParkingLog.addParkingLog(parkingLot.id, currentParked, undefined, (err) => {
                 done();
             })
         });

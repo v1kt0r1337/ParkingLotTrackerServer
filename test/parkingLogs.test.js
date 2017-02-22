@@ -8,7 +8,9 @@ require("./parkingLots.test");
 let server = require('../src/server');
 let connection = require("../src/dbconnection");
 let parkingLogs = require("../src/routes/parkingLogs");
-let parkingLot= require("../src/models/parkingLot.model");
+let ParkingLot = require("../src/models/parkingLot.model");
+let ParkingLog = require("../src/models/parkingLog.model");
+let async = require("async");
 
 // Require the dev-dependencies
 let chai = require("chai");
@@ -20,7 +22,7 @@ let config = require("config");
 chai.use(chaiHttp);
 
 let parkinglot;
-describe('hooks', function() {
+describe('hooks prepareDatabase', function() {
     before((done) => {
         prepareDatabase(() => {
             done();
@@ -45,7 +47,7 @@ describe('hooks', function() {
     /**
      * Test the /GET route
      */
-    describe('/GET parkingLogs', () => {
+   describe('/GET parkingLogs', () => {
         it('This GET test should get an empty parkingLogs object', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglogs/')
@@ -57,6 +59,7 @@ describe('hooks', function() {
                 })
         });
     });
+
 
     describe('/POST parkinglogs', () => {
         it('it should NOT POST, lacks parkingLot_id field', () => {
@@ -80,7 +83,7 @@ describe('hooks', function() {
                 "currentParked": 800,
                 "parkingLot_id": parkinglot.id
             }
-            console.log(parkingLog);
+            //console.log(parkingLog);
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
@@ -118,7 +121,7 @@ describe('hooks', function() {
                     res.body.parkingLogs[0].should.have.property('parkingLot_id');
                     res.body.parkingLogs[0].should.have.property('logDate');
                     res.body.parkingLogs[0].should.have.property('id');
-                    console.log(res.body);
+                    //console.log(res.body);
                 })
         });
     });
@@ -198,11 +201,54 @@ describe('hooks', function() {
         });
     });
 
+
+    let lastInserted = 0;
+    describe('hooks before GET Latest', function() {
+        before((done) => {
+            let i = 0;
+            let asyncTasks = [];
+            while (i < 10) {
+                asyncTasks.push(function(callback)
+                {
+                    let currentParked = i * i + 1;
+                    let logDate = "2099-01-0" + i + " 11:53:54";
+                    //let logDate = "2017-01-01 11:53:54";
+                    ParkingLog.addParkingLog(parkinglot.id, currentParked, logDate, (err) => {
+                        if (err)
+                            console.log(err);
+                        callback();
+                    });
+
+                    lastInserted = currentParked;
+                });
+                i++;
+            }
+            async.parallel(asyncTasks, function(){
+                // All tasks are done now
+                done();
+            });
+        });
+        describe('/GET latest parkinglog', () => {
+            it('GET/parkinglogs/latest Tests that the latest parkinglog gets retrieved', () => {
+                return chai.request(server)
+                    .get('/api/v0/parkinglogs/latest')
+                    .then((res) => {
+                        res.should.have.status(200);
+                        res.body.should.not.have.property('err');
+                        // console.log(res.body);
+                        //console.log(lastInserted);
+                        res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
+                    })
+            });
+        });
+    });
+
 });
 /**
  * Preparing the database for testing, minimum 1 parkingLot is required to test the parkinglogs api.
  * @param callback
  */
+
 function prepareDatabase(callback) {
     deleteAllParkingLogData( () => {
         deleteAllParkingLotData( () => {
@@ -212,6 +258,7 @@ function prepareDatabase(callback) {
         });
     });
 }
+
 
 function deleteAllParkingLogData(callback) {
     let query = "DELETE FROM parkingLog";
@@ -227,14 +274,14 @@ function deleteAllParkingLotData(callback) {
 
 function addParkingLotData(callback) {
     let query =
-    "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
     connection.query(query, callback);
     console.log("addParkingLotData");
 }
 
 function setParkingLot(callback) {
     console.log("setParkingLot");
-    parkingLot.getParkingLots( (err, rows) => {
+    ParkingLot.getParkingLots( (err, rows) => {
         if (err) {
             parkinglot = parseRowDataIntoSingleEntity(rows);
         }
@@ -244,12 +291,13 @@ function setParkingLot(callback) {
         console.log("setParkingLot => getParkingLots");
         callback();
     });
+
 }
 
 function parseRowDataIntoSingleEntity(rowdata)
 {
     rowdata = JSON.stringify(rowdata);
-    console.log(rowdata);
+   // console.log(rowdata);
     rowdata = JSON.parse(rowdata)[0];
     return rowdata;
 }
