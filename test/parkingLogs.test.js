@@ -235,9 +235,13 @@ describe('hooks prepareDatabase', function() {
                     .then((res) => {
                         res.should.have.status(200);
                         res.body.should.not.have.property('err');
-                        // console.log(res.body);
-                        //console.log(lastInserted);
+                        expect(res.body.parkingLogs).to.not.be.empty;
+                        res.body.parkingLogs[0].should.have.property('currentParked');
+                        res.body.parkingLogs[0].should.have.property('parkingLot_id');
+                        res.body.parkingLogs[0].should.have.property('logDate');
+                        res.body.parkingLogs[0].should.have.property('id');
                         res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
+                        res.body.parkingLogs.length.should.be.equal(1);
                     })
             });
         });
