@@ -203,26 +203,38 @@ describe('hooks prepareDatabase', function() {
 
 
     let lastInserted = 0;
+    let secondLastInserted = 0;
     describe('hooks before GET Latest', function() {
         before((done) => {
             let i = 0;
             let asyncTasks = [];
+            let alternating = 0;
             while (i < 10) {
+                let currentParked = i * i + 1;
+                let logDate = "2099-01-0" + i + " 11:53:54";
+                //let logDate = "2017-01-01 11:53:54";
+
                 asyncTasks.push(function(callback)
                 {
-                    let currentParked = i * i + 1;
-                    let logDate = "2099-01-0" + i + " 11:53:54";
-                    //let logDate = "2017-01-01 11:53:54";
-                    ParkingLog.addParkingLog(parkinglot.id, currentParked, logDate, (err) => {
+                    alternating = 1 - alternating;
+                    ParkingLog.addParkingLog((parkinglot.id + alternating), currentParked, logDate, (err) => {
                         if (err)
                             console.log(err);
                         callback();
                     });
 
-                    lastInserted = currentParked;
                 });
+                if (i == 9) {
+                    lastInserted = currentParked;
+                }
+                if (i == 8) {
+                    secondLastInserted = currentParked;
+                }
                 i++;
+
             }
+            console.log("lastInserted " + lastInserted);
+            console.log("secondLastInserted " + secondLastInserted);
             async.parallel(asyncTasks, function(){
                 // All tasks are done now
                 done();
@@ -242,6 +254,48 @@ describe('hooks prepareDatabase', function() {
                         res.body.parkingLogs[0].should.have.property('id');
                         res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
                         res.body.parkingLogs.length.should.be.equal(1);
+                        //
+                        // console.log(res.body.parkingLogs[0]);
+                    })
+            });
+        });
+
+        describe('/GET latest parkinglog of a spesific parking lot', () => {
+            it('GET/parkinglogs/latest/:i Tests that the latest parkinglog of that spesific parkinglot gets retrieved',
+                function() {
+                    return chai.request(server)
+                        .get('/api/v0/parkinglogs/latest/' + (parkinglot.id))
+                        .then((res) => {
+                            res.should.have.status(200);
+                            res.body.should.not.have.property('err');
+                            expect(res.body.parkingLogs).to.not.be.empty;
+                            res.body.parkingLogs[0].should.have.property('currentParked');
+                            res.body.parkingLogs[0].should.have.property('parkingLot_id');
+                            res.body.parkingLogs[0].should.have.property('logDate');
+                            res.body.parkingLogs[0].should.have.property('id');
+                            res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
+                            res.body.parkingLogs.length.should.be.equal(1);
+                           // console.log(res.body.parkingLogs[0]);
+                        })
+                });
+        });
+
+        describe('/GET latest parkinglog of another spesific parking place', () => {
+            it('GET/parkinglogs/latest/:i Tests that we it also work correctly on other parkinglots',
+                function() {
+                return chai.request(server)
+                    .get('/api/v0/parkinglogs/latest/' + (parkinglot.id + 1))
+                    .then((res) => {
+                        res.should.have.status(200);
+                        res.body.should.not.have.property('err');
+                        expect(res.body.parkingLogs).to.not.be.empty;
+                        res.body.parkingLogs[0].should.have.property('currentParked');
+                        res.body.parkingLogs[0].should.have.property('parkingLot_id');
+                        res.body.parkingLogs[0].should.have.property('logDate');
+                        res.body.parkingLogs[0].should.have.property('id');
+                        res.body.parkingLogs[0].currentParked.should.be.equal(secondLastInserted);
+                        res.body.parkingLogs.length.should.be.equal(1);
+                        //console.log(res.body.parkingLogs[0]);
                     })
             });
         });
@@ -277,10 +331,25 @@ function deleteAllParkingLotData(callback) {
 }
 
 function addParkingLotData(callback) {
+
+    let asyncTasks = [];
     let query =
         "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
-    connection.query(query, callback);
+    asyncTasks.push(function(callback) {
+        connection.query(query, callback);
+    });
+
+    query =
+       "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)";
+    asyncTasks.push(function(callback) {
+        connection.query(query, callback);
+    });
     console.log("addParkingLotData");
+    async.series(asyncTasks, function(){
+        // All tasks are done now
+        callback();
+    });
+
 }
 
 function setParkingLot(callback) {

@@ -16,7 +16,7 @@ let should = chai.should();
 let expect = chai.expect;
 let assert = chai.assert;
 
-
+/*
 describe('hooks', function() {
     before((done) => {
         prepareDatabase(() => {
@@ -124,7 +124,7 @@ describe('hooks', function() {
     });
 
 });
-
+*/
 function prepareDatabase(callback)
 {
     deleteAllParkingLogData( () => {
