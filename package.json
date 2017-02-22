@@ -22,12 +22,14 @@
     "coveralls": "^2.11.16",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "mocha-lcov-reporter": "^1.3.0"
+    "mocha-lcov-reporter": "^1.3.0",
+    "snyk": "^1.25.1"
   },
   "scripts": {
     "start": "NODE_ENV=dev node src/server.js",
-    "test": "mocha --timeout 10000",
-    "cover": "istanbul cover _mocha",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "test": "snyk test && mocha --timeout 10000",
+    "cover": "snyk test && istanbul cover _mocha",
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "snyk-auth": "snyk auth $SNYK_API_KEY"
   }
 }

@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-  - "7.5"
-  - "7"
-  - "6"
-  - "node"
+- '7.5'
+- '7'
+- '6'
+- node
 services:
-  - mysql
+- mysql
+script:
+- npm run snyk-auth
 
 before_install:
     - mysql -e 'create database shitdatabasetest;'
