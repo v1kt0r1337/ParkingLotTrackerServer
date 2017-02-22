@@ -18,7 +18,7 @@ let should = chai.should();
 let expect = chai.expect;
 let assert = chai.assert;
 
-
+/*
 let parkinglot;
 describe('hooks', function() {
     before((done) => {
@@ -145,7 +145,7 @@ describe('hooks', function() {
     });
 });
 
-
+ */
 /**
  * Preparing the database for testing, minimum 1 parkingLot is required to test the parkinglogs api.
  * @param callback

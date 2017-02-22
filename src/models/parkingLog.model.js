@@ -22,6 +22,15 @@ var parkingLog = {
     },
 
     /**
+     * Returns the latest parkingLog based on logDate.
+     */
+    getAParkingLotsLatestParkingLog: function(parkingLot_id, callback) {
+
+        db.query("SELECT * FROM parkingLog WHERE parkingLot_id=? ORDER BY logDate DESC LIMIT 1",
+            parkingLot_id, callback);
+    },
+
+    /**
      * Returns a parkingLog based on id
      */
     getParkingLogById: function (id, callback) {
