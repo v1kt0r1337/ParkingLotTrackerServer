@@ -70,7 +70,6 @@ $ npm test
 This script uses the test database.
 
 
-
 [travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=snykIntegration
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
@@ -78,4 +77,4 @@ This script uses the test database.
 [coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=snykIntegration
 
 [snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/snykIntegration/badge.svg
-[snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTracker
+[snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer
