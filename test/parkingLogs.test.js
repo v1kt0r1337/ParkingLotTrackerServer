@@ -21,7 +21,9 @@ let config = require("config");
 
 chai.use(chaiHttp);
 
+
 let parkinglot;
+
 describe('hooks prepareDatabase', function() {
     before((done) => {
         prepareDatabase(() => {
@@ -63,15 +65,17 @@ describe('hooks prepareDatabase', function() {
 
     describe('/POST parkinglogs', () => {
         it('it should NOT POST, lacks parkingLot_id field', () => {
-            var parkingLog = {
+            let parkingLog = {
                 "currentParked": 20
-            }
+            };
+
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
                 .then((res) => {
+                    //console.log(res);
+                    //console.log(parkingLog);
                     res.should.have.status(200);
-
                     res.body.should.have.property('err');
                 })
         });
@@ -79,15 +83,16 @@ describe('hooks prepareDatabase', function() {
 
     describe('/POST parkinglogs', () => {
         it('it should POST', () => {
-            parkingLog = {
+            let parkingLog = {
                 "currentParked": 800,
                 "parkingLot_id": parkinglot.id
-            }
-            //console.log(parkingLog);
+            };
+            console.log(parkingLog);
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
                 .then((res) => {
+                    console.log(parkingLog);
                     res.should.have.status(200);
                     //console.log(res.body);
                     res.body.should.not.have.property('err');
@@ -129,7 +134,7 @@ describe('hooks prepareDatabase', function() {
 
     describe('/PUT parkinglogs', () => {
         it('it should PUT/UPDATE a parking log', () => {
-            parkingLog = {
+            let parkingLog = {
                 "currentParked": 10,
                 "id": id
             };
@@ -146,7 +151,7 @@ describe('hooks prepareDatabase', function() {
 
     describe('/PUT parkinglogs', () => {
         it('it should fail to PUT/UPDATE a parking log due to missing field', () => {
-            parkingLog = {
+            let parkingLog = {
                 "id": id
             };
             return chai.request(server)
@@ -230,6 +235,7 @@ describe('hooks prepareDatabase', function() {
                 if (i == 8) {
                     secondLastInserted = currentParked;
                 }
+                //console.log("i: ", i);
                 i++;
 
             }
@@ -248,11 +254,13 @@ describe('hooks prepareDatabase', function() {
                         res.should.have.status(200);
                         res.body.should.not.have.property('err');
                         expect(res.body.parkingLogs).to.not.be.empty;
+
                         res.body.parkingLogs[0].should.have.property('currentParked');
                         res.body.parkingLogs[0].should.have.property('parkingLot_id');
                         res.body.parkingLogs[0].should.have.property('logDate');
                         res.body.parkingLogs[0].should.have.property('id');
                         res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
+                        //console.log(parkingLogs);
                         res.body.parkingLogs.length.should.be.equal(1);
                         //
                         // console.log(res.body.parkingLogs[0]);
@@ -289,6 +297,7 @@ describe('hooks prepareDatabase', function() {
                         res.should.have.status(200);
                         res.body.should.not.have.property('err');
                         expect(res.body.parkingLogs).to.not.be.empty;
+
                         res.body.parkingLogs[0].should.have.property('currentParked');
                         res.body.parkingLogs[0].should.have.property('parkingLot_id');
                         res.body.parkingLogs[0].should.have.property('logDate');
@@ -333,16 +342,16 @@ function deleteAllParkingLotData(callback) {
 function addParkingLotData(callback) {
 
     let asyncTasks = [];
-    let query =
+    let query1 =
         "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
     asyncTasks.push(function(callback) {
-        connection.query(query, callback);
+        connection.query(query1, callback);
     });
 
-    query =
+    let query2 =
        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)";
     asyncTasks.push(function(callback) {
-        connection.query(query, callback);
+        connection.query(query2, callback);
     });
     console.log("addParkingLotData");
     async.series(asyncTasks, function(){

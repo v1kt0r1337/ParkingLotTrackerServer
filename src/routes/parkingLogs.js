@@ -69,6 +69,11 @@ router.get("/:id", function(req, res) {
  * Route to create new parking logs.
  */
 router.post("/", function(req, res) {
+    if (!req.body.parkingLot_id) {
+        res.json({"err": {"code":"Missing json body: parkingLot_id"}});
+        return;
+    }
+    console.log(req.body.currentParked);
     ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, req.body.logDate, function(err, rows)
     {
         if (err) {
@@ -86,7 +91,7 @@ router.post("/", function(req, res) {
  */
 router.put("/", function(req, res) {
     if (!req.body.id || !req.body.currentParked) {
-        res.json({"err" : "not all fields are defined"});
+        res.json({"err": {"code":"Missing parameter: id and/or currentParked"}});
         return;
     }
 

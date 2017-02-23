@@ -35,7 +35,6 @@ var parkingLog = {
      * Returns a parkingLog based on id
      */
     getParkingLogById: function (id, callback) {
-        console.log(id);
         db.query("SELECT * FROM parkingLog WHERE id = ?", [id], callback)
     },
 
@@ -43,8 +42,8 @@ var parkingLog = {
      * Creates a new parkingLog.
      */
     addParkingLog: function (id, currentParked, logDate, callback) {
-        this.newHistoricParkCount(id, currentParked, (id, currentParked, historicParkCount ) => {
-            this.insertParkingLog(id, currentParked, historicParkCount, callback);
+        this.newHistoricParkCount(id, currentParked, logDate, (id, currentParked, historicParkCount, logDate ) => {
+            insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
         });
     },
 
@@ -72,8 +71,7 @@ var parkingLog = {
     /**
      * Checks the totalParked value of the latest dated log, to check if it should increment
      */
-    newHistoricParkCount: function(id, currentParked, callback) {
-        //console.log(this);
+    newHistoricParkCount: function(id, currentParked, logDate, callback) {
         this.getAParkingLotsLatestParkingLog(id, (err, rows) => {
            // console.log(this);
             let old;
@@ -84,15 +82,18 @@ var parkingLog = {
             else {
                 old = parseRowDataIntoSingleEntity(rows);
             }
+            // if old is undefined then there are no parkinglogs for this parkinglot.
+            if (!old) {
+                callback(id, currentParked, currentParked, logDate);
+                return;
+            }
             if (currentParked > old.currentParked) {
                 // This allows for a potentially greater increment then just 1,
                 // something that should perhaps be looked deeper into later.
                 increment = currentParked - old.currentParked;
             }
             let historicParkCount = old.historicParkCount + increment;
-            console.log("historicParkCount " + historicParkCount);
-            console.log("Callback(historicParkCount)");
-            callback(id, currentParked, historicParkCount);
+            callback(id, currentParked, historicParkCount, logDate);
         });
     }
 };
@@ -112,12 +113,7 @@ function parseRowDataIntoSingleEntity(rowdata)
  * Insert parkingLog. This function is called from the addParkingLog method, if called directly ensure that
  * the historicParkCount is a correct increment of the "old latest"
  */
-function insertParkingLog(id, currentParked, historicParkCount, callback) {
-    //console.log(this);
-    console.log(arguments);
-    console.log("id: " + id);
-    console.log("currentParked: " + currentParked);
-    console.log("historicParkCount: " + historicParkCount);
+function insertParkingLog(id, currentParked, historicParkCount, logDate, callback) {
     if (typeof logDate === "undefined") {
         //console.log("inside if");
         var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
@@ -126,7 +122,8 @@ function insertParkingLog(id, currentParked, historicParkCount, callback) {
     }
     else {
         //console.log("inside else");
-        var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,??)";
+        //console.log("logDate: ", logDate);
+        var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
         var table = ["parkingLog", "currentParked", "parkingLot_id", "logDate", "historicParkCount",
             currentParked, id, logDate, historicParkCount];
     }

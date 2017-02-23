@@ -114,7 +114,6 @@ describe('hooks', function() {
                         expect(firstRow.reservedSpaces).to.equal(1);
                         expect(firstRow.capacity).to.equal(5);
 
-
                         done();
                     });
                 });
