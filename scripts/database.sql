@@ -14,6 +14,7 @@ CREATE TABLE parkingLot (
 CREATE TABLE parkingLog (
   id int (11) NOT NULL AUTO_INCREMENT,
   currentParked int (11) NOT NULL,
+  historicParkCount INT (11) NOT NULL,
   logDate datetime NOT NULL DEFAULT NOW(),
   parkingLot_id int NOT NULL,
   #CONSTRAINT constraint_name
@@ -25,14 +26,14 @@ CREATE TABLE parkingLog (
 use shitdatabase
 INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES
 ('Student Organisasjonen', 100, 10),
-('Hokus Pokus Barnehage', 70, 7)
+('Hokus Pokus Barnehage', 70, 7);
 
 use shitdatabase;
-INSERT INTO parkingLog (currentParked, logDate, parkingLot_id) VALUES
-(28, '2016-12-31 10:59:59', 1),
-(29, '2017-01-30 11:53:54', 1),
-(30, NOW(), 1),
-(18, '2016-12-31 10:59:59', 2),
-(19, '2017-01-30 11:53:54', 2),
-(18, NOW(), 2)
+INSERT INTO parkingLog (currentParked, historicParkCount, logDate, parkingLot_id) VALUES
+(28, 1337, '2016-12-31 10:59:59', 1),
+(29, 1338, '2017-01-30 11:53:54', 1),
+(30, 1339, NOW(), 1),
+(18, 600, '2016-12-31 10:59:59', 2),
+(19, 601, '2017-01-30 11:53:54', 2),
+(18, 601, NOW(), 2);
 

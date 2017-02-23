@@ -23,6 +23,7 @@ chai.use(chaiHttp);
 console.log(config.Database);
 console.log(config.util.getEnv('NODE_ENV'));
 
+
 describe('hooks', function() {
     before((done) => {
         prepareDatabase(() => {

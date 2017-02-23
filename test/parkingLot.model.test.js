@@ -16,7 +16,7 @@ let should = chai.should();
 let expect = chai.expect;
 let assert = chai.assert;
 
-/*
+
 describe('hooks', function() {
     before((done) => {
         prepareDatabase(() => {
@@ -114,7 +114,6 @@ describe('hooks', function() {
                         expect(firstRow.reservedSpaces).to.equal(1);
                         expect(firstRow.capacity).to.equal(5);
 
-
                         done();
                     });
                 });
@@ -124,7 +123,7 @@ describe('hooks', function() {
     });
 
 });
-*/
+
 function prepareDatabase(callback)
 {
     deleteAllParkingLogData( () => {
