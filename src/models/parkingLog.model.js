@@ -47,7 +47,34 @@ var parkingLog = {
         });
     },
 
-
+    /**
+     * Creates a new parkingLog based on the former latest parkinglog, currentParked is incremented/decremented 1 point,
+     * And historicParkCount is incremented 1 point IF currentParked was incremented.
+     */
+    addIncrementedParkingLog: function(id, increment, logDate, callback) {
+          this.getAParkingLotsLatestParkingLog(id, (err, row, callback) => {
+              if (row) {
+                  let currentParked;
+                  console.log(row);
+                  console.log(row.length);
+                  if (row.length != 0) {
+                      row = parseRowDataIntoSingleEntity(row);
+                      if (!isNaN(increment)) {
+                          increment = parseInt(increment);
+                      }
+                      currentParked= row.currentParked + increment;
+                  }
+                  else {
+                      currentParked = increment;
+                  }
+                  console.log("currentParked " + currentParked);
+                  this.newHistoricParkCount(id, currentParked, undefined,
+                      (id, currentParked, historicParkCount) => {
+                      insertParkingLog(id, currentParked, historicParkCount, undefined, callback);
+                  });
+              }
+          })
+    },
 
     /**
      * Updates a parkingLog based on id.
