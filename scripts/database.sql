@@ -23,6 +23,13 @@ CREATE TABLE parkingLog (
   REFERENCES parkingLot(id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE User (
+  deviceId VARCHAR (64) NOT NULL,
+  name VARCHAR (32) NOT NULL,
+  admin BOOLEAN NOT NULL,
+  password VARCHAR (256) NOT NULL
+) ENGINE=InnoDB;
+
 use shitdatabase
 INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES
 ('Student Organisasjonen', 100, 10),
