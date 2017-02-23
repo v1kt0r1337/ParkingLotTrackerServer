@@ -23,7 +23,7 @@ before_install:
       CREATE TABLE parkingLog (
       id int (11) NOT NULL AUTO_INCREMENT,
       currentParked int (11) NOT NULL,
-      totalParked INT (11) NOT NULL,
+      historicParkCount INT (11) NOT NULL,
       logDate timestamp DEFAULT NOW(),
       parkingLot_id int NOT NULL,
       PRIMARY KEY (id),

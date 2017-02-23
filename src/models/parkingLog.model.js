@@ -5,6 +5,7 @@
 "use strict";
 var db = require("../dbconnection");
 var mysql = require("mysql");
+var async = require("async");
 
 var parkingLog = {
     /**
@@ -42,25 +43,12 @@ var parkingLog = {
      * Creates a new parkingLog.
      */
     addParkingLog: function (id, currentParked, logDate, callback) {
-
-       // console.log("inside addParkingLog");
-       /// console.log(logDate);
-        if(typeof logDate === "undefined")
-        {
-        //    console.log("inside if");
-            var query = "INSERT INTO ??(??,??) VALUES (?,?)";
-            var table = ["parkingLog", "currentParked", "parkingLot_id",
-                currentParked, id];
-        }
-        else {
-       //     console.log("inside else");
-            var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
-            var table = ["parkingLog", "currentParked", "parkingLot_id", "logDate",
-                currentParked, id, logDate];
-        }
-        query = mysql.format(query, table);
-        db.query(query, callback);
+        this.newHistoricParkCount(id, currentParked, (id, currentParked, historicParkCount ) => {
+            this.insertParkingLog(id, currentParked, historicParkCount, callback);
+        });
     },
+
+
 
     /**
      * Updates a parkingLog based on id.
@@ -79,7 +67,69 @@ var parkingLog = {
     deleteParkingLogById: function(id, callback) {
         var query = "DELETE FROM parkingLog WHERE id = ?";
         db.query(query, [id], callback);
+    },
+
+    /**
+     * Checks the totalParked value of the latest dated log, to check if it should increment
+     */
+    newHistoricParkCount: function(id, currentParked, callback) {
+        //console.log(this);
+        this.getAParkingLotsLatestParkingLog(id, (err, rows) => {
+           // console.log(this);
+            let old;
+            let increment = 0;
+            if (err) {
+                old = parseRowDataIntoSingleEntity(rows);
+            }
+            else {
+                old = parseRowDataIntoSingleEntity(rows);
+            }
+            if (currentParked > old.currentParked) {
+                // This allows for a potentially greater increment then just 1,
+                // something that should perhaps be looked deeper into later.
+                increment = currentParked - old.currentParked;
+            }
+            let historicParkCount = old.historicParkCount + increment;
+            console.log("historicParkCount " + historicParkCount);
+            console.log("Callback(historicParkCount)");
+            callback(id, currentParked, historicParkCount);
+        });
     }
 };
 
 module.exports = parkingLog;
+
+
+function parseRowDataIntoSingleEntity(rowdata)
+{
+    rowdata = JSON.stringify(rowdata);
+    // console.log(rowdata);
+    rowdata = JSON.parse(rowdata)[0];
+    return rowdata;
+}
+
+/**
+ * Insert parkingLog. This function is called from the addParkingLog method, if called directly ensure that
+ * the historicParkCount is a correct increment of the "old latest"
+ */
+function insertParkingLog(id, currentParked, historicParkCount, callback) {
+    //console.log(this);
+    console.log(arguments);
+    console.log("id: " + id);
+    console.log("currentParked: " + currentParked);
+    console.log("historicParkCount: " + historicParkCount);
+    if (typeof logDate === "undefined") {
+        //console.log("inside if");
+        var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+        var table = ["parkingLog", "currentParked", "parkingLot_id", "historicParkCount",
+            currentParked, id, historicParkCount];
+    }
+    else {
+        //console.log("inside else");
+        var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,??)";
+        var table = ["parkingLog", "currentParked", "parkingLot_id", "logDate", "historicParkCount",
+            currentParked, id, logDate, historicParkCount];
+    }
+    query = mysql.format(query, table);
+    db.query(query, callback);
+}
