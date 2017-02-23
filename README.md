@@ -51,6 +51,7 @@ parkingLogs |
 /api/v0/parkinglogs | GET - All parkinglogs
 /api/v0/parkinglogs/:id | GET/DELETE - Single parkinglog
 /api/v0/parkinglogs | POST - Creates new parkinglog
+/api/v0/parkinglogs/increment | POST - Creates new parkinglog with one more OR less parked car then the former latest parkinglog. Examples of use: Increment { "increment": 1, "parkingLot_id": 3 } Decrement { "increment": -1, "parkingLot_id": 3 }
 /api/v0/parkinglogs | PUT - Updates a parkinglog, only the currentParked value can be changed.
 /api/v0/parkinglogs/latest | GET - Single parkinglog of latest date.
 
@@ -69,11 +70,11 @@ $ npm test
 ```
 This script uses the test database.
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=develop
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=incrementRoute
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=develop
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=develop
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=incrementRoute
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=incrementRoute
 
-[snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/develop/badge.svg
+[snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/incrementRoute/badge.svg
 [snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer

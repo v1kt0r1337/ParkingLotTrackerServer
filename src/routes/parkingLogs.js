@@ -86,6 +86,26 @@ router.post("/", function(req, res) {
 });
 
 /**
+ * Route to create new parking logs.
+ */
+router.post("/increment", function(req, res) {
+    if (!req.body.parkingLot_id) {
+        res.json({"err": {"code":"Missing json body: parkingLot_id"}});
+        return;
+    }
+    ParkingLog.addIncrementedParkingLog(req.body.parkingLot_id, req.body.increment, req.body.logDate, function(err, rows)
+    {
+        if (err) {
+            res.json({err});
+        }
+        else {
+            res.json({"Error" : false, "Message" : "Parking Log Added"});
+        }
+    });
+});
+
+
+/**
  * Route to update a parking log.
  * Only the currentParked value can be changed.
  */
