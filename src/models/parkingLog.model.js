@@ -52,11 +52,9 @@ var parkingLog = {
      * And historicParkCount is incremented 1 point IF currentParked was incremented.
      */
     addIncrementedParkingLog: function(id, increment, logDate, callback) {
-          this.getAParkingLotsLatestParkingLog(id, (err, row, callback) => {
+          this.getAParkingLotsLatestParkingLog(id, (err, row) => {
               if (row) {
                   let currentParked;
-                  console.log(row);
-                  console.log(row.length);
                   if (row.length != 0) {
                       row = parseRowDataIntoSingleEntity(row);
                       if (!isNaN(increment)) {
@@ -67,10 +65,9 @@ var parkingLog = {
                   else {
                       currentParked = increment;
                   }
-                  console.log("currentParked " + currentParked);
-                  this.newHistoricParkCount(id, currentParked, undefined,
-                      (id, currentParked, historicParkCount) => {
-                      insertParkingLog(id, currentParked, historicParkCount, undefined, callback);
+                  this.newHistoricParkCount(id, currentParked, logDate,
+                      (id, currentParked, historicParkCount, logDate) => {
+                      insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
                   });
               }
           })
@@ -100,10 +97,11 @@ var parkingLog = {
      */
     newHistoricParkCount: function(id, currentParked, logDate, callback) {
         this.getAParkingLotsLatestParkingLog(id, (err, rows) => {
-           // console.log(this);
             let old;
             let increment = 0;
             if (err) {
+                // This should probably be looked closer into.
+                console.log("err in function newHistoricParkCount");
                 old = parseRowDataIntoSingleEntity(rows);
             }
             else {

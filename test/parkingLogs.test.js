@@ -307,6 +307,65 @@ describe('hooks prepareDatabase', function() {
                     })
             });
         });
+
+        describe('/POST parkinglogs/increment', () => {
+            it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks parkingLot_id field',
+                () => {
+                let parkingLog = {
+                    "increment": 1
+                };
+
+                return chai.request(server)
+                    .post('/api/v0/parkinglogs/increment')
+                    .send(parkingLog)
+                    .then((res) => {
+                        //console.log(res);
+                        //console.log(parkingLog);
+                        res.should.have.status(200);
+                        res.body.should.have.property('err');
+                    })
+            });
+        });
+
+        describe('/POST parkinglogs/increment', () => {
+            it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks increment field',
+                () => {
+                    let parkingLog = {
+                        "parkingLot_id": parkinglot.id
+                    };
+
+                    return chai.request(server)
+                        .post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .then((res) => {
+                            //console.log(res);
+                            //console.log(parkingLog);
+                            res.should.have.status(200);
+                            res.body.should.have.property('err');
+                        })
+                });
+        });
+
+        describe('/POST parkinglogs', () => {
+            it('it should POST', () => {
+                let parkingLog = {
+                    "increment": 1,
+                    "parkingLot_id": parkinglot.id
+                };
+                console.log(parkingLog);
+                return chai.request(server)
+                    .post('/api/v0/parkinglogs/increment')
+                    .send(parkingLog)
+                    .then((res) => {
+                        console.log(parkingLog);
+                        res.should.have.status(200);
+                        //console.log(res.body);
+                        res.body.should.not.have.property('err');
+                    })
+            });
+        });
+
+
     });
 
 });
