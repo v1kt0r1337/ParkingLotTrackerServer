@@ -9,6 +9,7 @@ var bodyParser = require("body-parser");
 // Our files
 var parkingLots = require("./routes/parkingLots");
 var parkingLogs = require("./routes/parkingLogs");
+let secret = process.env.secret;
 
 var app = express();
 
@@ -26,5 +27,6 @@ app.use('/api/v0/parkinglogs', parkingLogs);
 
 app.listen(3000);
 console.log("Server is listening to port 3000");
+console.log(secret);
 
 module.exports = app;
