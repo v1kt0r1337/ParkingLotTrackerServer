@@ -38,3 +38,6 @@ jspm_packages
 
 # Ignore .idea IDE spesific files
 .idea
+
+# Ignore .env file containing secret
+.env
