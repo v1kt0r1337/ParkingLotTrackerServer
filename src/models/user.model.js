@@ -1,9 +1,6 @@
 /**
  * Created by archheretic on 26.02.17.
  */
-/**
- * Created by archheretic on 24.02.17.
- */
 /* jshint node: true */
 "use strict";
 let db = require("../dbconnection");

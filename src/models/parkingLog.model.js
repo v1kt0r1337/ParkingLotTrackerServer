@@ -6,6 +6,7 @@
 let db = require("../dbconnection");
 let mysql = require("mysql");
 let async = require("async");
+let utility = require("./utility");
 
 let parkingLog = {
     /**
@@ -52,25 +53,25 @@ let parkingLog = {
      * And historicParkCount is incremented 1 point IF currentParked was incremented.
      */
     addIncrementedParkingLog: function(id, increment, logDate, callback) {
-          this.getAParkingLotsLatestParkingLog(id, (err, row) => {
-              if (row) {
-                  let currentParked;
-                  if (row.length != 0) {
-                      row = parseRowDataIntoSingleEntity(row);
-                      if (!isNaN(increment)) {
-                          increment = parseInt(increment);
-                      }
-                      currentParked= row.currentParked + increment;
-                  }
-                  else {
-                      currentParked = increment;
-                  }
-                  this.newHistoricParkCount(id, currentParked, logDate,
-                      (id, currentParked, historicParkCount, logDate) => {
-                      insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
-                  });
-              }
-          })
+        this.getAParkingLotsLatestParkingLog(id, (err, row) => {
+            if (row) {
+                let currentParked;
+                if (row.length != 0) {
+                    row = utility.parseRowDataIntoSingleEntity(row);
+                    if (!isNaN(increment)) {
+                        increment = parseInt(increment);
+                    }
+                    currentParked= row.currentParked + increment;
+                }
+                else {
+                    currentParked = increment;
+                }
+                this.newHistoricParkCount(id, currentParked, logDate,
+                    (id, currentParked, historicParkCount, logDate) => {
+                        insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
+                    });
+            }
+        })
     },
 
     /**
@@ -102,10 +103,10 @@ let parkingLog = {
             if (err) {
                 // This should probably be looked closer into.
                 console.log("err in function newHistoricParkCount");
-                old = parseRowDataIntoSingleEntity(rows);
+                old = utility.parseRowDataIntoSingleEntity(rows);
             }
             else {
-                old = parseRowDataIntoSingleEntity(rows);
+                old = utility.parseRowDataIntoSingleEntity(rows);
             }
             // if old is undefined then there are no parkinglogs for this parkinglot.
             if (!old) {
@@ -125,14 +126,6 @@ let parkingLog = {
 
 module.exports = parkingLog;
 
-
-function parseRowDataIntoSingleEntity(rowdata)
-{
-    rowdata = JSON.stringify(rowdata);
-    // console.log(rowdata);
-    rowdata = JSON.parse(rowdata)[0];
-    return rowdata;
-}
 
 /**
  * Insert parkingLog. This function is called from the addParkingLog method, if called directly ensure that
@@ -154,4 +147,3 @@ function insertParkingLog(id, currentParked, historicParkCount, logDate, callbac
     }
     query = mysql.format(query, table);
     db.query(query, callback);
-}
