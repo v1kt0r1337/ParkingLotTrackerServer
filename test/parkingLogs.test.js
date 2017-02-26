@@ -65,7 +65,6 @@ describe('hooks prepareDatabase', function() {
             return chai.request(server)
                 .post('/api/v0/auth')
                 .send(normalUser)
-                .set('x-access-token', adminToken)
                 .then((res) => {
                     //console.log("inni chaii request");
 

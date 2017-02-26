@@ -21,9 +21,10 @@ router.post('/', function(req, res) {
         } else if (user) {
             user = utility.parseRowDataIntoSingleEntity(user);
             // check if password matches
-            console.log("user ", user);
-            console.log("user.password ", user.password);
-            console.log("req.body.password ", req.body.password)
+            // console.log("user ", user);
+            // console.log("user.password ", user.password);
+            console.log("req.body.password ", req.body.password);
+            console.log("user.password ", user.password)
             if (user.password != req.body.password) {
                 res.json({ success: false, message: 'Authentication failed. Wrong password.' });
             } else {

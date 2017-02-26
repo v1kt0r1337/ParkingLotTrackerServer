@@ -24,7 +24,7 @@ let user = {
     // password VARCHAR (256) NOT NULL
 
     addUser: function(deviceId, name, admin=false, password, callback) {
-        let query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+        let query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
         let table = ["user", "deviceId", "name", "admin", "password",
             deviceId, name, admin, password];
         query = mysql.format(query, table);
@@ -35,11 +35,11 @@ let user = {
      * Returns a parkingLot based on id.
      */
     getUserById : function(deviceId, callback) {
-        console.log(deviceId);
+        //console.log(deviceId);
         let query = "SELECT * FROM ?? WHERE ??=?";
         let table = ["user", "deviceId", deviceId];
         query = mysql.format(query, table);
-        console.log(query);
+        //console.log(query);
         db.query(query, callback);
     },
 

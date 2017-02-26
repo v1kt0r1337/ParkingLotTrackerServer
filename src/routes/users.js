@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
 router.get('/:id', function(req, res) {
     authorize.verify(req,res, false, function(req,res) {
         // also need to check that req.params.deviceId is the same as the req.decoded.deviceId
-        User.getUserById(req.params.deviceId, function(err, rows) {
+        User.getUserById(req.params.id, function(err, rows) {
             if (err) {
                 res.json({err});
             }
@@ -34,5 +34,20 @@ router.get('/:id', function(req, res) {
             }
         });
     });
+});
+
+/**
+ * Route for creating new users.
+ */
+router.post("/", function(req, res) {
+    User.addUser(req.body.deviceId, req.body.name, false, req.body.password,
+        function(err, rows) {
+            if (err) {
+                res.json({err});
+            }
+            else {
+                res.json({"Message" : "Parking Lot Added"});
+            }
+        });
 });
 module.exports = router;

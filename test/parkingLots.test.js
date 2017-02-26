@@ -111,7 +111,7 @@ describe('hooks', function() {
                 "name": "tessst",
                 "capacity": 100,
                 "reservedSpaces": 10
-            }
+            };
             return chai.request(server)
                 .post('/api/v0/parkinglots/')
                 .set('x-access-token', adminToken)
