@@ -79,8 +79,8 @@ let parkingLog = {
      * Only the currentParked value can be changed.
      */
     updateParkingLog: function (id, currentParked, callback) {
-        var query = "UPDATE parkingLog SET currentParked = ? WHERE id = ?";
-        var prep = [currentParked, id];
+        let query = "UPDATE parkingLog SET currentParked = ? WHERE id = ?";
+        let prep = [currentParked, id];
         query = mysql.format(query, prep);
         db.query(query, callback);
     },
@@ -89,7 +89,7 @@ let parkingLog = {
      * Delete the parkingLog with the corresponding id.
      */
     deleteParkingLogById: function(id, callback) {
-        var query = "DELETE FROM parkingLog WHERE id = ?";
+        let query = "DELETE FROM parkingLog WHERE id = ?";
         db.query(query, [id], callback);
     },
 
@@ -132,18 +132,21 @@ module.exports = parkingLog;
  * the historicParkCount is a correct increment of the "old latest"
  */
 function insertParkingLog(id, currentParked, historicParkCount, logDate, callback) {
+    let query;
+    let table;
     if (typeof logDate === "undefined") {
         //console.log("inside if");
-        var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
-        var table = ["parkingLog", "currentParked", "parkingLot_id", "historicParkCount",
+        query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+        table = ["parkingLog", "currentParked", "parkingLot_id", "historicParkCount",
             currentParked, id, historicParkCount];
     }
     else {
         //console.log("inside else");
         //console.log("logDate: ", logDate);
-        var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
-        var table = ["parkingLog", "currentParked", "parkingLot_id", "logDate", "historicParkCount",
+        query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
+        table = ["parkingLog", "currentParked", "parkingLot_id", "logDate", "historicParkCount",
             currentParked, id, logDate, historicParkCount];
     }
     query = mysql.format(query, table);
     db.query(query, callback);
+}
