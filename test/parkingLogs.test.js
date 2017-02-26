@@ -23,11 +23,57 @@ chai.use(chaiHttp);
 
 
 let parkinglot;
+let adminToken;
+let userToken;
 
 describe('hooks prepareDatabase', function() {
     before((done) => {
         prepareDatabase(() => {
             done();
+        });
+    });
+
+    describe('/POST authenticate admin user for parkinglot tests', () => {
+        it('Should authenticate an admin user', () => {
+            let admin = {
+                deviceId: "humbug",
+                name: "humbugName",
+                admin: true,
+                password: "pwd"
+            };
+
+            return chai.request(server)
+                .post('/api/v0/auth')
+                .send(admin)
+                .then((res) => {
+                    res.should.have.status(200);
+                    adminToken = res.body.token;
+                })
+        });
+    });
+
+    describe('/POST authenticate a normal user for parkinglot tests', () => {
+        it('Should authenticate a normal user', () => {
+            let normalUser = {
+                deviceId: "ordinary",
+                name: "joe",
+                admin: false,
+                password: "pwd"
+            };
+
+            //console.log("utenfor chaii request");
+            return chai.request(server)
+                .post('/api/v0/auth')
+                .send(normalUser)
+                .set('x-access-token', adminToken)
+                .then((res) => {
+                    //console.log("inni chaii request");
+
+                    res.should.have.status(200);
+                    userToken = res.body.token;
+                    //console.log("res ", res);
+                    // console.log("adminToken", adminToken);
+                })
         });
     });
 
@@ -49,7 +95,7 @@ describe('hooks prepareDatabase', function() {
     /**
      * Test the /GET route
      */
-   describe('/GET parkingLogs', () => {
+    describe('/GET parkingLogs', () => {
         it('This GET test should get an empty parkingLogs object', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglogs/')
@@ -72,6 +118,7 @@ describe('hooks prepareDatabase', function() {
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     //console.log(res);
                     //console.log(parkingLog);
@@ -91,6 +138,7 @@ describe('hooks prepareDatabase', function() {
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     console.log(parkingLog);
                     res.should.have.status(200);
@@ -141,6 +189,7 @@ describe('hooks prepareDatabase', function() {
             return chai.request(server)
                 .put('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     //console.log(res.body);
@@ -157,6 +206,7 @@ describe('hooks prepareDatabase', function() {
             return chai.request(server)
                 .put('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     //console.log(res.body);
@@ -169,6 +219,7 @@ describe('hooks prepareDatabase', function() {
         it('GET :id Test checking that last test actually updated the parking log', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglogs/' + id)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
@@ -185,6 +236,7 @@ describe('hooks prepareDatabase', function() {
         it('DELETE :id Tests that the DELETE parkinglogs route work', () => {
             return chai.request(server)
                 .delete('/api/v0/parkinglogs/' + id)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
@@ -282,7 +334,7 @@ describe('hooks prepareDatabase', function() {
                             res.body.parkingLogs[0].should.have.property('id');
                             res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
                             res.body.parkingLogs.length.should.be.equal(1);
-                           // console.log(res.body.parkingLogs[0]);
+                            // console.log(res.body.parkingLogs[0]);
                         })
                 });
         });
@@ -290,41 +342,42 @@ describe('hooks prepareDatabase', function() {
         describe('/GET latest parkinglog of another spesific parking place', () => {
             it('GET/parkinglogs/latest/:i Tests that we it also work correctly on other parkinglots',
                 function() {
-                return chai.request(server)
-                    .get('/api/v0/parkinglogs/latest/' + (parkinglot.id + 1))
-                    .then((res) => {
-                        res.should.have.status(200);
-                        res.body.should.not.have.property('err');
-                        expect(res.body.parkingLogs).to.not.be.empty;
+                    return chai.request(server)
+                        .get('/api/v0/parkinglogs/latest/' + (parkinglot.id + 1))
+                        .then((res) => {
+                            res.should.have.status(200);
+                            res.body.should.not.have.property('err');
+                            expect(res.body.parkingLogs).to.not.be.empty;
 
-                        res.body.parkingLogs[0].should.have.property('currentParked');
-                        res.body.parkingLogs[0].should.have.property('parkingLot_id');
-                        res.body.parkingLogs[0].should.have.property('logDate');
-                        res.body.parkingLogs[0].should.have.property('id');
-                        res.body.parkingLogs[0].currentParked.should.be.equal(secondLastInserted);
-                        res.body.parkingLogs.length.should.be.equal(1);
-                        //console.log(res.body.parkingLogs[0]);
-                    })
-            });
+                            res.body.parkingLogs[0].should.have.property('currentParked');
+                            res.body.parkingLogs[0].should.have.property('parkingLot_id');
+                            res.body.parkingLogs[0].should.have.property('logDate');
+                            res.body.parkingLogs[0].should.have.property('id');
+                            res.body.parkingLogs[0].currentParked.should.be.equal(secondLastInserted);
+                            res.body.parkingLogs.length.should.be.equal(1);
+                            //console.log(res.body.parkingLogs[0]);
+                        })
+                });
         });
 
         describe('/POST parkinglogs/increment', () => {
             it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks parkingLot_id field',
                 () => {
-                let parkingLog = {
-                    "increment": 1
-                };
+                    let parkingLog = {
+                        "increment": 1
+                    };
 
-                return chai.request(server)
-                    .post('/api/v0/parkinglogs/increment')
-                    .send(parkingLog)
-                    .then((res) => {
-                        //console.log(res);
-                        //console.log(parkingLog);
-                        res.should.have.status(200);
-                        res.body.should.have.property('err');
-                    })
-            });
+                    return chai.request(server)
+                        .post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .set('x-access-token', adminToken)
+                        .then((res) => {
+                            //console.log(res);
+                            //console.log(parkingLog);
+                            res.should.have.status(200);
+                            res.body.should.have.property('err');
+                        })
+                });
         });
 
         describe('/POST parkinglogs/increment', () => {
@@ -337,6 +390,7 @@ describe('hooks prepareDatabase', function() {
                     return chai.request(server)
                         .post('/api/v0/parkinglogs/increment')
                         .send(parkingLog)
+                        .set('x-access-token', adminToken)
                         .then((res) => {
                             //console.log(res);
                             //console.log(parkingLog);
@@ -356,6 +410,7 @@ describe('hooks prepareDatabase', function() {
                 return chai.request(server)
                     .post('/api/v0/parkinglogs/increment')
                     .send(parkingLog)
+                    .set('x-access-token', adminToken)
                     .then((res) => {
                         console.log(parkingLog);
                         res.should.have.status(200);
@@ -375,15 +430,41 @@ describe('hooks prepareDatabase', function() {
  */
 
 function prepareDatabase(callback) {
-    deleteAllParkingLogData( () => {
-        deleteAllParkingLotData( () => {
-            addParkingLotData( () => {
-                setParkingLot(callback);
-           });
+    deleteAllUsers( () => {
+        addUsers(() => {
+            deleteAllParkingLogData(() => {
+                deleteAllParkingLotData(() => {
+                    addParkingLotData(() => {
+                        setParkingLot(callback);
+                    });
+                });
+            });
         });
     });
 }
 
+function deleteAllUsers(callback) {
+    let query = "DELETE FROM user";
+    connection.query(query, callback);
+    console.log("deleteAllUsers");
+}
+
+function addUsers(callback) {
+    function addAdminUser(callback) {
+        let query =
+            "INSERT INTO user (deviceId, name, admin, password) VALUES ('humbug', 'humbugName', true, 'pwd')";
+        connection.query(query, callback);
+        console.log("addAdminUser");
+    }
+
+    function addNormalUser(callback) {
+        let query =
+            "INSERT INTO user (deviceId, name, admin, password) VALUES ('ordinary', 'joe', false, 'pwd')";
+        connection.query(query, callback);
+        console.log("addNormalUser");
+    }
+    addAdminUser(addNormalUser(callback));
+}
 
 function deleteAllParkingLogData(callback) {
     let query = "DELETE FROM parkingLog";
@@ -408,7 +489,7 @@ function addParkingLotData(callback) {
     });
 
     let query2 =
-       "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)";
     asyncTasks.push(function(callback) {
         connection.query(query2, callback);
     });
@@ -439,7 +520,7 @@ function setParkingLot(callback) {
 function parseRowDataIntoSingleEntity(rowdata)
 {
     rowdata = JSON.stringify(rowdata);
-   // console.log(rowdata);
+    // console.log(rowdata);
     rowdata = JSON.parse(rowdata)[0];
     return rowdata;
 }
