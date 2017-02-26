@@ -4,9 +4,10 @@
 /* jshint node: true */
 "use strict";
 
-var express = require('express');
-var router = express.Router();
-var ParkingLog = require('../models/parkingLog.model');
+let express = require('express');
+let router = express.Router();
+let ParkingLog = require('../models/parkingLog.model');
+let authorize = require('./authorize');
 
 /**
  * Route to get all parking logs.
@@ -69,19 +70,21 @@ router.get("/:id", function(req, res) {
  * Route to create new parking logs.
  */
 router.post("/", function(req, res) {
-    if (!req.body.parkingLot_id) {
-        res.json({"err": {"code":"Missing json body: parkingLot_id"}});
-        return;
-    }
-    console.log(req.body.currentParked);
-    ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, req.body.logDate, function(err, rows)
-    {
-        if (err) {
-            res.json({err});
+    authorize.verify(req,res, true, function(req,res) {
+        if (!req.body.parkingLot_id) {
+            res.json({"err": {"code":"Missing json body: parkingLot_id"}});
+            return;
         }
-        else {
-            res.json({"Error" : false, "Message" : "Parking Log Added"});
-        }
+        console.log(req.body.currentParked);
+        ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, req.body.logDate, function(err, rows)
+        {
+            if (err) {
+                res.json({err});
+            }
+            else {
+                res.json({"Error" : false, "Message" : "Parking Log Added"});
+            }
+        });
     });
 });
 
@@ -89,18 +92,19 @@ router.post("/", function(req, res) {
  * Route to create new parking logs.
  */
 router.post("/increment", function(req, res) {
-    if (!req.body.parkingLot_id) {
-        res.json({"err": {"code":"Missing json body: parkingLot_id"}});
-        return;
-    }
-    ParkingLog.addIncrementedParkingLog(req.body.parkingLot_id, req.body.increment, req.body.logDate, function(err, rows)
-    {
-        if (err) {
-            res.json({err});
+    authorize.verify(req,res, true, function(req,res) {
+        if (!req.body.parkingLot_id) {
+            res.json({"err": {"code": "Missing json body: parkingLot_id"}});
+            return;
         }
-        else {
-            res.json({"Error" : false, "Message" : "Parking Log Added"});
-        }
+        ParkingLog.addIncrementedParkingLog(req.body.parkingLot_id, req.body.increment, req.body.logDate, function (err, rows) {
+            if (err) {
+                res.json({err});
+            }
+            else {
+                res.json({"Error": false, "Message": "Parking Log Added"});
+            }
+        });
     });
 });
 
@@ -110,19 +114,20 @@ router.post("/increment", function(req, res) {
  * Only the currentParked value can be changed.
  */
 router.put("/", function(req, res) {
-    if (!req.body.id || !req.body.currentParked) {
-        res.json({"err": {"code":"Missing parameter: id and/or currentParked"}});
-        return;
-    }
+    authorize.verify(req,res, true, function(req,res) {
+        if (!req.body.id || !req.body.currentParked) {
+            res.json({"err": {"code": "Missing parameter: id and/or currentParked"}});
+            return;
+        }
 
-    ParkingLog.updateParkingLog(req.body.id, req.body.currentParked, function(err, rows)
-    {
-        if (err) {
-            res.json({err});
-        }
-        else {
-            res.json({"Message" : "Parking Log Updated"});
-        }
+        ParkingLog.updateParkingLog(req.body.id, req.body.currentParked, function (err, rows) {
+            if (err) {
+                res.json({err});
+            }
+            else {
+                res.json({"Message": "Parking Log Updated"});
+            }
+        });
     });
 });
 
@@ -130,13 +135,15 @@ router.put("/", function(req, res) {
  * Route to delete a parking log with the corresponding id.
  */
 router.delete("/:id", function(req, res) {
-    ParkingLog.deleteParkingLogById(req.params.id, function(err, rows) {
-        if(err) {
-            res.json({err});
-        }
-        else {
-            res.json({"Message" : "Deleted parking log with id " + req.params.id});
-        }
+    authorize.verify(req,res, true, function(req,res) {
+        ParkingLog.deleteParkingLogById(req.params.id, function (err, rows) {
+            if (err) {
+                res.json({err});
+            }
+            else {
+                res.json({"Message": "Deleted parking log with id " + req.params.id});
+            }
+        });
     });
 });
 
