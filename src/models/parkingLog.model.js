@@ -3,11 +3,11 @@
  */
 /* jshint node: true */
 "use strict";
-var db = require("../dbconnection");
-var mysql = require("mysql");
-var async = require("async");
+let db = require("../dbconnection");
+let mysql = require("mysql");
+let async = require("async");
 
-var parkingLog = {
+let parkingLog = {
     /**
      * Returns all parkingLogs.
      */
