@@ -93,7 +93,7 @@ describe('hooks', function() {
             let parkingLot = {
                 "name": "tessst",
                 "reservedSpaces": 10
-            }
+            };
             return chai.request(server)
                 .post('/api/v0/parkinglots/')
                 .set('x-access-token', adminToken)
