@@ -309,8 +309,8 @@ describe('hooks prepareDatabase', function() {
                         res.body.parkingLogs[0].should.have.property('parkingLot_id');
                         res.body.parkingLogs[0].should.have.property('logDate');
                         res.body.parkingLogs[0].should.have.property('id');
+                        console.log(parkingLogs[0]);
                         res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
-                        //console.log(parkingLogs);
                         res.body.parkingLogs.length.should.be.equal(1);
                         //
                         // console.log(res.body.parkingLogs[0]);
@@ -331,6 +331,7 @@ describe('hooks prepareDatabase', function() {
                             res.body.parkingLogs[0].should.have.property('parkingLot_id');
                             res.body.parkingLogs[0].should.have.property('logDate');
                             res.body.parkingLogs[0].should.have.property('id');
+                            console.log(parkingLogs[0]);
                             res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
                             res.body.parkingLogs.length.should.be.equal(1);
                             // console.log(res.body.parkingLogs[0]);
@@ -352,6 +353,7 @@ describe('hooks prepareDatabase', function() {
                             res.body.parkingLogs[0].should.have.property('parkingLot_id');
                             res.body.parkingLogs[0].should.have.property('logDate');
                             res.body.parkingLogs[0].should.have.property('id');
+                            console.log(parkingLogs[0]);
                             res.body.parkingLogs[0].currentParked.should.be.equal(secondLastInserted);
                             res.body.parkingLogs.length.should.be.equal(1);
                             //console.log(res.body.parkingLogs[0]);
