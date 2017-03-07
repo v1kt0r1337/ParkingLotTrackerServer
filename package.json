@@ -11,9 +11,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "body-parser": "latest",
+    "body-parser": "^1.17.1",
     "config": "^1.25.1",
-    "express": "latest",
+    "express": "^4.15.2",
     "jsonwebtoken": "^7.3.0",
     "morgan": "^1.8.1",
     "mysql": "latest"
