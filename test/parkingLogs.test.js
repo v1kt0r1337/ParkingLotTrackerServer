@@ -267,9 +267,11 @@ describe('hooks prepareDatabase', function() {
             let i = 0;
             let asyncTasks = [];
             let alternating = 0;
+            let currentParked;
+            let logDate;
             while (i < 10) {
-                let currentParked = i * i + 1;
-                let logDate = "2099-01-0" + i + " 11:53:54";
+                currentParked = i * i + 1;
+                logDate = "2099-01-0" + i + " 11:53:54";
                 //let logDate = "2017-01-01 11:53:54";
 
                 asyncTasks.push(function(callback)
