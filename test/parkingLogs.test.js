@@ -424,6 +424,18 @@ describe('hooks prepareDatabase', function() {
             });
         });
 
+        // just to debug a weird bug on Travis-CI
+        describe('/GET parkinglogs', () => {
+            it('it should GET all the parkinglogs', () => {
+                return chai.request(server)
+                    .get('/api/v0/parkinglogs/')
+                    .then((res) => {
+                        res.should.have.status(200);
+                        console.log(res.body.parkingLogs);
+                    })
+            });
+        });
+
 
     });
 
