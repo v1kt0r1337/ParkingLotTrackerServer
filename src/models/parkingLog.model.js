@@ -134,7 +134,6 @@ module.exports = parkingLog;
 function insertParkingLog(id, currentParked, historicParkCount, logDate, callback) {
     let query;
     let table;
-    console.log(logDate);
     if (typeof logDate === "undefined") {
         //console.log("inside if");
         query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
