@@ -111,7 +111,8 @@ describe('hooks prepareDatabase', function() {
     describe('/POST parkinglogs', () => {
         it('it should NOT POST, lacks parkingLot_id field', () => {
             let parkingLog = {
-                "currentParked": 20
+                "currentParked": 20,
+                "parkingLog": "2010-01-0 11:53:54"
             };
 
             return chai.request(server)
@@ -131,7 +132,8 @@ describe('hooks prepareDatabase', function() {
         it('it should POST', () => {
             let parkingLog = {
                 "currentParked": 800,
-                "parkingLot_id": parkinglot.id
+                "parkingLot_id": parkinglot.id,
+                "parkingLog": "2009-01-0 11:53:54"
             };
             console.log(parkingLog);
             return chai.request(server)
@@ -405,7 +407,8 @@ describe('hooks prepareDatabase', function() {
             it('it should POST', () => {
                 let parkingLog = {
                     "increment": 1,
-                    "parkingLot_id": parkinglot.id
+                    "parkingLot_id": parkinglot.id,
+                    "parkingLog": "2011-01-0 11:53:54"
                 };
                 console.log(parkingLog);
                 return chai.request(server)
