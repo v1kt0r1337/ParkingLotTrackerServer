@@ -13,6 +13,10 @@ let chai = require("chai");
 let chaiHttp = require("chai-http");
 let should = chai.should();
 let expect = chai.expect;
+let supertest = require('supertest');
+// THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
+let api = supertest('http://localhost:3000');
+
 let config = require("config");
 
 chai.use(chaiHttp);
@@ -123,25 +127,33 @@ describe('hooks', function() {
         });
     });
 
-    //// find out how to test that the route is forbidden.
-    // describe('/POST parkinglots', () => {
-    //     it('it should not POST, User does not have admin access', () => {
-    //         parkingLot = {
-    //             "name": "tessst2",
-    //             "capacity": 100,
-    //             "reservedSpaces": 10
-    //         }
-    //         return chai.request(server)
-    //             .post('/api/v0/parkinglots/')
-    //             .set('x-access-token', userToken)
-    //             .send(parkingLot)
-    //             .then((res) => {
-    //                 res.should.have.status(403);
-    //                 console.log(res);
-    //                 //res.body.should.not.have.property('err');
-    //             })
-    //     });
-    // });
+    describe('/POST parkinglots', () => {
+        it('it should not POST, User does not have admin access', () => {
+            parkingLot = {
+                "name": "tessst2",
+                "capacity": 100,
+                "reservedSpaces": 10
+            };
+            return new Promise((resolve, reject) => {
+            api.post('/api/v0/parkinglots/')
+                .set('x-access-token', userToken)
+                .send(parkingLot)
+                .expect(403)
+                .expect((res) => {
+                    expect(res.status).to.equal(403)
+                    expect(res.forbidden).to.be.true
+                })
+                .end((err, res) => {
+                    if (err) {
+                        return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                    }
+                    return resolve()
+                })
+            })
+
+        });
+    });
+
 
     let id = "";
     describe('/GET parkinglots', () => {
