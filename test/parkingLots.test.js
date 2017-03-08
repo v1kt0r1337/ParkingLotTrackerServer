@@ -5,7 +5,7 @@
 process.env.NODE_ENV = "test";
 
 let server = require('../src/server');
-let connection = require("../src/dbconnection")
+let connection = require("../src/dbconnection");
 let parkingLots = require("../src/routes/parkingLots");
 
 // Require the dev-dependencies
@@ -139,8 +139,8 @@ describe('hooks', function() {
                     .send(parkingLot)
                     .expect(403)
                     .expect((res) => {
-                        expect(res.status).to.equal(403)
-                        expect(res.forbidden).to.be.true
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -166,8 +166,8 @@ describe('hooks', function() {
                 .send(parkingLot)
                 .expect(403)
                 .expect((res) => {
-                    expect(res.status).to.equal(403)
-                    expect(res.forbidden).to.be.true
+                    expect(res.status).to.equal(403);
+                    expect(res.forbidden).to.be.true;
                 })
                 .end((err, res) => {
                     if (err) {
@@ -266,8 +266,8 @@ describe('hooks', function() {
                     .send(parkingLot)
                     .expect(403)
                     .expect((res) => {
-                        expect(res.status).to.equal(403)
-                        expect(res.forbidden).to.be.true
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -293,8 +293,8 @@ describe('hooks', function() {
                     .send(parkingLot)
                     .expect(403)
                     .expect((res) => {
-                        expect(res.status).to.equal(403)
-                        expect(res.forbidden).to.be.true
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {

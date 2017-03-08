@@ -17,6 +17,10 @@ let chai = require("chai");
 let chaiHttp = require("chai-http");
 let should = chai.should();
 let expect = chai.expect;
+let supertest = require('supertest');
+// THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
+let api = supertest('http://localhost:3000');
+
 let config = require("config");
 
 chai.use(chaiHttp);
@@ -149,6 +153,59 @@ describe('hooks prepareDatabase', function() {
         });
     });
 
+    describe('/POST parkinglogs', () => {
+        it('it should not POST, User does not provide token', () => {
+            let parkingLog = {
+                "currentParked": 700,
+                "parkingLot_id": parkinglot.id,
+                "parkingLog": "2008-01-0 11:53:54"
+            };
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/POST parkinglogs', () => {
+        it('it should not POST, User does not have admin access', () => {
+            let parkingLog = {
+                "currentParked": 700,
+                "parkingLot_id": parkinglot.id,
+                "parkingLog": "2008-01-0 11:53:54"
+            };
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .set('x-access-token', userToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
     let id = "";
     describe('/GET parkinglogs', () => {
         it('it should GET all the parkinglogs', () => {
@@ -200,6 +257,58 @@ describe('hooks prepareDatabase', function() {
     });
 
     describe('/PUT parkinglogs', () => {
+        it('it should not PUT/UPDATE a parking log, User does not have admin access', () => {
+            let parkingLog = {
+                "currentParked": 90,
+                "id": id
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .set('x-access-token', userToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/PUT parkinglogs', () => {
+        it('it should not PUT/UPDATE a parking log, User does not provide token', () => {
+            let parkingLog = {
+                "currentParked": 90,
+                "id": id
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+
+    describe('/PUT parkinglogs', () => {
         it('it should fail to PUT/UPDATE a parking log due to missing field', () => {
             let parkingLog = {
                 "id": id
@@ -230,6 +339,47 @@ describe('hooks prepareDatabase', function() {
                     res.body.parkingLogs[0].should.have.property('id');
                     res.body.parkingLogs[0].currentParked.should.be.equal(10);
                 })
+        });
+    });
+
+    describe('/DELETE/:id parkinglogs', () => {
+        it('it should not DELETE a parking log, User does not provide token', () => {
+            return new Promise((resolve, reject) => {
+                api.delete('/api/v0/parkinglogs/' + id)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to DELETE /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/DELETE/:id parkinglogs', () => {
+        it('it should not DELETE a parking log, User does have admin access', () => {
+            return new Promise((resolve, reject) => {
+                api.delete('/api/v0/parkinglogs/' + id)
+                    .set('x-access-token', userToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to DELETE /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
         });
     });
 
@@ -383,6 +533,8 @@ describe('hooks prepareDatabase', function() {
                 });
         });
 
+
+
         describe('/POST parkinglogs/increment', () => {
             it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks increment field',
                 () => {
@@ -403,7 +555,60 @@ describe('hooks prepareDatabase', function() {
                 });
         });
 
-        describe('/POST parkinglogs', () => {
+        describe('/POST parkinglogs/increment', () => {
+            it('it should not POST, User does not have admin access', () => {
+                let parkingLog = {
+                    "increment": 1,
+                    "parkingLot_id": parkinglot.id,
+                    "parkingLog": "2011-01-0 11:53:54"
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .set('x-access-token', userToken)
+                        .expect(403)
+                        .expect((res) => {
+                            expect(res.status).to.equal(403);
+                            expect(res.forbidden).to.be.true;
+                        })
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/increment: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+
+            });
+        });
+
+        describe('/POST parkinglogs/increment', () => {
+            it('it should not POST, User does not provide token', () => {
+                let parkingLog = {
+                    "increment": 1,
+                    "parkingLot_id": parkinglot.id,
+                    "parkingLog": "2011-01-0 11:53:54"
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .expect(403)
+                        .expect((res) => {
+                            expect(res.status).to.equal(403);
+                            expect(res.forbidden).to.be.true;
+                        })
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/increment: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+
+            });
+        });
+
+        describe('/POST parkinglogs/increment', () => {
             it('it should POST', () => {
                 let parkingLog = {
                     "increment": 1,
