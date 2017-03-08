@@ -17,17 +17,66 @@ let chai = require("chai");
 let chaiHttp = require("chai-http");
 let should = chai.should();
 let expect = chai.expect;
+let supertest = require('supertest');
+// THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
+let api = supertest('http://localhost:3000');
+
 let config = require("config");
 
 chai.use(chaiHttp);
 
 
 let parkinglot;
+let adminToken;
+let userToken;
 
 describe('hooks prepareDatabase', function() {
     before((done) => {
         prepareDatabase(() => {
             done();
+        });
+    });
+
+    describe('/POST authenticate admin user for parkinglot tests', () => {
+        it('Should authenticate an admin user', () => {
+            let admin = {
+                deviceId: "humbug",
+                name: "humbugName",
+                admin: true,
+                password: "pwd"
+            };
+
+            return chai.request(server)
+                .post('/api/v0/auth')
+                .send(admin)
+                .then((res) => {
+                    res.should.have.status(200);
+                    adminToken = res.body.token;
+                })
+        });
+    });
+
+    describe('/POST authenticate a normal user for parkinglot tests', () => {
+        it('Should authenticate a normal user', () => {
+            let normalUser = {
+                deviceId: "ordinary",
+                name: "joe",
+                admin: false,
+                password: "pwd"
+            };
+
+            //console.log("utenfor chaii request");
+            return chai.request(server)
+                .post('/api/v0/auth')
+                .send(normalUser)
+                .then((res) => {
+                    //console.log("inni chaii request");
+
+                    res.should.have.status(200);
+                    userToken = res.body.token;
+                    //console.log("res ", res);
+                    // console.log("adminToken", adminToken);
+                })
         });
     });
 
@@ -49,7 +98,7 @@ describe('hooks prepareDatabase', function() {
     /**
      * Test the /GET route
      */
-   describe('/GET parkingLogs', () => {
+    describe('/GET parkingLogs', () => {
         it('This GET test should get an empty parkingLogs object', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglogs/')
@@ -66,12 +115,14 @@ describe('hooks prepareDatabase', function() {
     describe('/POST parkinglogs', () => {
         it('it should NOT POST, lacks parkingLot_id field', () => {
             let parkingLog = {
-                "currentParked": 20
+                "currentParked": 20,
+                "parkingLog": "2010-01-0 11:53:54"
             };
 
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     //console.log(res);
                     //console.log(parkingLog);
@@ -85,18 +136,73 @@ describe('hooks prepareDatabase', function() {
         it('it should POST', () => {
             let parkingLog = {
                 "currentParked": 800,
-                "parkingLot_id": parkinglot.id
+                "parkingLot_id": parkinglot.id,
+                "parkingLog": "2009-01-0 11:53:54"
             };
             console.log(parkingLog);
             return chai.request(server)
                 .post('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     console.log(parkingLog);
                     res.should.have.status(200);
                     //console.log(res.body);
                     res.body.should.not.have.property('err');
                 })
+        });
+    });
+
+    describe('/POST parkinglogs', () => {
+        it('it should not POST, User does not provide token', () => {
+            let parkingLog = {
+                "currentParked": 700,
+                "parkingLot_id": parkinglot.id,
+                "parkingLog": "2008-01-0 11:53:54"
+            };
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/POST parkinglogs', () => {
+        it('it should not POST, User does not have admin access', () => {
+            let parkingLog = {
+                "currentParked": 700,
+                "parkingLot_id": parkinglot.id,
+                "parkingLog": "2008-01-0 11:53:54"
+            };
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .set('x-access-token', userToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
         });
     });
 
@@ -141,6 +247,7 @@ describe('hooks prepareDatabase', function() {
             return chai.request(server)
                 .put('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     //console.log(res.body);
@@ -150,6 +257,58 @@ describe('hooks prepareDatabase', function() {
     });
 
     describe('/PUT parkinglogs', () => {
+        it('it should not PUT/UPDATE a parking log, User does not have admin access', () => {
+            let parkingLog = {
+                "currentParked": 90,
+                "id": id
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .set('x-access-token', userToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/PUT parkinglogs', () => {
+        it('it should not PUT/UPDATE a parking log, User does not provide token', () => {
+            let parkingLog = {
+                "currentParked": 90,
+                "id": id
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+
+    describe('/PUT parkinglogs', () => {
         it('it should fail to PUT/UPDATE a parking log due to missing field', () => {
             let parkingLog = {
                 "id": id
@@ -157,6 +316,7 @@ describe('hooks prepareDatabase', function() {
             return chai.request(server)
                 .put('/api/v0/parkinglogs/')
                 .send(parkingLog)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     //console.log(res.body);
@@ -169,6 +329,7 @@ describe('hooks prepareDatabase', function() {
         it('GET :id Test checking that last test actually updated the parking log', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglogs/' + id)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
@@ -182,9 +343,51 @@ describe('hooks prepareDatabase', function() {
     });
 
     describe('/DELETE/:id parkinglogs', () => {
+        it('it should not DELETE a parking log, User does not provide token', () => {
+            return new Promise((resolve, reject) => {
+                api.delete('/api/v0/parkinglogs/' + id)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to DELETE /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/DELETE/:id parkinglogs', () => {
+        it('it should not DELETE a parking log, User does have admin access', () => {
+            return new Promise((resolve, reject) => {
+                api.delete('/api/v0/parkinglogs/' + id)
+                    .set('x-access-token', userToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to DELETE /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/DELETE/:id parkinglogs', () => {
         it('DELETE :id Tests that the DELETE parkinglogs route work', () => {
             return chai.request(server)
                 .delete('/api/v0/parkinglogs/' + id)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
@@ -216,7 +419,7 @@ describe('hooks prepareDatabase', function() {
             let alternating = 0;
             while (i < 10) {
                 let currentParked = i * i + 1;
-                let logDate = "2099-01-0" + i + " 11:53:54";
+                let logDate = "2037-01-0" + i + " 11:53:54";
                 //let logDate = "2017-01-01 11:53:54";
 
                 asyncTasks.push(function(callback)
@@ -258,8 +461,8 @@ describe('hooks prepareDatabase', function() {
                         res.body.parkingLogs[0].should.have.property('parkingLot_id');
                         res.body.parkingLogs[0].should.have.property('logDate');
                         res.body.parkingLogs[0].should.have.property('id');
+                        console.log(res.body.parkingLogs[0]);
                         res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
-                        //console.log(parkingLogs);
                         res.body.parkingLogs.length.should.be.equal(1);
                         //
                         // console.log(res.body.parkingLogs[0]);
@@ -280,9 +483,10 @@ describe('hooks prepareDatabase', function() {
                             res.body.parkingLogs[0].should.have.property('parkingLot_id');
                             res.body.parkingLogs[0].should.have.property('logDate');
                             res.body.parkingLogs[0].should.have.property('id');
+                            console.log(res.body.parkingLogs[0]);
                             res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
                             res.body.parkingLogs.length.should.be.equal(1);
-                           // console.log(res.body.parkingLogs[0]);
+                            // console.log(res.body.parkingLogs[0]);
                         })
                 });
         });
@@ -290,42 +494,46 @@ describe('hooks prepareDatabase', function() {
         describe('/GET latest parkinglog of another spesific parking place', () => {
             it('GET/parkinglogs/latest/:i Tests that we it also work correctly on other parkinglots',
                 function() {
-                return chai.request(server)
-                    .get('/api/v0/parkinglogs/latest/' + (parkinglot.id + 1))
-                    .then((res) => {
-                        res.should.have.status(200);
-                        res.body.should.not.have.property('err');
-                        expect(res.body.parkingLogs).to.not.be.empty;
+                    return chai.request(server)
+                        .get('/api/v0/parkinglogs/latest/' + (parkinglot.id + 1))
+                        .then((res) => {
+                            res.should.have.status(200);
+                            res.body.should.not.have.property('err');
+                            expect(res.body.parkingLogs).to.not.be.empty;
 
-                        res.body.parkingLogs[0].should.have.property('currentParked');
-                        res.body.parkingLogs[0].should.have.property('parkingLot_id');
-                        res.body.parkingLogs[0].should.have.property('logDate');
-                        res.body.parkingLogs[0].should.have.property('id');
-                        res.body.parkingLogs[0].currentParked.should.be.equal(secondLastInserted);
-                        res.body.parkingLogs.length.should.be.equal(1);
-                        //console.log(res.body.parkingLogs[0]);
-                    })
-            });
+                            res.body.parkingLogs[0].should.have.property('currentParked');
+                            res.body.parkingLogs[0].should.have.property('parkingLot_id');
+                            res.body.parkingLogs[0].should.have.property('logDate');
+                            res.body.parkingLogs[0].should.have.property('id');
+                            console.log(res.body.parkingLogs[0]);
+                            res.body.parkingLogs[0].currentParked.should.be.equal(secondLastInserted);
+                            res.body.parkingLogs.length.should.be.equal(1);
+                            //console.log(res.body.parkingLogs[0]);
+                        })
+                });
         });
 
         describe('/POST parkinglogs/increment', () => {
             it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks parkingLot_id field',
                 () => {
-                let parkingLog = {
-                    "increment": 1
-                };
+                    let parkingLog = {
+                        "increment": 1
+                    };
 
-                return chai.request(server)
-                    .post('/api/v0/parkinglogs/increment')
-                    .send(parkingLog)
-                    .then((res) => {
-                        //console.log(res);
-                        //console.log(parkingLog);
-                        res.should.have.status(200);
-                        res.body.should.have.property('err');
-                    })
-            });
+                    return chai.request(server)
+                        .post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .set('x-access-token', adminToken)
+                        .then((res) => {
+                            //console.log(res);
+                            //console.log(parkingLog);
+                            res.should.have.status(200);
+                            res.body.should.have.property('err');
+                        })
+                });
         });
+
+
 
         describe('/POST parkinglogs/increment', () => {
             it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks increment field',
@@ -337,6 +545,7 @@ describe('hooks prepareDatabase', function() {
                     return chai.request(server)
                         .post('/api/v0/parkinglogs/increment')
                         .send(parkingLog)
+                        .set('x-access-token', adminToken)
                         .then((res) => {
                             //console.log(res);
                             //console.log(parkingLog);
@@ -346,21 +555,88 @@ describe('hooks prepareDatabase', function() {
                 });
         });
 
-        describe('/POST parkinglogs', () => {
+        describe('/POST parkinglogs/increment', () => {
+            it('it should not POST, User does not have admin access', () => {
+                let parkingLog = {
+                    "increment": 1,
+                    "parkingLot_id": parkinglot.id,
+                    "parkingLog": "2011-01-0 11:53:54"
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .set('x-access-token', userToken)
+                        .expect(403)
+                        .expect((res) => {
+                            expect(res.status).to.equal(403);
+                            expect(res.forbidden).to.be.true;
+                        })
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/increment: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+
+            });
+        });
+
+        describe('/POST parkinglogs/increment', () => {
+            it('it should not POST, User does not provide token', () => {
+                let parkingLog = {
+                    "increment": 1,
+                    "parkingLot_id": parkinglot.id,
+                    "parkingLog": "2011-01-0 11:53:54"
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .expect(403)
+                        .expect((res) => {
+                            expect(res.status).to.equal(403);
+                            expect(res.forbidden).to.be.true;
+                        })
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/increment: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+
+            });
+        });
+
+        describe('/POST parkinglogs/increment', () => {
             it('it should POST', () => {
                 let parkingLog = {
                     "increment": 1,
-                    "parkingLot_id": parkinglot.id
+                    "parkingLot_id": parkinglot.id,
+                    "parkingLog": "2011-01-0 11:53:54"
                 };
                 console.log(parkingLog);
                 return chai.request(server)
                     .post('/api/v0/parkinglogs/increment')
                     .send(parkingLog)
+                    .set('x-access-token', adminToken)
                     .then((res) => {
                         console.log(parkingLog);
                         res.should.have.status(200);
                         //console.log(res.body);
                         res.body.should.not.have.property('err');
+                    })
+            });
+        });
+
+        // just to debug a weird bug on Travis-CI
+        describe('/GET parkinglogs', () => {
+            it('it should GET all the parkinglogs', () => {
+                return chai.request(server)
+                    .get('/api/v0/parkinglogs/')
+                    .then((res) => {
+                        res.should.have.status(200);
+                        console.log(res.body.parkingLogs);
                     })
             });
         });
@@ -375,15 +651,41 @@ describe('hooks prepareDatabase', function() {
  */
 
 function prepareDatabase(callback) {
-    deleteAllParkingLogData( () => {
-        deleteAllParkingLotData( () => {
-            addParkingLotData( () => {
-                setParkingLot(callback);
-           });
+    deleteAllUsers( () => {
+        addUsers(() => {
+            deleteAllParkingLogData(() => {
+                deleteAllParkingLotData(() => {
+                    addParkingLotData(() => {
+                        setParkingLot(callback);
+                    });
+                });
+            });
         });
     });
 }
 
+function deleteAllUsers(callback) {
+    let query = "DELETE FROM user";
+    connection.query(query, callback);
+    console.log("deleteAllUsers");
+}
+
+function addUsers(callback) {
+    function addAdminUser(callback) {
+        let query =
+            "INSERT INTO user (deviceId, name, admin, password) VALUES ('humbug', 'humbugName', true, 'pwd')";
+        connection.query(query, callback);
+        console.log("addAdminUser");
+    }
+
+    function addNormalUser(callback) {
+        let query =
+            "INSERT INTO user (deviceId, name, admin, password) VALUES ('ordinary', 'joe', false, 'pwd')";
+        connection.query(query, callback);
+        console.log("addNormalUser");
+    }
+    addAdminUser(addNormalUser(callback));
+}
 
 function deleteAllParkingLogData(callback) {
     let query = "DELETE FROM parkingLog";
@@ -408,7 +710,7 @@ function addParkingLotData(callback) {
     });
 
     let query2 =
-       "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)";
     asyncTasks.push(function(callback) {
         connection.query(query2, callback);
     });
@@ -439,7 +741,7 @@ function setParkingLot(callback) {
 function parseRowDataIntoSingleEntity(rowdata)
 {
     rowdata = JSON.stringify(rowdata);
-   // console.log(rowdata);
+    // console.log(rowdata);
     rowdata = JSON.parse(rowdata)[0];
     return rowdata;
 }

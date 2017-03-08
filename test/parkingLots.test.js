@@ -1,29 +1,31 @@
 /**
- * Created by archheretic on 04.02.17.
- */
-/**
  * Created by archheretic on 03.02.17.
  */
 
 process.env.NODE_ENV = "test";
 
-var server = require('../src/server');
-var connection = require("../src/dbconnection")
-var parkingLots = require("../src/routes/parkingLots");
+let server = require('../src/server');
+let connection = require("../src/dbconnection");
+let parkingLots = require("../src/routes/parkingLots");
 
 // Require the dev-dependencies
-var chai = require("chai");
-var chaiHttp = require("chai-http");
-var should = chai.should();
-var expect = chai.expect;
-var config = require("config");
+let chai = require("chai");
+let chaiHttp = require("chai-http");
+let should = chai.should();
+let expect = chai.expect;
+let supertest = require('supertest');
+// THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
+let api = supertest('http://localhost:3000');
+
+let config = require("config");
 
 chai.use(chaiHttp);
 
 console.log(config.Database);
 console.log(config.util.getEnv('NODE_ENV'));
 
-
+let adminToken;
+let userToken;
 describe('hooks', function() {
     before((done) => {
         prepareDatabase(() => {
@@ -31,11 +33,57 @@ describe('hooks', function() {
         });
     });
 
+    describe('/POST authenticate admin user for parkinglot tests', () => {
+        it('Should authenticate an admin user', () => {
+            let admin = {
+                deviceId: "humbug",
+                name: "humbugName",
+                admin: true,
+                password: "pwd"
+            };
+
+            return chai.request(server)
+                .post('/api/v0/auth')
+                .send(admin)
+                .then((res) => {
+                    res.should.have.status(200);
+                    adminToken = res.body.token;
+
+                })
+        });
+    });
+
+    describe('/POST authenticate a normal user for parkinglot tests', () => {
+        it('Should authenticate a normal user', () => {
+            let normalUser = {
+                deviceId: "ordinary",
+                name: "joe",
+                admin: false,
+                password: "pwd"
+            };
+
+            //console.log("utenfor chaii request");
+            return chai.request(server)
+                .post('/api/v0/auth')
+                .send(normalUser)
+                .then((res) => {
+                    //console.log("inni chaii request");
+
+                    res.should.have.status(200);
+                    userToken = res.body.token;
+                    //console.log("res ", res);
+                    // console.log("adminToken", adminToken);
+                })
+        });
+    });
+
+
     describe('/GET parkinglots', () => {
         it('This GET test should get an empty parkingLots object', () => {
             console.log("/GET parkinglots");
             return chai.request(server)
                 .get('/api/v0/parkinglots/')
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
@@ -49,9 +97,10 @@ describe('hooks', function() {
             let parkingLot = {
                 "name": "tessst",
                 "reservedSpaces": 10
-            }
+            };
             return chai.request(server)
                 .post('/api/v0/parkinglots/')
+                .set('x-access-token', adminToken)
                 .send(parkingLot)
                 .then((res) => {
                     res.should.have.status(200);
@@ -66,9 +115,10 @@ describe('hooks', function() {
                 "name": "tessst",
                 "capacity": 100,
                 "reservedSpaces": 10
-            }
+            };
             return chai.request(server)
                 .post('/api/v0/parkinglots/')
+                .set('x-access-token', adminToken)
                 .send(parkingLot)
                 .then((res) => {
                     res.should.have.status(200);
@@ -77,11 +127,66 @@ describe('hooks', function() {
         });
     });
 
+    describe('/POST parkinglots', () => {
+        it('it should not POST, User does not provide token', () => {
+            parkingLot = {
+                "name": "tessst2",
+                "capacity": 100,
+                "reservedSpaces": 10
+            };
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglots/')
+                    .send(parkingLot)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/POST parkinglots', () => {
+        it('it should not POST, User does not have admin access', () => {
+            parkingLot = {
+                "name": "tessst2",
+                "capacity": 100,
+                "reservedSpaces": 10
+            };
+            return new Promise((resolve, reject) => {
+            api.post('/api/v0/parkinglots/')
+                .set('x-access-token', userToken)
+                .send(parkingLot)
+                .expect(403)
+                .expect((res) => {
+                    expect(res.status).to.equal(403);
+                    expect(res.forbidden).to.be.true;
+                })
+                .end((err, res) => {
+                    if (err) {
+                        return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkinglots/: \n \n ${err.message}`))
+                    }
+                    return resolve()
+                })
+            })
+
+        });
+    });
+
+
     let id = "";
     describe('/GET parkinglots', () => {
         it('it should GET all the parkinglots', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglots/')
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     id = res.body.parkingLots[0].id;
@@ -93,9 +198,9 @@ describe('hooks', function() {
 
     describe('/GET/:id parkinglots', () => {
         it('it should GET a parkinglot by the given id', () => {
-
             return chai.request(server)
                 .get('/api/v0/parkinglots/' + id)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
@@ -117,6 +222,7 @@ describe('hooks', function() {
             };
             return chai.request(server)
                 .put('/api/v0/parkinglots/')
+                .set('x-access-token', adminToken)
                 .send(parkingLot)
                 .then((res) => {
                     res.should.have.status(200);
@@ -136,6 +242,7 @@ describe('hooks', function() {
             };
             return chai.request(server)
                 .put('/api/v0/parkinglots/')
+                .set('x-access-token', adminToken)
                 .send(parkingLot)
                 .then((res) => {
                     res.should.have.status(200);
@@ -145,10 +252,66 @@ describe('hooks', function() {
         });
     });
 
+    describe('/PUT parkinglots', () => {
+        it('it should not PUT, User does not have admin access', () => {
+            parkingLot = {
+                "id": id,
+                "name": "crackadoodle",
+                "capacity": 10,
+                "reservedSpaces": 8
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglots/')
+                    .set('x-access-token', userToken)
+                    .send(parkingLot)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/PUT parkinglots', () => {
+        it('it should not PUT, User does not provide token', () => {
+            parkingLot = {
+                "id": id,
+                "name": "hackadoodle",
+                "capacity": 10,
+                "reservedSpaces": 8
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglots/')
+                    .send(parkingLot)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
     describe('/GET/:id parkinglots', () => {
-        it('GET :id Test checking that last test actually updated the parking lot', () => {
+        it('GET :id Controll Test checking that last two test actually worked', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglots/' + id)
+                .set('x-access-token', adminToken)
                 .then((res) => {
                     res.should.have.status(200);
                     res.body.should.not.have.property('err');
@@ -164,10 +327,61 @@ describe('hooks', function() {
 
 function prepareDatabase(callback)
 {
-    deleteAllParkingLogData( () => {
-        deleteAllParkingLotData(callback);
+    deleteAllUsers( () => {
+        addUsers(() => {
+            deleteAllParkingLogData(() => {
+                deleteAllParkingLotData(callback);
+            });
+        });
     });
 }
+
+
+function deleteAllUsers(callback) {
+    let query = "DELETE FROM user";
+    connection.query(query, callback);
+    console.log("deleteAllUsers");
+}
+
+function addUsers(callback) {
+    function addAdminUser(callback) {
+        let query =
+            "INSERT INTO user (deviceId, name, admin, password) VALUES ('humbug', 'humbugName', true, 'pwd')";
+        connection.query(query, callback);
+        console.log("addAdminUser");
+    }
+
+    function addNormalUser(callback) {
+        let query =
+            "INSERT INTO user (deviceId, name, admin, password) VALUES ('ordinary', 'joe', false, 'pwd')";
+        connection.query(query, callback);
+        console.log("addNormalUser");
+    }
+    addAdminUser(addNormalUser(callback));
+}
+
+// function authenticateUser() {
+//     let admin = {
+//         deviceId: "humbug",
+//         name: "humbugName",
+//         admin: true,
+//         password: "pwd"
+//     };
+//
+//     console.log("utenfor chaii request");
+//     return chai.request(server)
+//         .post('/api/v0/auth')
+//         .send(admin)
+//         .then((res) => {
+//             console.log("inni chaii request");
+//
+//             res.should.have.status(200);
+//             adminToken = res.body.token;
+//             //console.log("res ", res);
+//             console.log("adminToken", adminToken);
+//         })
+// }
+
 
 function deleteAllParkingLogData(callback) {
     let query = "DELETE FROM parkingLog";
@@ -177,8 +391,7 @@ function deleteAllParkingLogData(callback) {
 }
 
 function deleteAllParkingLotData(callback) {
-    var query = "DELETE FROM parkingLot";
+    let query = "DELETE FROM parkingLot";
     connection.query(query, callback);
     console.log("deleteAllParkingLotData");
 }
-

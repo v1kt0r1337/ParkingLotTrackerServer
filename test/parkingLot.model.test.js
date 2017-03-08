@@ -139,7 +139,7 @@ function deleteAllParkingLogData(callback) {
 }
 
 function deleteAllParkingLotData(callback) {
-    var query = "DELETE FROM parkingLot";
+    let query = "DELETE FROM parkingLot";
     connection.query(query, callback);
     console.log("deleteAllParkingLotData");
 }

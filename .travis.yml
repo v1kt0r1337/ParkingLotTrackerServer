@@ -6,8 +6,13 @@ node_js:
 - node
 services:
 - mysql
-script:
+
+before_script:
 - npm run snyk-auth
+
+script:
+- npm run coveralls
+
 
 before_install:
     - mysql -e 'create database shitdatabasetest;'
@@ -29,7 +34,12 @@ before_install:
       PRIMARY KEY (id),
       FOREIGN KEY fk_parkingLot(parkingLot_id)
       REFERENCES parkingLot(id)
+      ) ENGINE=InnoDB;
+
+      CREATE TABLE user (
+      deviceId VARCHAR (64) NOT NULL,
+      name VARCHAR (32) NOT NULL,
+      admin BOOLEAN NOT NULL,
+      password VARCHAR (256) NOT NULL
       ) ENGINE=InnoDB;'
 
-after_success:
-- npm run coveralls

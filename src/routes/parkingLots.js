@@ -4,9 +4,10 @@
 /* jshint node: true */
 "use strict";
 
-var express = require('express');
-var router = express.Router();
-var ParkingLot = require('../models/parkingLot.model');
+let express = require('express');
+let router = express.Router();
+let ParkingLot = require('../models/parkingLot.model');
+let authorize = require('./authorize');
 
 /**
  * Route to get all parking lots.
@@ -26,14 +27,16 @@ router.get("/", function(req, res) {
  * Route for creating new parking lots.
  */
 router.post("/", function(req, res) {
-    ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
-        function(err, rows) {
-        if (err) {
-            res.json({err});
-        }
-        else {
-            res.json({"Message" : "Parking Lot Added"});
-        }
+    authorize.verify(req,res, true, function(req,res) {
+        ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
+            function(err, rows) {
+                if (err) {
+                    res.json({err});
+                }
+                else {
+                    res.json({"Message" : "Parking Lot Added"});
+                }
+            });
     });
 });
 
@@ -57,24 +60,23 @@ router.get("/:id", function(req, res) {
  * All fields needs to be provided.
  */
 router.put("/", function(req, res) {
-    if (!req.body.id || !req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
-        res.json({"err" : "not all fields are defined"});
-        return;
-    }
-    ParkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
-        function(err, rows) {
-        if (err)
-        {
-            res.json({err});
+    authorize.verify(req,res, true, function(req,res) {
+        if (!req.body.id || !req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
+            res.json({"err": "not all fields are defined"});
+            return;
         }
-        else
-        {
-            res.json({"Message" : "Parking Lot Updated"});
-        }
+        ParkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
+            function (err, rows) {
+                if (err) {
+                    res.json({err});
+                }
+                else {
+                    res.json({"Message": "Parking Lot Updated"});
+                }
+            });
     });
 });
 
 module.exports = router;
-
 
 

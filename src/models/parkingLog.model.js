@@ -3,11 +3,12 @@
  */
 /* jshint node: true */
 "use strict";
-var db = require("../dbconnection");
-var mysql = require("mysql");
-var async = require("async");
+let db = require("../dbconnection");
+let mysql = require("mysql");
+let async = require("async");
+let utility = require("./utility");
 
-var parkingLog = {
+let parkingLog = {
     /**
      * Returns all parkingLogs.
      */
@@ -52,25 +53,25 @@ var parkingLog = {
      * And historicParkCount is incremented 1 point IF currentParked was incremented.
      */
     addIncrementedParkingLog: function(id, increment, logDate, callback) {
-          this.getAParkingLotsLatestParkingLog(id, (err, row) => {
-              if (row) {
-                  let currentParked;
-                  if (row.length != 0) {
-                      row = parseRowDataIntoSingleEntity(row);
-                      if (!isNaN(increment)) {
-                          increment = parseInt(increment);
-                      }
-                      currentParked= row.currentParked + increment;
-                  }
-                  else {
-                      currentParked = increment;
-                  }
-                  this.newHistoricParkCount(id, currentParked, logDate,
-                      (id, currentParked, historicParkCount, logDate) => {
-                      insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
-                  });
-              }
-          })
+        this.getAParkingLotsLatestParkingLog(id, (err, row) => {
+            if (row) {
+                let currentParked;
+                if (row.length != 0) {
+                    row = utility.parseRowDataIntoSingleEntity(row);
+                    if (!isNaN(increment)) {
+                        increment = parseInt(increment);
+                    }
+                    currentParked= row.currentParked + increment;
+                }
+                else {
+                    currentParked = increment;
+                }
+                this.newHistoricParkCount(id, currentParked, logDate,
+                    (id, currentParked, historicParkCount, logDate) => {
+                        insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
+                    });
+            }
+        })
     },
 
     /**
@@ -78,8 +79,8 @@ var parkingLog = {
      * Only the currentParked value can be changed.
      */
     updateParkingLog: function (id, currentParked, callback) {
-        var query = "UPDATE parkingLog SET currentParked = ? WHERE id = ?";
-        var prep = [currentParked, id];
+        let query = "UPDATE parkingLog SET currentParked = ? WHERE id = ?";
+        let prep = [currentParked, id];
         query = mysql.format(query, prep);
         db.query(query, callback);
     },
@@ -88,7 +89,7 @@ var parkingLog = {
      * Delete the parkingLog with the corresponding id.
      */
     deleteParkingLogById: function(id, callback) {
-        var query = "DELETE FROM parkingLog WHERE id = ?";
+        let query = "DELETE FROM parkingLog WHERE id = ?";
         db.query(query, [id], callback);
     },
 
@@ -102,10 +103,10 @@ var parkingLog = {
             if (err) {
                 // This should probably be looked closer into.
                 console.log("err in function newHistoricParkCount");
-                old = parseRowDataIntoSingleEntity(rows);
+                old = utility.parseRowDataIntoSingleEntity(rows);
             }
             else {
-                old = parseRowDataIntoSingleEntity(rows);
+                old = utility.parseRowDataIntoSingleEntity(rows);
             }
             // if old is undefined then there are no parkinglogs for this parkinglot.
             if (!old) {
@@ -126,30 +127,24 @@ var parkingLog = {
 module.exports = parkingLog;
 
 
-function parseRowDataIntoSingleEntity(rowdata)
-{
-    rowdata = JSON.stringify(rowdata);
-    // console.log(rowdata);
-    rowdata = JSON.parse(rowdata)[0];
-    return rowdata;
-}
-
 /**
  * Insert parkingLog. This function is called from the addParkingLog method, if called directly ensure that
  * the historicParkCount is a correct increment of the "old latest"
  */
 function insertParkingLog(id, currentParked, historicParkCount, logDate, callback) {
+    let query;
+    let table;
     if (typeof logDate === "undefined") {
         //console.log("inside if");
-        var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
-        var table = ["parkingLog", "currentParked", "parkingLot_id", "historicParkCount",
+        query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+        table = ["parkingLog", "currentParked", "parkingLot_id", "historicParkCount",
             currentParked, id, historicParkCount];
     }
     else {
         //console.log("inside else");
         //console.log("logDate: ", logDate);
-        var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
-        var table = ["parkingLog", "currentParked", "parkingLot_id", "logDate", "historicParkCount",
+        query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
+        table = ["parkingLog", "currentParked", "parkingLot_id", "logDate", "historicParkCount",
             currentParked, id, logDate, historicParkCount];
     }
     query = mysql.format(query, table);

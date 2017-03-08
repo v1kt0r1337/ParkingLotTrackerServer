@@ -3,10 +3,10 @@
  */
 /* jshint node: true */
 "use strict";
-var db = require("../dbconnection");
-var mysql = require("mysql");
+let db = require("../dbconnection");
+let mysql = require("mysql");
 
-var parkingLot = {
+let parkingLot = {
     /**
      * Returns all parkingLot from the database.
      */
@@ -18,8 +18,8 @@ var parkingLot = {
      * Creates new parkingLot.
      */
     addParkingLot: function(name, capacity, reservedSpaces, callback) {
-        var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
-        var table = ["parkingLot", "name", "capacity", "reservedSpaces",
+        let query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
+        let table = ["parkingLot", "name", "capacity", "reservedSpaces",
             name, capacity, reservedSpaces];
         query = mysql.format(query, table);
         db.query(query, callback);
@@ -29,8 +29,8 @@ var parkingLot = {
      * Returns a parkingLot based on id.
      */
     getParkingLotById : function(id, callback) {
-        var query = "SELECT * FROM ?? WHERE ??=?";
-        var table = ["parkingLot", "id", id];
+        let query = "SELECT * FROM ?? WHERE ??=?";
+        let table = ["parkingLot", "id", id];
         query = mysql.format(query, table);
         db.query(query, callback);
     },
@@ -39,8 +39,8 @@ var parkingLot = {
      * Updates a parkingLot based on id.
      */
     updateParkingLot : function(id, name, capacity, reservedSpaces, callback) {
-        var query = "UPDATE parkingLot SET name = ?, capacity = ?, reservedSpaces = ? WHERE id = ?";
-        var table = [name, capacity, reservedSpaces, id];
+        let query = "UPDATE parkingLot SET name = ?, capacity = ?, reservedSpaces = ? WHERE id = ?";
+        let table = [name, capacity, reservedSpaces, id];
         query = mysql.format(query, table);
         db.query(query, callback);
     }
