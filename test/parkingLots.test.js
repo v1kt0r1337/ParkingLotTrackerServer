@@ -77,18 +77,24 @@ describe('hooks', function() {
         });
     });
 
-
     describe('/GET parkinglots', () => {
         it('This GET test should get an empty parkingLots object', () => {
-            console.log("/GET parkinglots");
-            return chai.request(server)
-                .get('/api/v0/parkinglots/')
-                .set('x-access-token', adminToken)
-                .then((res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    expect(res.body.parkingLots).to.be.empty;
-                })
+
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/parkinglots/')
+                    .expect(404)
+                    .expect((res) => {
+                        expect(res.status).to.equal(404);
+                        expect(res.notFound).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
         });
     });
 
@@ -251,6 +257,35 @@ describe('hooks', function() {
                 })
         });
     });
+
+    describe('/PUT parkinglogs', () => {
+        it('it should not find a parkingLot to update and get a 404', () => {
+            parkingLot = {
+                "id": 9001,
+                "name": "newName",
+                "capacity": 10,
+                "reservedSpaces": 8
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglots/')
+                    .send(parkingLot)
+                    .set('x-access-token', adminToken)
+                    .expect(404)
+                    .expect((res) => {
+                        expect(res.status).to.equal(404);
+                        expect(res.notFound).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
 
     describe('/PUT parkinglots', () => {
         it('it should not PUT, User does not have admin access', () => {

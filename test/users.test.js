@@ -88,7 +88,6 @@ describe('hooks prepareDatabase', function() {
                     .send(normalUser)
                     .expect(401)
                     .expect((res) => {
-                        console.log(res);
                         expect(res.status).to.equal(401);
                         expect(res.unauthorized).to.be.true;
                     })
@@ -265,6 +264,7 @@ function deleteAllUsers(callback) {
     console.log("deleteAllUsers");
 }
 
+
 function addUsers(callback) {
     function addAdminUser(callback) {
         let query =
@@ -281,4 +281,3 @@ function addUsers(callback) {
     }
     addNormalUser(addAdminUser(callback));
 }
-

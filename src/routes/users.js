@@ -16,6 +16,7 @@ router.get('/', function(req, res) {
                 res.json({err});
             }
             else {
+                // no point with 404 because its unreachable
                 res.json({"users" : rows});
             }
         });
@@ -23,7 +24,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
-    console.log(req.params.id);
+    //console.log(req.params.id);
     authorize.verify(req,res, false, function(req,res) {
 
         if (req.decoded.deviceId != req.params.id) {
@@ -38,6 +39,7 @@ router.get('/:id', function(req, res) {
                 res.json({err});
             }
             else {
+                // no point with 404 because its unreachable
                 res.json({"users" : rows});
             }
         });

@@ -319,8 +319,8 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 500 <br />
-  
+  * **Code:** 404 <br />
+    **Content:** `{"success": false, "message": "No parking lots found"}`
  
 * **Sample Call:**
 
@@ -365,7 +365,9 @@ parkingLogs |
     **Content:** `{"parkingLots":[{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10}]}`
     
 * **Error Response:**
-  
+    
+    * **Code:** 404 <br />
+      **Content:** `{"success": false, "message": "Parking lot not found"}`
   
 * **Sample Call:**
 
@@ -465,6 +467,8 @@ parkingLogs |
   * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
   
+  * **Code:** 404 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`
  
 * **Sample Call:**
 
@@ -512,8 +516,8 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 500 <br />
-  
+  * **Code:** 404 <br />
+    **Content:** `{"success": false, "message": "No parking logs found"}`
  
 * **Sample Call:**
 
@@ -559,6 +563,8 @@ parkingLogs |
     
 * **Error Response:**
   
+    * **Code:** 404 <br />
+      **Content:** `{"success": false, "message": "Parking log not found"}`
   
 * **Sample Call:**
 
@@ -604,7 +610,9 @@ parkingLogs |
     
 * **Error Response:**
   
-  
+     * **Code:** 404 <br />
+       **Content:** `{"success": false, "message": "Parking log not found"}`
+        
 * **Sample Call:**
 
   ```javascript
@@ -750,6 +758,8 @@ parkingLogs |
   * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
   
+  * **Code:** 404 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`
  
 * **Sample Call:**
 
@@ -796,6 +806,8 @@ parkingLogs |
     
 * **Error Response:**
   
+  * **Code:** 404 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`  
   
 * **Sample Call:**
 
@@ -840,7 +852,9 @@ parkingLogs |
     **Content:** `{"parkingLogs":[{"id":1,"currentParked":28,"historicParkCount":1337,"logDate":"2016-12-31T09:59:59.000Z","parkingLot_id":1}]}`
     
 * **Error Response:**
-  
+
+  * **Code:** 404 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`  
   
 * **Sample Call:**
 

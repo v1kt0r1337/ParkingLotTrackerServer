@@ -18,7 +18,13 @@ router.get("/", function(req, res) {
             res.json({err});
         }
         else {
-
+            if (rows.length === 0) {
+                res.status(404).send({
+                    success: false,
+                    message: 'No parking logs found'
+                });
+                return;
+            }
             res.json({"parkingLogs" : rows});
         }
     });
@@ -33,6 +39,13 @@ router.get("/latest", function(req, res) {
             res.json({err})
         }
         else {
+            if (rows.length === 0) {
+                res.status(404).send({
+                    success: false,
+                    message: 'No parking log found'
+                });
+                return;
+            }
             res.json({"parkingLogs" : rows});
         }
     });
@@ -48,6 +61,13 @@ router.get("/latest/:id", function(req, res) {
             res.json({err})
         }
         else {
+            if (rows.length === 0) {
+                res.status(404).send({
+                    success: false,
+                    message: 'Parking log not found'
+                });
+                return;
+            }
             res.json({"parkingLogs" : rows});
         }
     });
@@ -62,6 +82,13 @@ router.get("/:id", function(req, res) {
             res.json({err})
         }
         else {
+            if (rows.length === 0) {
+                res.status(404).send({
+                    success: false,
+                    message: 'Parking log not found'
+                });
+                return;
+            }
             res.json({"parkingLogs" : rows});
         }
     });
@@ -132,6 +159,13 @@ router.put("/", function(req, res) {
                 res.json({err});
             }
             else {
+                if (rows.affectedRows == 0) {
+                    res.status(404).send({
+                        success: false,
+                        message: 'Parking log not found'
+                    });
+                    return;
+                }
                 res.json({"Message": "Parking Log Updated"});
             }
         });
@@ -148,6 +182,13 @@ router.delete("/:id", function(req, res) {
                 res.json({err});
             }
             else {
+                if (rows.affectedRows == 0) {
+                    res.status(404).send({
+                        success: false,
+                        message: 'Parking log not found'
+                    });
+                    return;
+                }
                 res.json({"Message": "Deleted parking log with id " + req.params.id});
             }
         });

@@ -95,22 +95,25 @@ describe('hooks prepareDatabase', function() {
         });
     });
 
-    /**
-     * Test the /GET route
-     */
     describe('/GET parkingLogs', () => {
-        it('This GET test should get an empty parkingLogs object', () => {
-            return chai.request(server)
-                .get('/api/v0/parkinglogs/')
-                .then((res) => {
-                    res.should.have.status(200);
-                    //console.log(res.body.parkingLogs);
-                    res.body.should.be.a('object');
-                    expect(res.body.parkingLogs).to.be.empty;
-                })
+        it('This GET test should get a 404 as no parkinglogs exist', () => {
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/parkinglogs/')
+                    .expect(404)
+                    .expect((res) => {
+                        expect(res.status).to.equal(404);
+                        expect(res.notFound).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
         });
     });
-
 
     describe('/POST parkinglogs', () => {
         it('it should NOT POST, lacks parkingLot_id field', () => {
@@ -307,6 +310,31 @@ describe('hooks prepareDatabase', function() {
         });
     });
 
+    describe('/PUT parkinglogs', () => {
+        it('it should not find a parkinglog to update and get a 404', () => {
+            let parkingLog = {
+                "currentParked": 90,
+                "id": 99999
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .set('x-access-token', adminToken)
+                    .expect(404)
+                    .expect((res) => {
+                        expect(res.status).to.equal(404);
+                        expect(res.notFound).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkingLog/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
 
     describe('/PUT parkinglogs', () => {
         it('it should fail to PUT/UPDATE a parking log due to missing field', () => {
@@ -398,17 +426,43 @@ describe('hooks prepareDatabase', function() {
 
     describe('/GET/:id parkinglogs', () => {
         it('GET :id Tests that the DELETE route actually deleted the log', () => {
-            return chai.request(server)
-                .get('/api/v0/parkinglogs/' + id)
-                .then((res) => {
-                    res.should.have.status(200);
-                    res.body.should.not.have.property('err');
-                    expect(res.body.parkingLots).to.be.empty;
-                    //console.log(res.body);
-                })
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/parkinglogs/' + id)
+                    .expect(404)
+                    .expect((res) => {
+                        expect(res.status).to.equal(404);
+                        expect(res.notFound).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkingLog/:id  \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
         });
     });
 
+    describe('/DELETE/:id parkinglogs', () => {
+        it('DELETE :id Tests that it returns 404 if the parkinglog to be deleted is not found', () => {
+            return new Promise((resolve, reject) => {
+                api.delete('/api/v0/parkinglogs/' + id)
+                    .set('x-access-token', adminToken)
+                    .expect(404)
+                    .expect((res) => {
+                        expect(res.status).to.equal(404);
+                        expect(res.notFound).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkingLog/:id  \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
 
     let lastInserted = 0;
     let secondLastInserted = 0;
@@ -532,8 +586,6 @@ describe('hooks prepareDatabase', function() {
                         })
                 });
         });
-
-
 
         describe('/POST parkinglogs/increment', () => {
             it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks increment field',

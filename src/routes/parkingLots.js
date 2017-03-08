@@ -18,6 +18,13 @@ router.get("/", function(req, res) {
             res.json(err);
         }
         else {
+            if (rows.length === 0) {
+                res.status(404).send({
+                    success: false,
+                    message: 'No parking lots found'
+                });
+                return;
+            }
             res.json({"parkingLots" : rows});
         }
     });
@@ -52,6 +59,13 @@ router.get("/:id", function(req, res) {
             res.json({err})
         }
         else {
+            if (rows.length === 0) {
+                res.status(404).send({
+                    success: false,
+                    message: 'Parking lot not found'
+                });
+                return;
+            }
             res.json({"parkingLots": rows});
         }
     });
@@ -74,6 +88,13 @@ router.put("/", function(req, res) {
                     res.json({err});
                 }
                 else {
+                    if (rows.affectedRows == 0) {
+                        res.status(404).send({
+                            success: false,
+                            message: 'Parking lot not found'
+                        });
+                        return;
+                    }
                     res.json({"Message": "Parking Lot Updated"});
                 }
             });
