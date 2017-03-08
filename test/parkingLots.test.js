@@ -121,7 +121,7 @@ describe('hooks', function() {
                 .set('x-access-token', adminToken)
                 .send(parkingLot)
                 .then((res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(201);
                     res.body.should.not.have.property('err');
                 })
         });
@@ -137,10 +137,10 @@ describe('hooks', function() {
             return new Promise((resolve, reject) => {
                 api.post('/api/v0/parkinglots/')
                     .send(parkingLot)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -164,10 +164,10 @@ describe('hooks', function() {
             api.post('/api/v0/parkinglots/')
                 .set('x-access-token', userToken)
                 .send(parkingLot)
-                .expect(403)
+                .expect(401)
                 .expect((res) => {
-                    expect(res.status).to.equal(403);
-                    expect(res.forbidden).to.be.true;
+                    expect(res.status).to.equal(401);
+                    expect(res.unauthorized).to.be.true;
                 })
                 .end((err, res) => {
                     if (err) {
@@ -264,10 +264,10 @@ describe('hooks', function() {
                 api.put('/api/v0/parkinglots/')
                     .set('x-access-token', userToken)
                     .send(parkingLot)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -291,10 +291,10 @@ describe('hooks', function() {
             return new Promise((resolve, reject) => {
                 api.put('/api/v0/parkinglots/')
                     .send(parkingLot)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {

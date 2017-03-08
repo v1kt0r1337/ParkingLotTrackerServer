@@ -1,8 +1,7 @@
 Before first release:
-- Authorization on all non GET api endpoints.
-- Add total historical amount of parked cars on that spesific parkingLot to the parkingLog
-- fix api/v0/parkinglogs/latest to be spesific for each parkingLot foreignkey, perhaps also allow for non spesific?
-- Tests that covers the three previous TODOs
-- Add a version number (to the readme file?)
-- Checkout https://coveralls.io/ to integrate test coverage stat in our projects README file.
-- Set up a continuous integration test tool like Jenkins or Travis (might be covered by coveralls.io?)
+- Add password encryption.
+- Write tests for password encryption.
+- Finish api documentation
+- Write a description about what the project is all about.
+- fix so that code 200 is not returned when a user fails authentication.
+- Add a version number to the project

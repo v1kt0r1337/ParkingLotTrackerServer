@@ -146,7 +146,7 @@ describe('hooks prepareDatabase', function() {
                 .set('x-access-token', adminToken)
                 .then((res) => {
                     console.log(parkingLog);
-                    res.should.have.status(200);
+                    res.should.have.status(201);
                     //console.log(res.body);
                     res.body.should.not.have.property('err');
                 })
@@ -163,10 +163,10 @@ describe('hooks prepareDatabase', function() {
             return new Promise((resolve, reject) => {
                 api.post('/api/v0/parkinglogs/')
                     .send(parkingLog)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -190,10 +190,10 @@ describe('hooks prepareDatabase', function() {
                 api.post('/api/v0/parkinglogs/')
                     .send(parkingLog)
                     .set('x-access-token', userToken)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -266,10 +266,10 @@ describe('hooks prepareDatabase', function() {
                 api.put('/api/v0/parkinglogs/')
                     .send(parkingLog)
                     .set('x-access-token', userToken)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -291,10 +291,10 @@ describe('hooks prepareDatabase', function() {
             return new Promise((resolve, reject) => {
                 api.put('/api/v0/parkinglogs/')
                     .send(parkingLog)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -346,10 +346,10 @@ describe('hooks prepareDatabase', function() {
         it('it should not DELETE a parking log, User does not provide token', () => {
             return new Promise((resolve, reject) => {
                 api.delete('/api/v0/parkinglogs/' + id)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -367,10 +367,10 @@ describe('hooks prepareDatabase', function() {
             return new Promise((resolve, reject) => {
                 api.delete('/api/v0/parkinglogs/' + id)
                     .set('x-access-token', userToken)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -566,10 +566,10 @@ describe('hooks prepareDatabase', function() {
                     api.post('/api/v0/parkinglogs/increment')
                         .send(parkingLog)
                         .set('x-access-token', userToken)
-                        .expect(403)
+                        .expect(401)
                         .expect((res) => {
-                            expect(res.status).to.equal(403);
-                            expect(res.forbidden).to.be.true;
+                            expect(res.status).to.equal(401);
+                            expect(res.unauthorized).to.be.true;
                         })
                         .end((err, res) => {
                             if (err) {
@@ -592,10 +592,10 @@ describe('hooks prepareDatabase', function() {
                 return new Promise((resolve, reject) => {
                     api.post('/api/v0/parkinglogs/increment')
                         .send(parkingLog)
-                        .expect(403)
+                        .expect(401)
                         .expect((res) => {
-                            expect(res.status).to.equal(403);
-                            expect(res.forbidden).to.be.true;
+                            expect(res.status).to.equal(401);
+                            expect(res.unauthorized).to.be.true;
                         })
                         .end((err, res) => {
                             if (err) {
@@ -622,7 +622,7 @@ describe('hooks prepareDatabase', function() {
                     .set('x-access-token', adminToken)
                     .then((res) => {
                         console.log(parkingLog);
-                        res.should.have.status(200);
+                        res.should.have.status(201);
                         //console.log(res.body);
                         res.body.should.not.have.property('err');
                     })

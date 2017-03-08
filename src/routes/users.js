@@ -27,7 +27,7 @@ router.get('/:id', function(req, res) {
     authorize.verify(req,res, false, function(req,res) {
 
         if (req.decoded.deviceId != req.params.id) {
-            res.status(403).send({
+            res.status(401).send({
                 success: false,
                 message: 'Failed to retrieve user, the token does not belong to the the requested user'
             });
@@ -54,7 +54,10 @@ router.post("/", function(req, res) {
                 res.json({err});
             }
             else {
-                res.json({"Message" : "Parking Lot Added"});
+                res.status(201).send({
+                    success: true,
+                    message: 'User Added'
+                });
             }
         });
 });
