@@ -23,8 +23,16 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
+    console.log(req.params.id);
     authorize.verify(req,res, false, function(req,res) {
-        // also need to check that req.params.deviceId is the same as the req.decoded.deviceId
+
+        if (req.decoded.deviceId != req.params.id) {
+            res.status(403).send({
+                success: false,
+                message: 'Failed to retrieve user, the token does not belong to the the requested user'
+            });
+            return;
+        }
         User.getUserById(req.params.id, function(err, rows) {
             if (err) {
                 res.json({err});

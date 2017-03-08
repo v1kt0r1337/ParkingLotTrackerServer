@@ -17,6 +17,10 @@ let chai = require("chai");
 let chaiHttp = require("chai-http");
 let should = chai.should();
 let expect = chai.expect;
+let supertest = require('supertest');
+// THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
+let api = supertest('http://localhost:3000');
+
 let config = require("config");
 
 chai.use(chaiHttp);
@@ -70,13 +74,13 @@ describe('hooks prepareDatabase', function() {
         });
     });
 
+    let normalUser;
     describe('/POST authenticate normal user for user tests', () => {
         it('Should authenticate a normal user', () => {
-            let normalUser = {
+            normalUser = {
                 deviceId: "ordinary",
                 password: "pwd"
             };
-
             return chai.request(server)
                 .post('/api/v0/auth')
                 .send(normalUser)
@@ -132,6 +136,69 @@ describe('hooks prepareDatabase', function() {
                 })
         });
     });
+
+    describe('/GET users', () => {
+        it('it should not GET the users, User does not have admin access', () => {
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/users/')
+                    .set('x-access-token', userToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/users/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/GET users/:id', () => {
+        it('it should not GET the user, no token provided', () => {
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/users/' + user.deviceId)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/users/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/GET users/:id', () => {
+        it('it should not GET the user, token does not match', () => {
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/users/' + normalUser.deviceId)
+                    .set('x-access-token', newToken)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403);
+                        expect(res.forbidden).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/users/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
 
 });
 
