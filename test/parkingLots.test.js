@@ -128,6 +128,32 @@ describe('hooks', function() {
     });
 
     describe('/POST parkinglots', () => {
+        it('it should not POST, User does not provide token', () => {
+            parkingLot = {
+                "name": "tessst2",
+                "capacity": 100,
+                "reservedSpaces": 10
+            };
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglots/')
+                    .send(parkingLot)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403)
+                        expect(res.forbidden).to.be.true
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/POST parkinglots', () => {
         it('it should not POST, User does not have admin access', () => {
             parkingLot = {
                 "name": "tessst2",
@@ -226,8 +252,63 @@ describe('hooks', function() {
         });
     });
 
+    describe('/PUT parkinglots', () => {
+        it('it should not PUT, User does not have admin access', () => {
+            parkingLot = {
+                "id": id,
+                "name": "crackadoodle",
+                "capacity": 10,
+                "reservedSpaces": 8
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglots/')
+                    .set('x-access-token', userToken)
+                    .send(parkingLot)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403)
+                        expect(res.forbidden).to.be.true
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/PUT parkinglots', () => {
+        it('it should not PUT, User does not provide token', () => {
+            parkingLot = {
+                "id": id,
+                "name": "hackadoodle",
+                "capacity": 10,
+                "reservedSpaces": 8
+            };
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglots/')
+                    .send(parkingLot)
+                    .expect(403)
+                    .expect((res) => {
+                        expect(res.status).to.equal(403)
+                        expect(res.forbidden).to.be.true
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
     describe('/GET/:id parkinglots', () => {
-        it('GET :id Test checking that last test actually updated the parking lot', () => {
+        it('GET :id Controll Test checking that last two test actually worked', () => {
             return chai.request(server)
                 .get('/api/v0/parkinglots/' + id)
                 .set('x-access-token', adminToken)
