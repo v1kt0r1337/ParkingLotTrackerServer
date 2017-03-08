@@ -16,7 +16,7 @@ let tokenVerification = {
             // verifies secret and checks exp
             jwt.verify(token, config.secret, function(err, decoded) {
                 if (err) {
-                    return res.status(403).send({
+                    return res.status(401).send({
                         success: false,
                         message: 'Failed to authenticate token.'
                     });
@@ -25,7 +25,7 @@ let tokenVerification = {
                     req.decoded = decoded;
                     //console.log(req.decoded.admin);
                     if (reqAdmin && !req.decoded.admin)
-                        return res.status(403).send({
+                        return res.status(401).send({
                             success: false,
                             message: 'Failed to authenticate token, only users with admin rights can access this endpoint'
                         });
@@ -36,7 +36,7 @@ let tokenVerification = {
         } else {
             // if there is no token
             // return an error
-            return res.status(403).send({
+            return res.status(401).send({
                 success: false,
                 message: 'No token provided.'
             });

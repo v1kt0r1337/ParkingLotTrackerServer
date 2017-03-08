@@ -169,7 +169,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
  
@@ -218,7 +218,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
  
@@ -266,7 +266,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
   **Content:** `{"success":false,"message":"Failed to authenticate token."}`
                 OR
                `{"success":false,"message":"No token provided."}`
@@ -412,7 +412,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
  
@@ -462,7 +462,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
   
  
@@ -648,7 +648,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
  
@@ -699,7 +699,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
 * **Sample Call:**
@@ -747,7 +747,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 403 <br />
+  * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
   
  

@@ -17,16 +17,22 @@ router.post('/', function(req, res) {
         if (err) throw err;
 
         if (!user) {
-            res.json({ success: false, message: 'Authentication failed. User not found.' });
+            return res.status(401).send({
+                success: false,
+                message: 'Authentication failed. Wrong password and/or deviceId.'
+            });
         } else if (user) {
             user = utility.parseRowDataIntoSingleEntity(user);
             // check if password matches
             // console.log("user ", user);
             // console.log("user.password ", user.password);
             console.log("req.body.password ", req.body.password);
-            console.log("user.password ", user.password)
+            console.log("user.password ", user.password);
             if (user.password != req.body.password) {
-                res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+                return res.status(401).send({
+                    success: false,
+                    message: 'Authentication failed. Wrong password and/or deviceId.'
+                });
             } else {
                 // if user is found and password is right
                 // create a token

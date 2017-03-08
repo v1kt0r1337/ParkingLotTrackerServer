@@ -76,36 +76,25 @@ describe('hooks prepareDatabase', function() {
     });
 
     let normalUser;
+
     describe('/POST authenticate', () => {
         it('Should fail to authenticate a user due to wrong password', () => {
-            normalUser = {
-                deviceId: "ordinary",
-                password: "wrongPassword"
-            };
-            return chai.request(server)
-                .post('/api/v0/auth')
-                .send(normalUser)
-                .then((res) => {
-                    res.should.have.status(200);
-                    expect(res.body.success).to.equal(false);
-                    assert.equal(res.body.token, undefined);
-                })
-        });
-    });
-    /*
-    describe('/POST authenticate', () => {
-        it('Should fail to authenticate a user due to wrong password', () => {
+             normalUser = {
+                 deviceId: "ordinary",
+                 password: "wrongPassword"
+             };
             return new Promise((resolve, reject) => {
-                api.get('/api/v0/users/')
-                    .set('x-access-token', userToken)
-                    .expect(403)
+                api.post('/api/v0/auth')
+                    .send(normalUser)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        console.log(res);
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
-                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/users/ : \n \n ${err.message}`))
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/auth : \n \n ${err.message}`))
                         }
                         return resolve()
                     })
@@ -113,7 +102,7 @@ describe('hooks prepareDatabase', function() {
 
         });
     });
-    */
+
 
     describe('/POST authenticate normal user for user tests', () => {
         it('Should authenticate a normal user', () => {
@@ -182,10 +171,10 @@ describe('hooks prepareDatabase', function() {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/users/')
                     .set('x-access-token', userToken)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -202,10 +191,10 @@ describe('hooks prepareDatabase', function() {
         it('it should not GET the user, no token provided', () => {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/users/' + user.deviceId)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -223,10 +212,10 @@ describe('hooks prepareDatabase', function() {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/users/' + normalUser.deviceId)
                     .set('x-access-token', newToken)
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -244,10 +233,10 @@ describe('hooks prepareDatabase', function() {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/users/' + normalUser.deviceId)
                     .set('x-access-token', 'eyJhbGciOiJIUzI1NiIhdhahadCI6IkpXVCJ9.eyJkZXZpY2VJZCI6Imh1bWJ5asffsad5haWUiOiJPbGUiLCJhZG1pbiI6MCwicGFzc3dvcmQiOiJwd2QiLCJpYXQiOjE0ODg5NjgyMDUsImV4cCI6MTQ4OTA1NDYwNX0.ZCqQ7dPSqZAYSzXIniYAm0U5JipidsjapjjdwaFroyVaaJNo')
-                    .expect(403)
+                    .expect(401)
                     .expect((res) => {
-                        expect(res.status).to.equal(403);
-                        expect(res.forbidden).to.be.true;
+                        expect(res.status).to.equal(401);
+                        expect(res.unauthorized).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
