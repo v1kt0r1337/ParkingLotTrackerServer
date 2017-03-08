@@ -121,7 +121,7 @@ describe('hooks', function() {
                 .set('x-access-token', adminToken)
                 .send(parkingLot)
                 .then((res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(201);
                     res.body.should.not.have.property('err');
                 })
         });

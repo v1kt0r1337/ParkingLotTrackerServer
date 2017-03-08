@@ -146,7 +146,7 @@ describe('hooks prepareDatabase', function() {
                 .set('x-access-token', adminToken)
                 .then((res) => {
                     console.log(parkingLog);
-                    res.should.have.status(200);
+                    res.should.have.status(201);
                     //console.log(res.body);
                     res.body.should.not.have.property('err');
                 })
@@ -622,7 +622,7 @@ describe('hooks prepareDatabase', function() {
                     .set('x-access-token', adminToken)
                     .then((res) => {
                         console.log(parkingLog);
-                        res.should.have.status(200);
+                        res.should.have.status(201);
                         //console.log(res.body);
                         res.body.should.not.have.property('err');
                     })

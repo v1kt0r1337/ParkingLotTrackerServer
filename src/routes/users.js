@@ -54,7 +54,10 @@ router.post("/", function(req, res) {
                 res.json({err});
             }
             else {
-                res.json({"Message" : "User Added"});
+                res.status(201).send({
+                    success: true,
+                    message: 'User Added'
+                });
             }
         });
 });

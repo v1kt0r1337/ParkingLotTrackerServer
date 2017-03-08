@@ -18,6 +18,7 @@ router.get("/", function(req, res) {
             res.json({err});
         }
         else {
+
             res.json({"parkingLogs" : rows});
         }
     });
@@ -82,7 +83,10 @@ router.post("/", function(req, res) {
                 res.json({err});
             }
             else {
-                res.json({"Error" : false, "Message" : "Parking Log Added"});
+                res.status(201).send({
+                    success: true,
+                    message: 'Parking Log Added'
+                });
             }
         });
     });
@@ -102,7 +106,10 @@ router.post("/increment", function(req, res) {
                 res.json({err});
             }
             else {
-                res.json({"Error": false, "Message": "Parking Log Added"});
+                res.status(201).send({
+                    success: true,
+                    message: 'Parking Log Added'
+                });
             }
         });
     });

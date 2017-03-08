@@ -34,7 +34,10 @@ router.post("/", function(req, res) {
                     res.json({err});
                 }
                 else {
-                    res.json({"Message" : "Parking Lot Added"});
+                    res.status(201).send({
+                        success: true,
+                        message: 'Parking lot Added'
+                    });
                 }
             });
     });

@@ -117,8 +117,8 @@ parkingLogs |
     ,"token":"eyJhbGciOiJIUzI1NiIhdhahadCI6IkpXVCJ5...}`
     
 * **Error Response:**
-  Should be fixed.
-  * **Code:** 200 <br />  
+
+  * **Code:** 401 <br />  
   **Content:** `{"success":false,"message":"Reason for failure."}`
   
  
@@ -261,7 +261,7 @@ parkingLogs |
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 <br />
     **Content:** `{"Message" : "User Added"}`
     
 * **Error Response:**
@@ -407,7 +407,7 @@ parkingLogs |
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 <br />
     **Content:** `{"Message":"Parking Lot Added"}`
     
 * **Error Response:**
@@ -644,7 +644,7 @@ parkingLogs |
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 <br />
     
 * **Error Response:**
   
@@ -695,7 +695,7 @@ parkingLogs |
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 <br />
     
 * **Error Response:**
   

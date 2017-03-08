@@ -50,7 +50,7 @@ describe('hooks prepareDatabase', function() {
                 .post('/api/v0/users')
                 .send(user)
                 .then((res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(201);
                 })
         });
     });
