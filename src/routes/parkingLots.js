@@ -8,6 +8,8 @@ let express = require('express');
 let router = express.Router();
 let ParkingLot = require('../models/parkingLot.model');
 let authorize = require('./authorize');
+let config = require("config");
+let env = config.util.getEnv('NODE_ENV');
 
 /**
  * Route to get all parking lots.
@@ -15,7 +17,14 @@ let authorize = require('./authorize');
 router.get("/", function(req, res) {
     ParkingLot.getParkingLots(function(err, rows) {
         if (err) {
-            res.json(err);
+            let message = "Internal Server Error";
+            if (env === "dev" || env === "test") {
+                message = err;
+            }
+            res.status(500).send({
+                success: false,
+                message: message
+            });
         }
         else {
             if (rows.length === 0) {
@@ -38,7 +47,14 @@ router.post("/", function(req, res) {
         ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
             function(err, rows) {
                 if (err) {
-                    res.json({err});
+                    let message = "Internal Server Error";
+                    if (env === "dev" || env === "test") {
+                        message = err;
+                    }
+                    res.status(500).send({
+                        success: false,
+                        message: message
+                    });
                 }
                 else {
                     res.status(201).send({
@@ -56,7 +72,14 @@ router.post("/", function(req, res) {
 router.get("/:id", function(req, res) {
     ParkingLot.getParkingLotById(req.params.id, function (err, rows) {
         if (err) {
-            res.json({err})
+            let message = "Internal Server Error";
+            if (env === "dev" || env === "test") {
+                message = err;
+            }
+            res.status(500).send({
+                success: false,
+                message: message
+            });
         }
         else {
             if (rows.length === 0) {
@@ -78,14 +101,24 @@ router.get("/:id", function(req, res) {
  */
 router.put("/", function(req, res) {
     authorize.verify(req,res, true, function(req,res) {
-        if (!req.body.id || !req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
-            res.json({"err": "not all fields are defined"});
+        if (!req.body.id) {
+            res.status(500).send({
+                success: false,
+                message: "The parking lots id in the request body is defined"
+            });
             return;
         }
         ParkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
             function (err, rows) {
                 if (err) {
-                    res.json({err});
+                    let message = "Internal Server Error";
+                    if (env === "dev" || env === "test") {
+                        message = err;
+                    }
+                    res.status(500).send({
+                        success: false,
+                        message: message
+                    });
                 }
                 else {
                     if (rows.affectedRows == 0) {

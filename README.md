@@ -119,8 +119,10 @@ parkingLogs |
 * **Error Response:**
 
   * **Code:** 401 <br />  
-  **Content:** `{"success":false,"message":"Reason for failure."}`
+    **Content:** `{"success":false,"message":"Reason for failure."}`
   
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
  
 * **Sample Call:**
 
@@ -172,6 +174,8 @@ parkingLogs |
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`  
  
 * **Sample Call:**
 
@@ -221,7 +225,9 @@ parkingLogs |
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -271,7 +277,9 @@ parkingLogs |
                 OR
                `{"success":false,"message":"No token provided."}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -321,6 +329,9 @@ parkingLogs |
   
   * **Code:** 404 <br />
     **Content:** `{"success": false, "message": "No parking lots found"}`
+    
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`    
  
 * **Sample Call:**
 
@@ -368,6 +379,9 @@ parkingLogs |
     
     * **Code:** 404 <br />
       **Content:** `{"success": false, "message": "Parking lot not found"}`
+      
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`      
   
 * **Sample Call:**
 
@@ -417,7 +431,9 @@ parkingLogs |
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -469,7 +485,10 @@ parkingLogs |
   
   * **Code:** 404 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`
- 
+  
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}` 
+    
 * **Sample Call:**
 
   ```javascript
@@ -518,7 +537,10 @@ parkingLogs |
   
   * **Code:** 404 <br />
     **Content:** `{"success": false, "message": "No parking logs found"}`
- 
+    
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -563,8 +585,11 @@ parkingLogs |
     
 * **Error Response:**
   
-    * **Code:** 404 <br />
-      **Content:** `{"success": false, "message": "Parking log not found"}`
+  * **Code:** 404 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`
+      
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
   
 * **Sample Call:**
 
@@ -610,8 +635,11 @@ parkingLogs |
     
 * **Error Response:**
   
-     * **Code:** 404 <br />
-       **Content:** `{"success": false, "message": "Parking log not found"}`
+   * **Code:** 404 <br />
+     **Content:** `{"success": false, "message": "Parking log not found"}`
+       
+   * **Code:** 500 <br />  
+     **Content:** `{"success":false,"message":"Internal Server Error."}`
         
 * **Sample Call:**
 
@@ -659,7 +687,9 @@ parkingLogs |
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -709,7 +739,10 @@ parkingLogs |
   
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
-  
+
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+      
 * **Sample Call:**
 
   ```javascript
@@ -760,6 +793,9 @@ parkingLogs |
   
   * **Code:** 404 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`
+    
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`    
  
 * **Sample Call:**
 
@@ -808,7 +844,10 @@ parkingLogs |
   
   * **Code:** 404 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`  
-  
+
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+      
 * **Sample Call:**
 
   ```javascript
@@ -855,7 +894,10 @@ parkingLogs |
 
   * **Code:** 404 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`  
-  
+
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+      
 * **Sample Call:**
 
   ```javascript

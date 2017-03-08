@@ -9,11 +9,21 @@ let router = express.Router();
 let User = require('../models/user.model');
 let authorize = require('./authorize');
 
+let config = require("config");
+let env = config.util.getEnv('NODE_ENV');
+
 router.get('/', function(req, res) {
     authorize.verify(req,res, true, function(req,res) {
         User.getUsers(function(err, rows) {
             if (err) {
-                res.json({err});
+                let message = "Internal Server Error";
+                if (env === "dev" || env === "test") {
+                    message = err;
+                }
+                res.status(500).send({
+                    success: false,
+                    message: message
+                });
             }
             else {
                 // no point with 404 because its unreachable
@@ -36,7 +46,14 @@ router.get('/:id', function(req, res) {
         }
         User.getUserById(req.params.id, function(err, rows) {
             if (err) {
-                res.json({err});
+                let message = "Internal Server Error";
+                if (env === "dev" || env === "test") {
+                    message = err;
+                }
+                res.status(500).send({
+                    success: false,
+                    message: message
+                });
             }
             else {
                 // no point with 404 because its unreachable
@@ -53,7 +70,14 @@ router.post("/", function(req, res) {
     User.addUser(req.body.deviceId, req.body.name, false, req.body.password,
         function(err, rows) {
             if (err) {
-                res.json({err});
+                let message = "Internal Server Error";
+                if (env === "dev" || env === "test") {
+                    message = err;
+                }
+                res.status(500).send({
+                    success: false,
+                    message: message
+                });
             }
             else {
                 res.status(201).send({

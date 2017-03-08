@@ -568,43 +568,45 @@ describe('hooks prepareDatabase', function() {
         });
 
         describe('/POST parkinglogs/increment', () => {
-            it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks parkingLot_id field',
-                () => {
-                    let parkingLog = {
-                        "increment": 1
-                    };
-
-                    return chai.request(server)
-                        .post('/api/v0/parkinglogs/increment')
+            it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks parkingLot_id field', () => {
+                let parkingLog = {
+                    "increment": 1
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/increment')
                         .send(parkingLog)
                         .set('x-access-token', adminToken)
-                        .then((res) => {
-                            //console.log(res);
-                            //console.log(parkingLog);
-                            res.should.have.status(200);
-                            res.body.should.have.property('err');
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/increment: \n \n ${err.message}`))
+                            }
+                            return resolve()
                         })
-                });
+                })
+
+            });
         });
 
-        describe('/POST parkinglogs/increment', () => {
-            it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks increment field',
-                () => {
-                    let parkingLog = {
-                        "parkingLot_id": parkinglot.id
-                    };
 
-                    return chai.request(server)
-                        .post('/api/v0/parkinglogs/increment')
-                        .send(parkingLog)
+        describe('/POST parkinglogs/increment', () => {
+            it('it tries to POST through parkinglogs/increment route, but should NOT POST, lacks increment field', () => {
+                let parkingLog = {
+                    "parkingLot_id": parkinglot.id
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/increment')
                         .set('x-access-token', adminToken)
-                        .then((res) => {
-                            //console.log(res);
-                            //console.log(parkingLog);
-                            res.should.have.status(200);
-                            res.body.should.have.property('err');
+                        .send(parkingLog)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkinglogs/: \n \n ${err.message}`))
+                            }
+                            return resolve()
                         })
-                });
+                })
+            });
         });
 
         describe('/POST parkinglogs/increment', () => {

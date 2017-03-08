@@ -100,18 +100,22 @@ describe('hooks', function() {
 
     describe('/POST parkinglots', () => {
         it('it should NOT POST, lacks capacity field', () => {
-            let parkingLot = {
+            parkingLot = {
                 "name": "tessst",
                 "reservedSpaces": 10
             };
-            return chai.request(server)
-                .post('/api/v0/parkinglots/')
-                .set('x-access-token', adminToken)
-                .send(parkingLot)
-                .then((res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('err');
-                })
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglots/')
+                    .set('x-access-token', adminToken)
+                    .send(parkingLot)
+                    .expect(500)
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkinglots/: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
         });
     });
 
@@ -220,21 +224,25 @@ describe('hooks', function() {
     });
 
     describe('/PUT parkinglots', () => {
-        it('it should fail to PUT/UPDATE a parking lot due to missing field', () => {
+        it('it should fail to PUT/UPDATE a parking lot due to missing field2', () => {
             parkingLot = {
-                "id": id,
                 "name": "newName",
                 "capacity": 10,
+                "reservedSpaces": 8
             };
-            return chai.request(server)
-                .put('/api/v0/parkinglots/')
-                .set('x-access-token', adminToken)
-                .send(parkingLot)
-                .then((res) => {
-                    res.should.have.status(200);
-                    console.log(res.body);
-                    res.body.should.have.property('err');
-                })
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglots')
+                    .send(parkingLot)
+                    .set('x-access-token', adminToken)
+                    .expect(500)
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkinglots: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
         });
     });
 
