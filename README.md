@@ -8,6 +8,7 @@ Server application for the ParkingLotTracker project.
 
 - [Installation](#installation)
 - [How to run](#how-to-run)
+- [API Overview](#api-overview)
 - [API Documentation](#api-documentation)
 - [Troubleshoot](#troubleshoot)
 - [Tests](#tests)
@@ -39,21 +40,31 @@ $ npm start
 To change which environmental mode that is used (including database) modify the [package.json](package.json) start script.
 If you have trouble starting the project look at 
 
-## API Documentation
-API Endpoint | Description
------------- | -------------
+## API Overview
+API Endpoint | Method | Auth | Description
+------------|---- |------- |-------------
+auth |
+/api/v0/auth | POST | no | Used to authenticate a user.
+users |
+/api/v0/users | GET | admin |  Gets All users
+/api/v0/users/:id | GET | user | Gets a single user, auth token must belong to the user.
+    /api/v0/users | POST | no | Creates a new user.
 parkingLots |
-/api/v0/parkinglots | GET - All parkinglots
-/api/v0/parkinglots/:id | GET - Single parkinglot
-/api/v0/parkinglots | POST - Creates new parkinglot
-/api/v0/parkinglots | PUT - Updates a parkinglot
+/api/v0/parkinglots |GET | no | Gets all parkinglots
+/api/v0/parkinglots/:id | no | Gets a Single parkinglot
+/api/v0/parkinglots | POST | admin | Creates new parkinglot
+/api/v0/parkinglots | PUT | admin | Updates a parkinglot
 parkingLogs |
-/api/v0/parkinglogs | GET - All parkinglogs
-/api/v0/parkinglogs/:id | GET/DELETE - Single parkinglog
-/api/v0/parkinglogs | POST - Creates new parkinglog
-/api/v0/parkinglogs/increment | POST - Creates new parkinglog with one more OR less parked car then the former latest parkinglog. Examples of use: Increment { "increment": 1, "parkingLot_id": 3 } Decrement { "increment": -1, "parkingLot_id": 3 }
-/api/v0/parkinglogs | PUT - Updates a parkinglog, only the currentParked value can be changed.
-/api/v0/parkinglogs/latest | GET - Single parkinglog of latest date.
+/api/v0/parkinglogs | GET | no | Gets all parkinglogs
+/api/v0/parkinglogs/:id | GET | no | Gets a Single parkinglog
+/api/v0/parkinglogs/:id | DELETE | no  | Deletes a single parkinglog
+/api/v0/parkinglogs | POST | admin | Creates new parkinglog
+/api/v0/parkinglogs/increment | POST | admin | Creates new parkinglog with one more OR less parked car then the former latest parkinglog.
+/api/v0/parkinglogs | PUT | admin | Updates a parkinglog, only the currentParked value can be changed.
+/api/v0/parkinglogs/latest | GET | no | Gets a single parkinglog of latest date.
+
+## API Documentation
+
 
 ## Troubleshoot
 
