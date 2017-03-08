@@ -144,7 +144,7 @@ describe('hooks', function() {
                     })
                     .end((err, res) => {
                         if (err) {
-                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkinglots/: \n \n ${err.message}`))
                         }
                         return resolve()
                     })
@@ -171,7 +171,7 @@ describe('hooks', function() {
                 })
                 .end((err, res) => {
                     if (err) {
-                        return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                        return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkinglots/: \n \n ${err.message}`))
                     }
                     return resolve()
                 })
@@ -271,7 +271,7 @@ describe('hooks', function() {
                     })
                     .end((err, res) => {
                         if (err) {
-                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkinglots/: \n \n ${err.message}`))
                         }
                         return resolve()
                     })
@@ -298,7 +298,7 @@ describe('hooks', function() {
                     })
                     .end((err, res) => {
                         if (err) {
-                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
+                            return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkinglots/: \n \n ${err.message}`))
                         }
                         return resolve()
                     })
