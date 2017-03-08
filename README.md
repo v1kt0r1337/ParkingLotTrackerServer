@@ -10,6 +10,22 @@ Server application for the ParkingLotTracker project.
 - [How to run](#how-to-run)
 - [API Overview](#api-overview)
 - [API Documentation](#api-documentation)
+    - [Authenticate user](#authenticate-user)
+    - [GET all users](#get-all-users)
+    - [GET a user](#get-a-user)
+    - [POST/Create new user](#post/create-new-user)
+    - [GET all parkinglots](#get-all-parkinglots)
+    - [GET a parkinglot](#get-a-parkinglot)
+    - [POST/Create new parkinglot](#post/create-new-parkinglot)
+    - [PUT/Update parkinglot](#put/update-parkinglot)
+    - [GET all parkinglogs](#get-all-parkinglogs)
+    - [GET a parkinglog](#get-a-parkinglog)
+    - [DELETE a parkinglog](#delete-a-parkinglog)
+    - [POST/Create new parkinglog](#post/create-new-parkinglog)
+    - [Increment parkinglog](#increment-parkinglog)
+    - [PUT/Update parkinglog](#put/update-parkinglog)
+    - [GET latest registered parkinglog](#get-latest-registered-parkinglog)
+    - [GET a parkinglots latest registered parkinglog](#get-a-parkinglots-latest-registered-parkinglog)
 - [Troubleshoot](#troubleshoot)
 - [Tests](#tests)
 
@@ -52,7 +68,7 @@ auth |
 users |
 /api/v0/users | GET | admin |  Gets all users
 /api/v0/users/:id | GET | user | Gets a single user, auth token must belong to the user.
-    /api/v0/users | POST | no | Creates a new user.
+/api/v0/users | POST | no | Creates a new user.
 parkingLots |
 /api/v0/parkinglots |GET | no | Gets all parkinglots
 /api/v0/parkinglots/:id | GET | no | Gets a Single parkinglot
@@ -118,59 +134,7 @@ parkingLogs |
         console.log(r);
       }
     });
-  ```
-  
-### POST/Create new user
-
-  Creates a new user
-
-* **URL**
-
-  /api/v0/users
-
-* **Method:**
-
-  `POST`
-
-* **Headers:**
-
-    * **Content-Type** application/json
-
-*  **URL Params**
-
-  None
-
-* **Data Params**
-
-  `{"deviceId":"f07a13984f6d116a","name":"Ole","password":"pwd"}`
-
-* **Success Response:**
-
-  * **Code:** 200 <br />
-    **Content:** `{"Message" : "User Added"}`
-    
-* **Error Response:**
-  
-  * **Code:** 403 <br />
-  **Content:** `{"success":false,"message":"Failed to authenticate token."}`
-                OR
-               `{"success":false,"message":"No token provided."}`
-  
- 
-* **Sample Call:**
-
-  ```javascript
-    $.ajax({
-      url: "/api/v0/users",
-      dataType: "json",
-      type : "POST",
-      Data: '{"deviceId":"f07a13984f6d116a","name":"Ole","password":"pwd"}',
-      success : function(r) {
-        console.log(r);
-      }
-    });
-  ```
-  
+  ```  
 
 ### GET all users
 
@@ -270,6 +234,58 @@ parkingLogs |
       }
     });
   ```
+
+### POST/Create new user
+
+  Creates a new user
+
+* **URL**
+
+  /api/v0/users
+
+* **Method:**
+
+  `POST`
+
+* **Headers:**
+
+    * **Content-Type** application/json
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  `{"deviceId":"f07a13984f6d116a","name":"Ole","password":"pwd"}`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{"Message" : "User Added"}`
+    
+* **Error Response:**
+  
+  * **Code:** 403 <br />
+  **Content:** `{"success":false,"message":"Failed to authenticate token."}`
+                OR
+               `{"success":false,"message":"No token provided."}`
+  
+ 
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/api/v0/users",
+      dataType: "json",
+      type : "POST",
+      Data: '{"deviceId":"f07a13984f6d116a","name":"Ole","password":"pwd"}',
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+
 
 ### GET all parkinglots
 
