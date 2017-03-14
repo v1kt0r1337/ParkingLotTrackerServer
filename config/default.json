@@ -2,6 +2,6 @@
   "DBHost"     : "localhost",
   "DBUser"     : "root",
   "DBPassword" : "",
-  "database" : "shitdatabase",
+  "Database" : "shitdatabase",
   "secret" : "secret"
 }

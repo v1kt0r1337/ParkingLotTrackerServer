@@ -5,6 +5,5 @@ Before first release:
 - Write a description about what the project is all about.
 - fix so that code 200 is not returned when a user fails authentication.
 - Add a version number to the project
-- Change from 404 -> 204 on GET requests that don't give any data.
 
 parkingLots.test.js linje 370->

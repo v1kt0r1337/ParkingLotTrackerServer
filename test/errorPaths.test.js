@@ -36,6 +36,9 @@ chai.use(chaiHttp);
 
 console.log("This should be the last test file to run, all tests after this that requires the database will fail");
 
+let userToken;
+let adminToken;
+let normalUser;
 
 describe('hooks prepareDatabase', function() {
     before((done) => {
@@ -66,7 +69,7 @@ describe('hooks prepareDatabase', function() {
 
     describe('/POST authenticate normal user for user tests', () => {
         it('Should authenticate a normal user', () => {
-            normalUser = {
+                normalUser = {
                 deviceId: "ordinary",
                 password: "pwd"
             };
@@ -92,7 +95,7 @@ describe('hooks prepareDatabase', function() {
         });
         describe('/POST authenticate', () => {
             it('Should fail to authenticate a user due to 500', () => {
-                normalUser = {
+                    normalUser = {
                     deviceId: "ordinary",
                     password: "pwd"
                 };
@@ -135,7 +138,7 @@ describe('hooks prepareDatabase', function() {
                         .expect(500)
                         .end((err, res) => {
                             if (err) {
-                                return reject(new Error(`apiHelper Error : Failed to GET /api/v0/users \n \n ${err.message}`))
+                                return reject(new Error(`apiHelper Error :\n ${err.message}`))
                             }
                             return resolve()
                         })
@@ -144,6 +147,28 @@ describe('hooks prepareDatabase', function() {
             });
         });
 
+        describe('/POST users', () => {
+            it('Should fail to insert a user due to lack of database', () => {
+                let user = {
+                    deviceId: "dumbug",
+                    name: "dumbugName",
+                    admin: true, // this should be ignored as set to false.
+                    password: "pwd"
+                };
+
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/users')
+                        .send(user)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error :\n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+            });
+        });
 
         /**
          * This Section is ment to trigger the 500 status responses on the parkingLots route

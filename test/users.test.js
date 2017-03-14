@@ -152,7 +152,7 @@ describe('hooks prepareDatabase', function() {
     });
 
     describe('/GET users', () => {
-        it('it should not GET the users, User does not have admin access2', () => {
+        it('it should not GET the users, User does not have admin access', () => {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/users/')
                     .set('x-access-token', newToken)
