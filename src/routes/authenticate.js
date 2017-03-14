@@ -14,7 +14,7 @@ let env = config.util.getEnv('NODE_ENV');
 router.post('/', function(req, res) {
     // find the user
     User.getUserById(req.body.deviceId, function(err, user) {
-        if (err || !user) {
+        if (err || !user || user.length == 0) {
             let message;
             if (env === "dev" || env === "test") {
                 message = err;
@@ -25,11 +25,11 @@ router.post('/', function(req, res) {
                 message: message
             });
         }
-        else if (user) {
+        else {
             user = utility.parseRowDataIntoSingleEntity(user);
             // check if password matches
-            // console.log("user ", user);
-            // console.log("user.password ", user.password);
+            // console.log("req.body.password ", req.body);
+            console.log("user ", user);
             if (user.password != req.body.password) {
                 return res.status(401).send({
                     success: false,

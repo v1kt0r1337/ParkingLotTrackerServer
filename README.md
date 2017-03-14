@@ -931,11 +931,11 @@ $ npm run coveralls
 
 These script uses the test database.
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=develop
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=fixErrorHandling
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=develop
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=develop
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=fixErrorHandling
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=fixErrorHandling
 
 [snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/develop/badge.svg
 [snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer

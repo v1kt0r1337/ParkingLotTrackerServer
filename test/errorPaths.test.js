@@ -16,6 +16,8 @@ require("./users.test.js");
 let server = require('../src/server');
 let connection = require("../src/dbconnection");
 let users = require("../src/routes/users");
+let ParkingLot = require("../src/models/parkingLot.model");
+let ParkingLog = require("../src/models/parkingLog.model");
 // Require the dev-dependencies
 let chai = require("chai");
 let chaiHttp = require("chai-http");
@@ -28,6 +30,8 @@ let api = supertest('http://localhost:3000');
 
 let config = require("config");
 
+let async = require("async");
+
 let fs = require('fs');
 let path = require('path');
 let sqlPath = path.join(__dirname, '..', 'scripts', 'database.sql');
@@ -39,6 +43,8 @@ console.log("This should be the last test file to run, all tests after this that
 let userToken;
 let adminToken;
 let normalUser;
+let parkinglot;
+let parkinglog;
 
 describe('hooks prepareDatabase', function() {
     before((done) => {
@@ -85,7 +91,7 @@ describe('hooks prepareDatabase', function() {
 
 
     /**
-     * This Section is ment to trigger the 500 status responses on the users route
+     * This Section is ment to trigger the 500 status responses on the users API route
      */
     describe('hooks prepareDatabase', function() {
         before((done) => {
@@ -171,7 +177,7 @@ describe('hooks prepareDatabase', function() {
         });
 
         /**
-         * This Section is ment to trigger the 500 status responses on the parkingLots route
+         * This Section is ment to trigger the 500 status responses on the parkingLots API route
          */
         describe('/GET parkinglots', () => {
             it('Should fail to get parkinglots due to 500', () => {
@@ -192,6 +198,86 @@ describe('hooks prepareDatabase', function() {
             });
         });
 
+        describe('/GET parkinglots', () => {
+            it('Should fail to get the parkinglot due to 500', () => {
+                return new Promise((resolve, reject) => {
+                    api.get('/api/v0/parkinglots/' + 1)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+            });
+        });
+
+        describe('/GET parkinglots', () => {
+            it('Should fail to get the parkinglot due to 500', () => {
+                return new Promise((resolve, reject) => {
+                    api.get('/api/v0/parkinglots/' + 1)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+            });
+        });
+
+        describe('/PUT parkinglots', () => {
+            it('it should fail to PUT/UPDATE a parking lot due to internal server error', () => {
+                parkingLot = {
+                    "id": parkinglot.id,
+                    "name": "newName",
+                    "capacity": 1000,
+                    "reservedSpaces": 8
+                };
+                return new Promise((resolve, reject) => {
+                    api.put('/api/v0/parkinglots')
+                        .send(parkingLot)
+                        .set('x-access-token', adminToken)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+
+            });
+        });
+
+        describe('/POST parkinglots', () => {
+            it('it should fail to POST a parking lot due to internal server error', () => {
+                parkingLot = {
+                    "name": "newName",
+                    "capacity": 1000,
+                    "reservedSpaces": 8
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglots')
+                        .send(parkingLot)
+                        .set('x-access-token', adminToken)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error:\n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+
+            });
+        });
+
+        /**
+         * This Section is ment to trigger the 500 status responses on the parkingLogs API route
+         */
 
     //     describe('hooks fixDatabase', function () {
     //         before((done) => {
@@ -250,7 +336,19 @@ function messUpDatabase(callback) {
 
 function prepareDatabase(callback) {
     deleteAllUsers( () => {
-        addUsers(callback);
+        addUsers(() => {
+            deleteAllParkingLogData(() => {
+                deleteAllParkingLotData(() => {
+                    addParkingLotData(() => {
+                        setParkingLot(() => {
+                            addParkingLogData(() => {
+                                setParkingLot(callback);
+                            })
+                        })
+                    });
+                });
+            });
+        });
     });
 }
 
@@ -279,28 +377,107 @@ function addUsers(callback) {
 }
 
 
-function fixDatabase(callback) {
-    try {
-        fs.readFile(sqlPath, 'utf8', function (err, data) {
-            try {
-                console.log(err);
-                let sqlDDL = data.toString();
-                console.log(sqlDDL);
-                connection.query("CREATE database shitdatabasetest", (err, data) => {
-                    console.log(err);
-                    console.log(data);
-                    callback(err, data);
-                });
-                console.log("fixDatabase Done");
-            }
-            catch (err) {
+function deleteAllParkingLogData(callback) {
+    let query = "DELETE FROM parkingLog";
+    connection.query(query, callback);
+    console.log("deleteAllParkingLogsData");
+}
 
-            }
-        });
-    }
-    catch (err) {
-        console.log("fixDatabase failed: ", err);
-    }
+function deleteAllParkingLotData(callback) {
+    let query = "DELETE FROM parkingLot";
+    connection.query(query, callback);
+    console.log("deleteAllParkingLotsData");
+}
+
+function addParkingLotData(callback) {
+    let asyncTasks = [];
+
+    let query1 =
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
+    asyncTasks.push(function(callback) {
+        connection.query(query1, callback);
+    });
+
+    console.log("addParkingLotData");
+    async.series(asyncTasks, function(){
+        // All tasks are done now
+        callback();
+    });
 
 }
+
+function setParkingLot(callback) {
+    console.log("setParkingLot");
+    ParkingLot.getParkingLots( (err, rows) => {
+        if (err) {
+            parkinglot = parseRowDataIntoSingleEntity(rows);
+        }
+        else {
+            parkinglot = parseRowDataIntoSingleEntity(rows);
+        }
+        console.log("setParkingLot => getParkingLots");
+        callback();
+    });
+}
+
+function addParkingLogData(callback) {
+    let asyncTasks = [];
+
+    let query1 =
+        "INSERT INTO parkingLog (currentParked, historicParkCount, parkingLot_id) VALUES (10, 100, " + parkinglot.id + ")";
+    asyncTasks.push(function(callback) {
+        connection.query(query1, callback);
+    });
+
+    console.log("addParkingLogData");
+    async.series(asyncTasks, function(){
+        // All tasks are done now
+        callback();
+    });
+
+}
+
+function setParkingLog(callback) {
+    console.log("setParkingLog");
+    ParkingLog.getParkingLogs( (err, rows) => {
+        if (err) {
+            parkinglog = parseRowDataIntoSingleEntity(rows);
+        }
+        else {
+            parkinglog = parseRowDataIntoSingleEntity(rows);
+        }
+        console.log("setParkingLog => getParkingLogs");
+        callback();
+    });
+}
+
+function parseRowDataIntoSingleEntity(rowdata) {
+    rowdata = JSON.stringify(rowdata);
+    // console.log(rowdata);
+    rowdata = JSON.parse(rowdata)[0];
+    return rowdata;
+}
+// function fixDatabase(callback) {
+//     try {
+//         fs.readFile(sqlPath, 'utf8', function (err, data) {
+//             try {
+//                 console.log(err);
+//                 let sqlDDL = data.toString();
+//                 console.log(sqlDDL);
+//                 connection.query("CREATE database shitdatabasetest", (err, data) => {
+//                     console.log(err);
+//                     console.log(data);
+//                     callback(err, data);
+//                 });
+//                 console.log("fixDatabase Done");
+//             }
+//             catch (err) {
+//
+//             }
+//         });
+//     }
+//     catch (err) {
+//         console.log("fixDatabase failed: ", err);
+//     }
+// }
 
