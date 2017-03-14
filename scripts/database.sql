@@ -1,7 +1,7 @@
-DROP SCHEMA IF EXISTS shitdatabase;
+DROP SCHEMA IF EXISTS shitdatabasetest;
 
-CREATE SCHEMA IF NOT EXISTS shitdatabase;
-use shitdatabase;
+CREATE SCHEMA IF NOT EXISTS shitdatabasetest;
+use shitdatabasetest;
 CREATE TABLE parkingLot (
   id int(11) NOT NULL AUTO_INCREMENT,
   name varchar(50) NOT NULL,
@@ -23,19 +23,19 @@ CREATE TABLE parkingLog (
   REFERENCES parkingLot(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE User (
+CREATE TABLE user (
   deviceId VARCHAR (64) NOT NULL,
   name VARCHAR (32) NOT NULL,
   admin BOOLEAN NOT NULL,
   password VARCHAR (256) NOT NULL
 ) ENGINE=InnoDB;
 
-use shitdatabase
+use shitdatabasetest
 INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES
 ('Student Organisasjonen', 100, 10),
 ('Hokus Pokus Barnehage', 70, 7);
 
-use shitdatabase;
+use shitdatabasetest;
 INSERT INTO parkingLog (currentParked, historicParkCount, logDate, parkingLot_id) VALUES
 (28, 1337, '2016-12-31 10:59:59', 1),
 (29, 1338, '2017-01-30 11:53:54', 1),

@@ -29,7 +29,7 @@ router.get("/", function(req, res) {
         }
         else {
             if (rows.length === 0) {
-                res.status(404).send({
+                res.status(204).send({
                     success: false,
                     message: 'No parking logs found'
                 });
@@ -57,7 +57,7 @@ router.get("/latest", function(req, res) {
         }
         else {
             if (rows.length === 0) {
-                res.status(404).send({
+                res.status(204).send({
                     success: false,
                     message: 'No parking log found'
                 });
@@ -86,7 +86,7 @@ router.get("/latest/:id", function(req, res) {
         }
         else {
             if (rows.length === 0) {
-                res.status(404).send({
+                res.status(204).send({
                     success: false,
                     message: 'Parking log not found'
                 });
@@ -114,7 +114,7 @@ router.get("/:id", function(req, res) {
         }
         else {
             if (rows.length === 0) {
-                res.status(404).send({
+                res.status(204).send({
                     success: false,
                     message: 'Parking log not found'
                 });
@@ -215,7 +215,7 @@ router.put("/", function(req, res) {
             }
             else {
                 if (rows.affectedRows == 0) {
-                    res.status(404).send({
+                    res.status(204).send({
                         success: false,
                         message: 'Parking log not found'
                     });
@@ -245,7 +245,7 @@ router.delete("/:id", function(req, res) {
             }
             else {
                 if (rows.affectedRows == 0) {
-                    res.status(404).send({
+                    res.status(204).send({
                         success: false,
                         message: 'Parking log not found'
                     });

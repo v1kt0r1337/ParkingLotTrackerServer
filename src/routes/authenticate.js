@@ -14,24 +14,18 @@ let env = config.util.getEnv('NODE_ENV');
 router.post('/', function(req, res) {
     // find the user
     User.getUserById(req.body.deviceId, function(err, user) {
-
-        if (err) {
-            let message = "Internal Server Error";
+        if (err || !user) {
+            let message;
             if (env === "dev" || env === "test") {
                 message = err;
             }
-            res.status(500).send({
+            message = message || "Internal Server Error";
+            return res.status(500).send({
                 success: false,
                 message: message
             });
         }
-
-        if (!user) {
-            return res.status(401).send({
-                success: false,
-                message: 'Authentication failed. Wrong password and/or deviceId.'
-            });
-        } else if (user) {
+        else if (user) {
             user = utility.parseRowDataIntoSingleEntity(user);
             // check if password matches
             // console.log("user ", user);

@@ -327,7 +327,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 404 <br />
+  * **Code:** 204 <br />
     **Content:** `{"success": false, "message": "No parking lots found"}`
     
   * **Code:** 500 <br />  
@@ -377,7 +377,7 @@ parkingLogs |
     
 * **Error Response:**
     
-    * **Code:** 404 <br />
+    * **Code:** 204 <br />
       **Content:** `{"success": false, "message": "Parking lot not found"}`
       
   * **Code:** 500 <br />  
@@ -483,7 +483,7 @@ parkingLogs |
   * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
   
-  * **Code:** 404 <br />
+  * **Code:** 204 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`
   
   * **Code:** 500 <br />  
@@ -535,7 +535,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 404 <br />
+  * **Code:** 204 <br />
     **Content:** `{"success": false, "message": "No parking logs found"}`
     
   * **Code:** 500 <br />  
@@ -585,7 +585,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 404 <br />
+  * **Code:** 204 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`
       
   * **Code:** 500 <br />  
@@ -635,7 +635,7 @@ parkingLogs |
     
 * **Error Response:**
   
-   * **Code:** 404 <br />
+   * **Code:** 204 <br />
      **Content:** `{"success": false, "message": "Parking log not found"}`
        
    * **Code:** 500 <br />  
@@ -791,7 +791,7 @@ parkingLogs |
   * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
   
-  * **Code:** 404 <br />
+  * **Code:** 204 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`
     
   * **Code:** 500 <br />  
@@ -842,7 +842,7 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 404 <br />
+  * **Code:** 204 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`  
 
   * **Code:** 500 <br />  
@@ -892,7 +892,7 @@ parkingLogs |
     
 * **Error Response:**
 
-  * **Code:** 404 <br />
+  * **Code:** 204 <br />
     **Content:** `{"success": false, "message": "Parking log not found"}`  
 
   * **Code:** 500 <br />  

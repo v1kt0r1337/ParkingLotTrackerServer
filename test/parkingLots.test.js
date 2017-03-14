@@ -78,14 +78,14 @@ describe('hooks', function() {
     });
 
     describe('/GET parkinglots', () => {
-        it('This GET test should get an empty parkingLots object', () => {
+        it('This GET test should get a 204 since no parkinglots exist', () => {
 
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/parkinglots/')
-                    .expect(404)
+                    .expect(204)
                     .expect((res) => {
-                        expect(res.status).to.equal(404);
-                        expect(res.notFound).to.be.true;
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -267,7 +267,7 @@ describe('hooks', function() {
     });
 
     describe('/PUT parkinglogs', () => {
-        it('it should not find a parkingLot to update and get a 404', () => {
+        it('it should not find a parkingLot to update and get a 204', () => {
             parkingLot = {
                 "id": 9001,
                 "name": "newName",
@@ -278,10 +278,10 @@ describe('hooks', function() {
                 api.put('/api/v0/parkinglots/')
                     .send(parkingLot)
                     .set('x-access-token', adminToken)
-                    .expect(404)
+                    .expect(204)
                     .expect((res) => {
-                        expect(res.status).to.equal(404);
-                        expect(res.notFound).to.be.true;
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -366,6 +366,9 @@ describe('hooks', function() {
                 })
         });
     });
+
+
+
 });
 
 function prepareDatabase(callback)
@@ -437,4 +440,43 @@ function deleteAllParkingLotData(callback) {
     let query = "DELETE FROM parkingLot";
     connection.query(query, callback);
     console.log("deleteAllParkingLotData");
+}
+
+function messUpDatabase(callback) {
+
+    function dropParkingLot(callback) {
+        let query = "DROP TABLE parkingLot";
+        connection.query(query, callback);
+        console.log("dropParkingLot");
+    }
+
+    function dropParkingLog(callback) {
+        let query = "DROP TABLE parkingLog";
+        connection.query(query, callback);
+        console.log("dropParkingLog");
+    }
+    dropParkingLog(dropParkingLot(callback));
+}
+
+
+function fixDatabase(callback) {
+
+    function createParkingLotTable(callback) {
+        let query = "CREATE TABLE parkingLot (id int(11) NOT NULL AUTO_INCREMENT, name varchar(50) NOT NULL, ";
+        query += "capacity int(11) NOT NULL, reservedSpaces int(11) NOT NULL,PRIMARY KEY (id)) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+        connection.query(query, callback);
+        console.log("createParkingLotTable");
+    }
+
+    function createParkingLogTable(callback) {
+        let query = "CREATE TABLE parkingLog (id int (11) NOT NULL AUTO_INCREMENT, currentParked int (11) NOT NULL,"
+        query += "historicParkCount INT (11) NOT NULL, logDate datetime NOT NULL DEFAULT NOW(), parkingLot_id int NOT NULL,";
+        query += "PRIMARY KEY (id), FOREIGN KEY fk_parkingLot(parkingLot_id) REFERENCES parkingLot(id) ) ENGINE=InnoDB;";
+            connection.query(query, callback);
+        console.log("createParkingLogTable");
+    }
+
+    createParkingLotTable(createParkingLogTable(callback));
+
 }

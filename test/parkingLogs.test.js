@@ -96,13 +96,13 @@ describe('hooks prepareDatabase', function() {
     });
 
     describe('/GET parkingLogs', () => {
-        it('This GET test should get a 404 as no parkinglogs exist', () => {
+        it('This GET test should get a 204 as no parkinglogs exist', () => {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/parkinglogs/')
-                    .expect(404)
+                    .expect(204)
                     .expect((res) => {
-                        expect(res.status).to.equal(404);
-                        expect(res.notFound).to.be.true;
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -114,6 +114,47 @@ describe('hooks prepareDatabase', function() {
 
         });
     });
+
+    describe('/GET parkingLogs/latest', () => {
+        it('This GET test should get a 204 as no parkinglogs exist', () => {
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/parkinglogs/latest')
+                    .expect(204)
+                    .expect((res) => {
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkingLog/latest: \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
+    describe('/GET parkingLogs/latest/:id', () => {
+        it('This GET test should get a 204 as no parkinglogs exist', () => {
+            return new Promise((resolve, reject) => {
+                api.get('/api/v0/parkinglogs/latest/1')
+                    .expect(204)
+                    .expect((res) => {
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
+                    })
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkingLog/latest/:id \n \n ${err.message}`))
+                        }
+                        return resolve()
+                    })
+            })
+
+        });
+    });
+
 
     describe('/POST parkinglogs', () => {
         it('it should NOT POST, lacks parkingLot_id field', () => {
@@ -178,7 +219,6 @@ describe('hooks prepareDatabase', function() {
                         return resolve()
                     })
             })
-
         });
     });
 
@@ -205,7 +245,6 @@ describe('hooks prepareDatabase', function() {
                         return resolve()
                     })
             })
-
         });
     });
 
@@ -311,7 +350,7 @@ describe('hooks prepareDatabase', function() {
     });
 
     describe('/PUT parkinglogs', () => {
-        it('it should not find a parkinglog to update and get a 404', () => {
+        it('it should not find a parkinglog to update and get a 204', () => {
             let parkingLog = {
                 "currentParked": 90,
                 "id": 99999
@@ -320,10 +359,10 @@ describe('hooks prepareDatabase', function() {
                 api.put('/api/v0/parkinglogs/')
                     .send(parkingLog)
                     .set('x-access-token', adminToken)
-                    .expect(404)
+                    .expect(204)
                     .expect((res) => {
-                        expect(res.status).to.equal(404);
-                        expect(res.notFound).to.be.true;
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -428,10 +467,10 @@ describe('hooks prepareDatabase', function() {
         it('GET :id Tests that the DELETE route actually deleted the log', () => {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/parkinglogs/' + id)
-                    .expect(404)
+                    .expect(204)
                     .expect((res) => {
-                        expect(res.status).to.equal(404);
-                        expect(res.notFound).to.be.true;
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -444,14 +483,14 @@ describe('hooks prepareDatabase', function() {
     });
 
     describe('/DELETE/:id parkinglogs', () => {
-        it('DELETE :id Tests that it returns 404 if the parkinglog to be deleted is not found', () => {
+        it('DELETE :id Tests that it returns 204 if the parkinglog to be deleted is not found', () => {
             return new Promise((resolve, reject) => {
                 api.delete('/api/v0/parkinglogs/' + id)
                     .set('x-access-token', adminToken)
-                    .expect(404)
+                    .expect(204)
                     .expect((res) => {
-                        expect(res.status).to.equal(404);
-                        expect(res.notFound).to.be.true;
+                        expect(res.status).to.equal(204);
+                        expect(res.noContent).to.be.true;
                     })
                     .end((err, res) => {
                         if (err) {
@@ -694,11 +733,9 @@ describe('hooks prepareDatabase', function() {
                     })
             });
         });
-
-
     });
-
 });
+
 /**
  * Preparing the database for testing, minimum 1 parkingLot is required to test the parkinglogs api.
  * @param callback

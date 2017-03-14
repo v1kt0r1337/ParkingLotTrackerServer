@@ -28,7 +28,7 @@ router.get("/", function(req, res) {
         }
         else {
             if (rows.length === 0) {
-                res.status(404).send({
+                res.status(204).send({
                     success: false,
                     message: 'No parking lots found'
                 });
@@ -83,7 +83,7 @@ router.get("/:id", function(req, res) {
         }
         else {
             if (rows.length === 0) {
-                res.status(404).send({
+                res.status(204).send({
                     success: false,
                     message: 'Parking lot not found'
                 });
@@ -122,7 +122,7 @@ router.put("/", function(req, res) {
                 }
                 else {
                     if (rows.affectedRows == 0) {
-                        res.status(404).send({
+                        res.status(204).send({
                             success: false,
                             message: 'Parking lot not found'
                         });
