@@ -1,9 +1,23 @@
+
 language: node_js
 node_js:
 - '7.5'
 - '7'
 - '6'
 - node
+
+sudo: required
+
+before_install:
+  - npm install -g node-gyp
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-5
+
 services:
 - mysql
 
@@ -40,6 +54,7 @@ before_install:
       deviceId VARCHAR (64) NOT NULL,
       name VARCHAR (32) NOT NULL,
       admin BOOLEAN NOT NULL,
+      salt VARCHAR (128) NOT NULL,
       password VARCHAR (256) NOT NULL
       ) ENGINE=InnoDB;'
 

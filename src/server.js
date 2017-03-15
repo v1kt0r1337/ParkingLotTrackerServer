@@ -4,18 +4,18 @@
 /* jshint node: true */
 "use strict";
 // External dependencies
-let express = require("express");
-let bodyParser = require("body-parser");
-let morgan = require("morgan");
+const express = require("express");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
 // Our files
-let parkingLots = require("./routes/parkingLots");
-let parkingLogs = require("./routes/parkingLogs");
+const parkingLots = require("./routes/parkingLots");
+const parkingLogs = require("./routes/parkingLogs");
 
-let authenticate = require("./routes/authenticate");
-let users = require("./routes/users");
+const authenticate = require("./routes/authenticate");
+const users = require("./routes/users");
 
 
-let app = express();
+const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

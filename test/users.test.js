@@ -9,20 +9,23 @@ require("./parkingLogs.test");
 require("./parkingLot.model.test.js");
 require("./parkingLog.model.test.js");
 
-let server = require('../src/server');
-let connection = require("../src/dbconnection");
-let users = require("../src/routes/users");
-// Require the dev-dependencies
-let chai = require("chai");
-let chaiHttp = require("chai-http");
-let should = chai.should();
-let expect = chai.expect;
-let assert = chai.assert;
-let supertest = require('supertest');
-// THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
-let api = supertest('http://localhost:3000');
+const server = require('../src/server');
+const connection = require("../src/dbconnection");
+const users = require("../src/routes/users");
+const User = require("../src/models/user.model");
 
-let config = require("config");
+const async = require("async");
+// Require the dev-dependencies
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const should = chai.should();
+const expect = chai.expect;
+const assert = chai.assert;
+const supertest = require('supertest');
+// THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
+const api = supertest('http://localhost:3000');
+
+const config = require("config");
 
 chai.use(chaiHttp);
 
@@ -145,7 +148,8 @@ describe('hooks prepareDatabase', function() {
                     res.body.users.should.not.be.empty;
                     expect(res.body.users[0].deviceId).to.equal(user.deviceId);
                     expect(res.body.users[0].name).to.equal(user.name);
-                    expect(res.body.users[0].password).to.equal(user.password);
+                    // password should now be encrypted
+                    expect(res.body.users[0].password).to.not.equal(user.password);
                     expect(res.body.users[0].admin).to.equal(0); //aka false.
                 })
         });
@@ -250,19 +254,20 @@ function deleteAllUsers(callback) {
 
 
 function addUsers(callback) {
-    function addAdminUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('humbug', 'humbugName', true, 'pwd')";
-        connection.query(query, callback);
-        console.log("addAdminUser");
-    }
-
-    function addNormalUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('ordinary', 'joe', false, 'pwd')";
-        connection.query(query, callback);
-        console.log("addNormalUser");
-    }
-    addNormalUser(addAdminUser(callback));
+    let asyncTasks = [];
+    asyncTasks.push(function(callback) {
+        User.addUser("humbug", "humbugName", true,"pwd", (err, row) => {
+            if (err) console.log("err ", err);
+            //else console.log(row);
+            callback();
+        });
+    });
+    asyncTasks.push(function(callback) {
+        User.addUser("ordinary", "joe", false, "pwd", callback);
+    });
+    async.series(asyncTasks, function(){
+        // All tasks are done now
+        callback();
+        console.log("all users added");
+    });
 }
-

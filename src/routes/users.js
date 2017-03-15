@@ -4,13 +4,13 @@
 /* jshint node: true */
 "use strict";
 
-let express = require('express');
-let router = express.Router();
-let User = require('../models/user.model');
-let authorize = require('./authorize');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user.model');
+const authorize = require('./authorize');
 
-let config = require("config");
-let env = config.util.getEnv('NODE_ENV');
+const config = require("config");
+const env = config.util.getEnv('NODE_ENV');
 
 router.get('/', function(req, res) {
     authorize.verify(req,res, true, function(req,res) {

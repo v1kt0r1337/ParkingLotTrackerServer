@@ -3,10 +3,11 @@
  */
 /* jshint node: true */
 "use strict";
-let db = require("../dbconnection");
-let mysql = require("mysql");
+const db = require("../dbconnection");
+const mysql = require("mysql");
+const bcrypt = require('bcrypt');
 
-let user = {
+const user = {
     /**
      * Returns all users from the database.
      */
@@ -17,16 +18,13 @@ let user = {
     /**
      * Creates new user.
      */
-    //
-    // deviceId VARCHAR (64) NOT NULL,
-    // name VARCHAR (32) NOT NULL,
-    // admin BOOLEAN NOT NULL,
-    // password VARCHAR (256) NOT NULL
-
     addUser: function(deviceId, name, admin=false, password, callback) {
-        let query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
-        let table = ["user", "deviceId", "name", "admin", "password",
-            deviceId, name, admin, password];
+        let saltRounds = 10;
+        let salt = bcrypt.genSaltSync(saltRounds);
+        let hash = bcrypt.hashSync(password, salt);
+        let query = "INSERT INTO ??(??,??,??,??,??) VALUES (?,?,?,?,?)";
+        let table = ["user", "deviceId", "name", "admin", "password", "salt",
+            deviceId, name, admin, hash, salt];
         query = mysql.format(query, table);
         db.query(query, callback);
     },

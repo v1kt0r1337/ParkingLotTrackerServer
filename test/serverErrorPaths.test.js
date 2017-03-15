@@ -13,28 +13,29 @@ require("./parkingLog.model.test.js");
 require("./user.model.test.js");
 require("./users.test.js");
 
-let server = require('../src/server');
-let connection = require("../src/dbconnection");
-let users = require("../src/routes/users");
-let ParkingLot = require("../src/models/parkingLot.model");
-let ParkingLog = require("../src/models/parkingLog.model");
+const server = require('../src/server');
+const connection = require("../src/dbconnection");
+const users = require("../src/routes/users");
+const ParkingLot = require("../src/models/parkingLot.model");
+const ParkingLog = require("../src/models/parkingLog.model");
+const User = require("../src/models/user.model");
 // Require the dev-dependencies
-let chai = require("chai");
-let chaiHttp = require("chai-http");
-let should = chai.should();
-let expect = chai.expect;
-let assert = chai.assert;
-let supertest = require('supertest');
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const should = chai.should();
+const expect = chai.expect;
+const assert = chai.assert;
+const supertest = require('supertest');
 // THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
-let api = supertest('http://localhost:3000');
+const api = supertest('http://localhost:3000');
 
-let config = require("config");
+const config = require("config");
 
-let async = require("async");
+const async = require("async");
 
-let fs = require('fs');
-let path = require('path');
-let sqlPath = path.join(__dirname, '..', 'scripts', 'database.sql');
+// const fs = require('fs');
+// const path = require('path');
+// const sqlPath = path.join(__dirname, '..', 'scripts', 'database.sql');
 
 chai.use(chaiHttp);
 
@@ -477,21 +478,24 @@ function deleteAllUsers(callback) {
 
 
 function addUsers(callback) {
-    function addAdminUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('humbug', 'humbugName', true, 'pwd')";
-        connection.query(query, callback);
-        console.log("addAdminUser");
-    }
-
-    function addNormalUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('ordinary', 'joe', false, 'pwd')";
-        connection.query(query, callback);
-        console.log("addNormalUser");
-    }
-    addNormalUser(addAdminUser(callback));
+    let asyncTasks = [];
+    asyncTasks.push(function(callback) {
+        User.addUser("humbug", "humbugName", true,"pwd", (err, row) => {
+            if (err) console.log("err ", err);
+            //else console.log(row);
+            callback();
+        });
+    });
+    asyncTasks.push(function(callback) {
+        User.addUser("ordinary", "joe", false, "pwd", callback);
+    });
+    async.series(asyncTasks, function(){
+        // All tasks are done now
+        callback();
+        console.log("all users added");
+    });
 }
+
 
 
 function deleteAllParkingLogData(callback) {

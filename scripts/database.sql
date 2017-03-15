@@ -27,7 +27,8 @@ CREATE TABLE user (
   deviceId VARCHAR (64) NOT NULL,
   name VARCHAR (32) NOT NULL,
   admin BOOLEAN NOT NULL,
-  password VARCHAR (256) NOT NULL
+  salt VARCHAR (64) NOT NULL,
+  password VARCHAR (64) NOT NULL
 ) ENGINE=InnoDB;
 
 use shitdatabasetest

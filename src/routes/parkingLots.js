@@ -4,12 +4,12 @@
 /* jshint node: true */
 "use strict";
 
-let express = require('express');
-let router = express.Router();
-let ParkingLot = require('../models/parkingLot.model');
-let authorize = require('./authorize');
-let config = require("config");
-let env = config.util.getEnv('NODE_ENV');
+const express = require('express');
+const router = express.Router();
+const ParkingLot = require('../models/parkingLot.model');
+const authorize = require('./authorize');
+const config = require("config");
+const env = config.util.getEnv('NODE_ENV');
 
 /**
  * Route to get all parking lots.

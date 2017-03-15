@@ -7,14 +7,14 @@ process.env.NODE_ENV = "test";
 require("./parkingLots.test");
 require("./parkingLogs.test");
 
-let connection = require("../src/dbconnection");
-let ParkingLot = require("../src/models/parkingLot.model");
+const connection = require("../src/dbconnection");
+const ParkingLot = require("../src/models/parkingLot.model");
 
 // Require the dev-dependencies
-let chai = require("chai");
-let should = chai.should();
-let expect = chai.expect;
-let assert = chai.assert;
+const chai = require("chai");
+const should = chai.should();
+const expect = chai.expect;
+const assert = chai.assert;
 
 
 describe('hooks', function() {

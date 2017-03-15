@@ -8,16 +8,15 @@ require("./parkingLot.model.test.js");
 require("./parkingLog.model.test.js");
 require("./users.test.js");
 
-let server = require('../src/server');
-let connection = require("../src/dbconnection");
-let User = require("../src/models/user.model");
+const connection = require("../src/dbconnection");
+const User = require("../src/models/user.model");
 // Require the dev-dependencies
-let chai = require("chai");
-let chaiHttp = require("chai-http");
-let should = chai.should();
-let expect = chai.expect;
-let config = require("config");
-let assert = chai.assert;
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const should = chai.should();
+const expect = chai.expect;
+const config = require("config");
+const assert = chai.assert;
 
 
 chai.use(chaiHttp);
