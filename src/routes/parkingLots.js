@@ -8,6 +8,8 @@ let express = require('express');
 let router = express.Router();
 let ParkingLot = require('../models/parkingLot.model');
 let authorize = require('./authorize');
+let config = require("config");
+let env = config.util.getEnv('NODE_ENV');
 
 /**
  * Route to get all parking lots.
@@ -15,9 +17,23 @@ let authorize = require('./authorize');
 router.get("/", function(req, res) {
     ParkingLot.getParkingLots(function(err, rows) {
         if (err) {
-            res.json(err);
+            let message = "Internal Server Error";
+            if (env === "dev" || env === "test") {
+                message = err;
+            }
+            res.status(500).send({
+                success: false,
+                message: message
+            });
         }
         else {
+            if (rows.length === 0) {
+                res.status(204).send({
+                    success: false,
+                    message: 'No parking lots found'
+                });
+                return;
+            }
             res.json({"parkingLots" : rows});
         }
     });
@@ -27,11 +43,25 @@ router.get("/", function(req, res) {
  * Route for creating new parking lots.
  */
 router.post("/", function(req, res) {
+    if (!req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
+        res.status(400).send({
+            success: false,
+            message: "The parking lots id in the request body is not defined"
+        });
+        return;
+    }
     authorize.verify(req,res, true, function(req,res) {
         ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
             function(err, rows) {
                 if (err) {
-                    res.json({err});
+                    let message = "Internal Server Error";
+                    if (env === "dev" || env === "test") {
+                        message = err;
+                    }
+                    res.status(500).send({
+                        success: false,
+                        message: message
+                    });
                 }
                 else {
                     res.status(201).send({
@@ -49,9 +79,23 @@ router.post("/", function(req, res) {
 router.get("/:id", function(req, res) {
     ParkingLot.getParkingLotById(req.params.id, function (err, rows) {
         if (err) {
-            res.json({err})
+            let message = "Internal Server Error";
+            if (env === "dev" || env === "test") {
+                message = err;
+            }
+            res.status(500).send({
+                success: false,
+                message: message
+            });
         }
         else {
+            if (rows.length === 0) {
+                res.status(204).send({
+                    success: false,
+                    message: 'Parking lot not found'
+                });
+                return;
+            }
             res.json({"parkingLots": rows});
         }
     });
@@ -63,17 +107,35 @@ router.get("/:id", function(req, res) {
  * All fields needs to be provided.
  */
 router.put("/", function(req, res) {
+    if (!req.body.id) {
+        res.status(400).send({
+            success: false,
+            message: "The parking lots id in the request body is not defined"
+        });
+        return;
+    }
     authorize.verify(req,res, true, function(req,res) {
-        if (!req.body.id || !req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
-            res.json({"err": "not all fields are defined"});
-            return;
-        }
+
         ParkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
             function (err, rows) {
                 if (err) {
-                    res.json({err});
+                    let message = "Internal Server Error";
+                    if (env === "dev" || env === "test") {
+                        message = err;
+                    }
+                    res.status(500).send({
+                        success: false,
+                        message: message
+                    });
                 }
                 else {
+                    if (rows.affectedRows == 0) {
+                        res.status(204).send({
+                            success: false,
+                            message: 'Parking lot not found'
+                        });
+                        return;
+                    }
                     res.json({"Message": "Parking Lot Updated"});
                 }
             });

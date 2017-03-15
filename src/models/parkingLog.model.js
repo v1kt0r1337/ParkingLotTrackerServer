@@ -43,8 +43,8 @@ let parkingLog = {
      * Creates a new parkingLog.
      */
     addParkingLog: function (id, currentParked, logDate, callback) {
-        this.newHistoricParkCount(id, currentParked, logDate, (id, currentParked, historicParkCount, logDate ) => {
-            insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
+        this.newHistoricParkCount(id, currentParked, logDate, (err, id, currentParked, historicParkCount, logDate ) => {
+            insertParkingLog(err, id, currentParked, historicParkCount, logDate, callback);
         });
     },
 
@@ -67,9 +67,12 @@ let parkingLog = {
                     currentParked = increment;
                 }
                 this.newHistoricParkCount(id, currentParked, logDate,
-                    (id, currentParked, historicParkCount, logDate) => {
-                        insertParkingLog(id, currentParked, historicParkCount, logDate, callback);
+                    (err, id, currentParked, historicParkCount, logDate) => {
+                        insertParkingLog(err, id, currentParked, historicParkCount, logDate, callback);
                     });
+            }
+            else {
+                callback(err);
             }
         })
     },
@@ -103,14 +106,15 @@ let parkingLog = {
             if (err) {
                 // This should probably be looked closer into.
                 console.log("err in function newHistoricParkCount");
-                old = utility.parseRowDataIntoSingleEntity(rows);
+                callback(err);
+                return;
             }
             else {
                 old = utility.parseRowDataIntoSingleEntity(rows);
             }
             // if old is undefined then there are no parkinglogs for this parkinglot.
             if (!old) {
-                callback(id, currentParked, currentParked, logDate);
+                callback(err, id, currentParked, currentParked, logDate);
                 return;
             }
             if (currentParked > old.currentParked) {
@@ -119,7 +123,7 @@ let parkingLog = {
                 increment = currentParked - old.currentParked;
             }
             let historicParkCount = old.historicParkCount + increment;
-            callback(id, currentParked, historicParkCount, logDate);
+            callback(err, id, currentParked, historicParkCount, logDate);
         });
     }
 };
@@ -131,7 +135,11 @@ module.exports = parkingLog;
  * Insert parkingLog. This function is called from the addParkingLog method, if called directly ensure that
  * the historicParkCount is a correct increment of the "old latest"
  */
-function insertParkingLog(id, currentParked, historicParkCount, logDate, callback) {
+function insertParkingLog(err, id, currentParked, historicParkCount, logDate, callback) {
+    if (err) {
+        callback(err);
+        return;
+    }
     let query;
     let table;
     if (typeof logDate === "undefined") {

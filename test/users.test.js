@@ -88,7 +88,6 @@ describe('hooks prepareDatabase', function() {
                     .send(normalUser)
                     .expect(401)
                     .expect((res) => {
-                        console.log(res);
                         expect(res.status).to.equal(401);
                         expect(res.unauthorized).to.be.true;
                     })
@@ -104,21 +103,7 @@ describe('hooks prepareDatabase', function() {
     });
 
 
-    describe('/POST authenticate normal user for user tests', () => {
-        it('Should authenticate a normal user', () => {
-            normalUser = {
-                deviceId: "ordinary",
-                password: "pwd"
-            };
-            return chai.request(server)
-                .post('/api/v0/auth')
-                .send(normalUser)
-                .then((res) => {
-                    res.should.have.status(200);
-                    userToken = res.body.token;
-                })
-        });
-    });
+
 
     /**
      * Tests the prepareDatabase functions have executed correctly
@@ -170,7 +155,7 @@ describe('hooks prepareDatabase', function() {
         it('it should not GET the users, User does not have admin access', () => {
             return new Promise((resolve, reject) => {
                 api.get('/api/v0/users/')
-                    .set('x-access-token', userToken)
+                    .set('x-access-token', newToken)
                     .expect(401)
                     .expect((res) => {
                         expect(res.status).to.equal(401);
@@ -178,7 +163,7 @@ describe('hooks prepareDatabase', function() {
                     })
                     .end((err, res) => {
                         if (err) {
-                            return reject(new Error(`apiHelper Error : Failed to GET /api/v0/users/ : \n \n ${err.message}`))
+                            return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
                         }
                         return resolve()
                     })
@@ -249,8 +234,6 @@ describe('hooks prepareDatabase', function() {
         });
     });
 
-
-
 });
 
 function prepareDatabase(callback) {
@@ -264,6 +247,7 @@ function deleteAllUsers(callback) {
     connection.query(query, callback);
     console.log("deleteAllUsers");
 }
+
 
 function addUsers(callback) {
     function addAdminUser(callback) {

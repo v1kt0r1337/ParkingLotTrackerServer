@@ -119,8 +119,10 @@ parkingLogs |
 * **Error Response:**
 
   * **Code:** 401 <br />  
-  **Content:** `{"success":false,"message":"Reason for failure."}`
+    **Content:** `{"success":false,"message":"Reason for failure."}`
   
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
  
 * **Sample Call:**
 
@@ -172,6 +174,8 @@ parkingLogs |
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`  
  
 * **Sample Call:**
 
@@ -221,7 +225,9 @@ parkingLogs |
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -271,7 +277,9 @@ parkingLogs |
                 OR
                `{"success":false,"message":"No token provided."}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -319,8 +327,11 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 500 <br />
-  
+  * **Code:** 204 <br />
+    **Content:** `{"success": false, "message": "No parking lots found"}`
+    
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`    
  
 * **Sample Call:**
 
@@ -365,7 +376,12 @@ parkingLogs |
     **Content:** `{"parkingLots":[{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10}]}`
     
 * **Error Response:**
-  
+    
+    * **Code:** 204 <br />
+      **Content:** `{"success": false, "message": "Parking lot not found"}`
+      
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`      
   
 * **Sample Call:**
 
@@ -411,11 +427,16 @@ parkingLogs |
     **Content:** `{"Message":"Parking Lot Added"}`
     
 * **Error Response:**
+
+  * **Code:** 400 <br /> 
+    **Content:** `{"success":false, "The parking lots id in the request body is not defined"}`
   
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -461,11 +482,19 @@ parkingLogs |
     **Content:** `{"Message":"Parking Lot Added"}`
     
 * **Error Response:**
+
+  * **Code:** 400 <br />
+    **Content:** `{"success":false, "The parking lots id in the request body is not defined"}`
   
   * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
   
- 
+  * **Code:** 204 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`
+  
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}` 
+    
 * **Sample Call:**
 
   ```javascript
@@ -512,9 +541,12 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 500 <br />
-  
- 
+  * **Code:** 204 <br />
+    **Content:** `{"success": false, "message": "No parking logs found"}`
+    
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -559,6 +591,11 @@ parkingLogs |
     
 * **Error Response:**
   
+  * **Code:** 204 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`
+      
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
   
 * **Sample Call:**
 
@@ -604,7 +641,12 @@ parkingLogs |
     
 * **Error Response:**
   
-  
+   * **Code:** 204 <br />
+     **Content:** `{"success": false, "message": "Parking log not found"}`
+       
+   * **Code:** 500 <br />  
+     **Content:** `{"success":false,"message":"Internal Server Error."}`
+        
 * **Sample Call:**
 
   ```javascript
@@ -647,11 +689,16 @@ parkingLogs |
   * **Code:** 201 <br />
     
 * **Error Response:**
+
+  * **Code:** 400 <br />
+    **Content:** `{"success":false, "message":"request body is missing parkingLot_id}`
   
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
   
- 
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+     
 * **Sample Call:**
 
   ```javascript
@@ -699,9 +746,15 @@ parkingLogs |
     
 * **Error Response:**
   
+  * **Code:** 400 <br />
+    **Content:** `{"success":false, "message":"request body is missing parkingLot_id}`
+  
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
-  
+
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+      
 * **Sample Call:**
 
   ```javascript
@@ -747,9 +800,17 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 401 <br />
-    **Content:** `{"success":false, "message":"The reason for failure"}`
+    * **Code:** 400 <br />
+      **Content:** `{"success":false, "message":"request body is missing id and/or currentParked"}`
+      
+    * **Code:** 401 <br />
+      **Content:** `{"success":false, "message":"The reason for failure"}`
   
+    * **Code:** 204 <br />
+      **Content:** `{"success": false, "message": "Parking log not found"}`
+    
+    * **Code:** 500 <br />  
+      **Content:** `{"success":false,"message":"Internal Server Error."}`    
  
 * **Sample Call:**
 
@@ -796,7 +857,12 @@ parkingLogs |
     
 * **Error Response:**
   
-  
+  * **Code:** 204 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`  
+
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+      
 * **Sample Call:**
 
   ```javascript
@@ -840,8 +906,13 @@ parkingLogs |
     **Content:** `{"parkingLogs":[{"id":1,"currentParked":28,"historicParkCount":1337,"logDate":"2016-12-31T09:59:59.000Z","parkingLot_id":1}]}`
     
 * **Error Response:**
-  
-  
+
+  * **Code:** 204 <br />
+    **Content:** `{"success": false, "message": "Parking log not found"}`  
+
+  * **Code:** 500 <br />  
+    **Content:** `{"success":false,"message":"Internal Server Error."}`
+      
 * **Sample Call:**
 
   ```javascript
@@ -864,10 +935,19 @@ $ NODE_ENV=dev nodejs src/server.js"
 
 ## Tests
 
+If adding new test files, make certain that the file serverErrorPaths.test.js is the last test file to run.
+This test file will drop the test database, so this database needs to be regenerated.
+
 To run tests
 ```sh
 $ npm test
 ```
+
+Warning, both these scripts will end up dropping the test database, the test database need to be regenerated or 
+the next tests will fail.
+To avoid this, comment out the code in serverErrorPaths.test.js. HOWEVER! Be sure the uncomment this code before next
+git commit.
+
 To run the complete test suite
 ```sh
 $ npm run coveralls
@@ -875,11 +955,11 @@ $ npm run coveralls
 
 These script uses the test database.
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=develop
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=fixErrorhandling
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=develop
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=develop
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=fixErrorhandling
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=fixErrorhandling
 
 [snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/develop/badge.svg
 [snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer
