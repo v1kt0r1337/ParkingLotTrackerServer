@@ -1,6 +1,6 @@
 {
   "name": "parkinglottrackerserver",
-  "version": "0.0.1",
+  "version": "0.7",
   "main": "server.js",
   "repository": {
     "type": "git",
