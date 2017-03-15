@@ -202,7 +202,6 @@ describe('hooks prepareDatabase', function() {
             let parkingLog = {
                 "currentParked": 700,
                 "parkingLot_id": parkinglot.id,
-                "parkingLog": "2008-01-0 11:53:54"
             };
             return new Promise((resolve, reject) => {
                 api.post('/api/v0/parkinglogs/')
@@ -534,8 +533,8 @@ describe('hooks prepareDatabase', function() {
                 i++;
 
             }
-            console.log("lastInserted " + lastInserted);
-            console.log("secondLastInserted " + secondLastInserted);
+            //console.log("lastInserted " + lastInserted);
+            //console.log("secondLastInserted " + secondLastInserted);
             async.parallel(asyncTasks, function(){
                 // All tasks are done now
                 done();
@@ -708,7 +707,7 @@ describe('hooks prepareDatabase', function() {
                     "parkingLot_id": parkinglot.id,
                     "parkingLog": "2011-01-0 11:53:54"
                 };
-                console.log(parkingLog);
+                //console.log(parkingLog);
                 return chai.request(server)
                     .post('/api/v0/parkinglogs/increment')
                     .send(parkingLog)

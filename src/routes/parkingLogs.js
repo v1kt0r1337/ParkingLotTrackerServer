@@ -134,7 +134,6 @@ router.post("/", function(req, res) {
             res.json({"err": {"code":"Missing json body: parkingLot_id"}});
             return;
         }
-        console.log(req.body.currentParked);
         ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, req.body.logDate, function(err, rows)
         {
             if (err) {
@@ -162,6 +161,7 @@ router.post("/", function(req, res) {
  */
 router.post("/increment", function(req, res) {
     authorize.verify(req,res, true, function(req,res) {
+        // Should be code 400
         if (!req.body.parkingLot_id) {
             res.status(500).send({
                 success: false,
@@ -213,14 +213,13 @@ router.put("/", function(req, res) {
                     message: message
                 });
             }
+            else if (rows.affectedRows == 0) {
+                res.status(204).send({
+                    success: false,
+                    message: 'Parking log not found'
+                });
+            }
             else {
-                if (rows.affectedRows == 0) {
-                    res.status(204).send({
-                        success: false,
-                        message: 'Parking log not found'
-                    });
-                    return;
-                }
                 res.json({"Message": "Parking Log Updated"});
             }
         });

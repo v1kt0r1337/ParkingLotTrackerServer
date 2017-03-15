@@ -111,7 +111,7 @@ describe('hooks prepareDatabase', function() {
                         .expect(500)
                         .end((err, res) => {
                             if (err) {
-                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/auth : \n \n ${err.message}`))
+                                return reject(new Error(`apiHelper Error :\n \n ${err.message}`))
                             }
                             return resolve()
                         })
@@ -181,31 +181,12 @@ describe('hooks prepareDatabase', function() {
          */
         describe('/GET parkinglots', () => {
             it('Should fail to get parkinglots due to 500', () => {
-                parkingLot = {
-                    "name": "tessst",
-                    "reservedSpaces": 10
-                };
                 return new Promise((resolve, reject) => {
                     api.get('/api/v0/parkinglots/')
                         .expect(500)
                         .end((err, res) => {
                             if (err) {
                                 return reject(new Error(`apiHelper Error : Failed to GET /api/v0/parkinglots/: \n \n ${err.message}`))
-                            }
-                            return resolve()
-                        })
-                })
-            });
-        });
-
-        describe('/GET parkinglots', () => {
-            it('Should fail to get the parkinglot due to 500', () => {
-                return new Promise((resolve, reject) => {
-                    api.get('/api/v0/parkinglots/' + 1)
-                        .expect(500)
-                        .end((err, res) => {
-                            if (err) {
-                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
                             }
                             return resolve()
                         })
@@ -278,6 +259,145 @@ describe('hooks prepareDatabase', function() {
         /**
          * This Section is ment to trigger the 500 status responses on the parkingLogs API route
          */
+        describe('/GET parkinglogs', () => {
+            it('Should fail to get parkinglogs due to internal error 500', () => {
+                return new Promise((resolve, reject) => {
+                    api.get('/api/v0/parkinglogs/')
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+            });
+        });
+
+        describe('/GET parkinglogs/:id', () => {
+            it('Should fail to get the parkinglog due to internal error 500', () => {
+                return new Promise((resolve, reject) => {
+                    api.get('/api/v0/parkinglogs/' + parkinglog.id)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
+                            }
+                            return resolve();
+                        });
+                });
+            });
+        });
+
+        describe('/GET parkinglogs/latest', () => {
+            it('Should fail to get latest parkinglog due to internal error 500', () => {
+                return new Promise((resolve, reject) => {
+                    api.get('/api/v0/parkinglogs/latest')
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        })
+                })
+            });
+        });
+
+        describe('/GET parkinglogs/:id', () => {
+            it('Should fail to get the latest parkinglog of a certain id due to internal error 500', () => {
+                return new Promise((resolve, reject) => {
+                    api.get('/api/v0/parkinglogs/latest/' + parkinglog.id)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
+                            }
+                            return resolve();
+                        });
+                });
+            });
+        });
+
+        describe('/POST parkinglogs', () => {
+            it('Should fail to POST the parkinglog due to internal error 500', () => {
+                let parkingLog = {
+                    "currentParked": 800,
+                    "parkingLot_id": parkinglot.id
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/')
+                        .send(parkingLog)
+                        .set('x-access-token', adminToken)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error: \n \n ${err.message}`))
+                            }
+                            return resolve();
+                        });
+                });
+            });
+        });
+
+
+        describe('/POST parkinglogs/increment', () => {
+            it('Should fail to POST the parkinglog increment due to internal error 500', () => {
+                let parkingLog = {
+                    "increment": 1,
+                    "parkingLot_id": parkinglot.id,
+                };
+                return new Promise((resolve, reject) => {
+                    api.post('/api/v0/parkinglogs/increment')
+                        .send(parkingLog)
+                        .set('x-access-token', adminToken)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        });
+                });
+            });
+        });
+
+        describe('/PUT parkinglogs', () => {
+            it('Should fail to PUT/UPDATE the parking log increment due to internal error 500', () => {
+                let parkingLog = {
+                    "currentParked": 10,
+                    "id": parkinglog.id,
+                };
+                return new Promise((resolve, reject) => {
+                    api.put('/api/v0/parkinglogs/')
+                        .send(parkingLog)
+                        .set('x-access-token', adminToken)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error: \n \n ${err.message}`))
+                            }
+                            return resolve()
+                        });
+                });
+            });
+        });
+
+        describe('/DELETE/:id parkinglogs', () => {
+            it('Should fail to DELETE the parkinglog due to internal error 500', () => {
+                return new Promise((resolve, reject) => {
+                    api.delete('/api/v0/parkinglogs/' + parkinglog.id)
+                        .set('x-access-token', adminToken)
+                        .expect(500)
+                        .end((err, res) => {
+                            if (err) {
+                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`))
+                            }
+                            return resolve();
+                        });
+                });
+            });
+        });
 
     //     describe('hooks fixDatabase', function () {
     //         before((done) => {
@@ -340,11 +460,8 @@ function prepareDatabase(callback) {
             deleteAllParkingLogData(() => {
                 deleteAllParkingLotData(() => {
                     addParkingLotData(() => {
-                        setParkingLot(() => {
-                            addParkingLogData(() => {
-                                setParkingLot(callback);
-                            })
-                        })
+                        setParkingLot(callback);
+
                     });
                 });
             });
@@ -416,7 +533,7 @@ function setParkingLot(callback) {
             parkinglot = parseRowDataIntoSingleEntity(rows);
         }
         console.log("setParkingLot => getParkingLots");
-        callback();
+        addParkingLogData(callback);
     });
 }
 
@@ -432,7 +549,7 @@ function addParkingLogData(callback) {
     console.log("addParkingLogData");
     async.series(asyncTasks, function(){
         // All tasks are done now
-        callback();
+        setParkingLog(callback);
     });
 
 }
@@ -449,6 +566,7 @@ function setParkingLog(callback) {
         console.log("setParkingLog => getParkingLogs");
         callback();
     });
+
 }
 
 function parseRowDataIntoSingleEntity(rowdata) {

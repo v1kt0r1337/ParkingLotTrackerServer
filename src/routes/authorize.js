@@ -23,7 +23,6 @@ let tokenVerification = {
                 } else {
                     // if everything is good, save to request for use in other routes
                     req.decoded = decoded;
-                    //console.log(req.decoded.admin);
                     if (reqAdmin && !req.decoded.admin)
                         return res.status(401).send({
                             success: false,
