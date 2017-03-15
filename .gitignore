@@ -38,3 +38,7 @@ jspm_packages
 
 # Ignore .idea IDE spesific files
 .idea
+
+# Ignore config files in the config directory, use the template to configure your own configs.
+# To start keep track again git update-index --no-assume-unchanged config/*
+config

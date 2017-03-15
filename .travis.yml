@@ -1,0 +1,60 @@
+
+language: node_js
+node_js:
+- '7.5'
+- '7'
+- '6'
+- node
+
+sudo: required
+
+before_install:
+  - npm install -g node-gyp
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-5
+
+services:
+- mysql
+
+before_script:
+- npm run snyk-auth
+
+script:
+- npm run coveralls
+
+
+before_install:
+    - mysql -e 'create database shitdatabasetest;'
+    - mysql -e 'USE shitdatabasetest;
+      CREATE TABLE parkingLot (
+      id int(11) NOT NULL AUTO_INCREMENT,
+      name varchar(50) NOT NULL,
+      capacity int(11) NOT NULL,
+      reservedSpaces int(11) NOT NULL,
+      PRIMARY KEY (id)
+      ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+      CREATE TABLE parkingLog (
+      id int (11) NOT NULL AUTO_INCREMENT,
+      currentParked int (11) NOT NULL,
+      historicParkCount INT (11) NOT NULL,
+      logDate timestamp DEFAULT NOW(),
+      parkingLot_id int NOT NULL,
+      PRIMARY KEY (id),
+      FOREIGN KEY fk_parkingLot(parkingLot_id)
+      REFERENCES parkingLot(id)
+      ) ENGINE=InnoDB;
+
+      CREATE TABLE user (
+      deviceId VARCHAR (64) NOT NULL,
+      name VARCHAR (32) NOT NULL,
+      admin BOOLEAN NOT NULL,
+      salt VARCHAR (128) NOT NULL,
+      password VARCHAR (256) NOT NULL
+      ) ENGINE=InnoDB;'
+

@@ -1,0 +1,7 @@
+{
+  "DBHost"     : "localhost",
+  "DBUser"     : "root",
+  "DBPassword" : "",
+  "Database" : "shitdatabasetest",
+  "secret" : "secret"
+}
