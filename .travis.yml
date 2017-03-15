@@ -40,6 +40,7 @@ before_install:
       deviceId VARCHAR (64) NOT NULL,
       name VARCHAR (32) NOT NULL,
       admin BOOLEAN NOT NULL,
+      salt VARCHAR (128) NOT NULL,
       password VARCHAR (256) NOT NULL
       ) ENGINE=InnoDB;'
 

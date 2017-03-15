@@ -1,10 +1,10 @@
 /**
  * Created by archheretic on 26.02.17.
  */
-let express = require('express');
-let router = express.Router();
-let config = require("config");
-let jwt = require("jsonwebtoken");
+const express = require('express');
+const router = express.Router();
+const config = require("config");
+const jwt = require("jsonwebtoken");
 // route middleware to verify a token
 
 let tokenVerification = {

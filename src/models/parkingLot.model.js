@@ -3,10 +3,10 @@
  */
 /* jshint node: true */
 "use strict";
-let db = require("../dbconnection");
-let mysql = require("mysql");
+const db = require("../dbconnection");
+const mysql = require("mysql");
 
-let parkingLot = {
+const parkingLot = {
     /**
      * Returns all parkingLot from the database.
      */

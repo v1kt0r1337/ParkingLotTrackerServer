@@ -8,15 +8,15 @@ require("./parkingLots.test");
 require("./parkingLogs.test");
 require("./parkingLot.model.test.js");
 
-let connection = require("../src/dbconnection");
-let ParkingLot = require("../src/models/parkingLot.model");
-let ParkingLog = require("../src/models/parkingLog.model");
+const connection = require("../src/dbconnection");
+const ParkingLot = require("../src/models/parkingLot.model");
+const ParkingLog = require("../src/models/parkingLog.model");
 
 // Require the dev-dependencies
-let chai = require("chai");
-let should = chai.should();
-let expect = chai.expect;
-let assert = chai.assert;
+const chai = require("chai");
+const should = chai.should();
+const expect = chai.expect;
+const assert = chai.assert;
 
 let parkinglot;
 describe('hooks', function() {

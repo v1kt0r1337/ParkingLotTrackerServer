@@ -2,14 +2,14 @@
  * Created by archheretic on 26.02.17.
  */
 
-let express = require('express');
-let router = express.Router();
-let config = require("config");
-let jwt = require("jsonwebtoken");
-let User = require('../models/user.model');
-let utility = require('../models/utility');
-
-let env = config.util.getEnv('NODE_ENV');
+const express = require('express');
+const router = express.Router();
+const config = require("config");
+const jwt = require("jsonwebtoken");
+const User = require('../models/user.model');
+const utility = require('../models/utility');
+const bcrypt = require('bcrypt');
+const env = config.util.getEnv('NODE_ENV');
 
 router.post('/', function(req, res) {
     // find the user
@@ -29,8 +29,7 @@ router.post('/', function(req, res) {
             user = utility.parseRowDataIntoSingleEntity(user);
             // check if password matches
             // console.log("req.body.password ", req.body);
-            console.log("user ", user);
-            if (user.password != req.body.password) {
+            if (!bcrypt.compareSync(req.body.password, user.password)) {
                 return res.status(401).send({
                     success: false,
                     message: 'Authentication failed. Wrong password and/or deviceId.'

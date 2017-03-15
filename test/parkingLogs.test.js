@@ -5,23 +5,24 @@ process.env.NODE_ENV = "test";
 
 // this ensures that parkingLots.test runs first.
 require("./parkingLots.test");
-let server = require('../src/server');
-let connection = require("../src/dbconnection");
-let parkingLogs = require("../src/routes/parkingLogs");
-let ParkingLot = require("../src/models/parkingLot.model");
-let ParkingLog = require("../src/models/parkingLog.model");
-let async = require("async");
+const server = require('../src/server');
+const connection = require("../src/dbconnection");
+const parkingLogs = require("../src/routes/parkingLogs");
+const ParkingLot = require("../src/models/parkingLot.model");
+const ParkingLog = require("../src/models/parkingLog.model");
+const User = require("../src/models/user.model");
+const async = require("async");
 
 // Require the dev-dependencies
-let chai = require("chai");
-let chaiHttp = require("chai-http");
-let should = chai.should();
-let expect = chai.expect;
-let supertest = require('supertest');
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const should = chai.should();
+const expect = chai.expect;
+const supertest = require('supertest');
 // THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
-let api = supertest('http://localhost:3000');
+const api = supertest('http://localhost:3000');
 
-let config = require("config");
+const config = require("config");
 
 chai.use(chaiHttp);
 
@@ -551,7 +552,7 @@ describe('hooks prepareDatabase', function() {
                         res.body.parkingLogs[0].should.have.property('parkingLot_id');
                         res.body.parkingLogs[0].should.have.property('logDate');
                         res.body.parkingLogs[0].should.have.property('id');
-                        console.log(res.body.parkingLogs[0]);
+                        //console.log(res.body.parkingLogs[0]);
                         res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
                         res.body.parkingLogs.length.should.be.equal(1);
                         //
@@ -573,7 +574,7 @@ describe('hooks prepareDatabase', function() {
                             res.body.parkingLogs[0].should.have.property('parkingLot_id');
                             res.body.parkingLogs[0].should.have.property('logDate');
                             res.body.parkingLogs[0].should.have.property('id');
-                            console.log(res.body.parkingLogs[0]);
+                            //console.log(res.body.parkingLogs[0]);
                             res.body.parkingLogs[0].currentParked.should.be.equal(lastInserted);
                             res.body.parkingLogs.length.should.be.equal(1);
                             // console.log(res.body.parkingLogs[0]);
@@ -595,7 +596,7 @@ describe('hooks prepareDatabase', function() {
                             res.body.parkingLogs[0].should.have.property('parkingLot_id');
                             res.body.parkingLogs[0].should.have.property('logDate');
                             res.body.parkingLogs[0].should.have.property('id');
-                            console.log(res.body.parkingLogs[0]);
+                            //console.log(res.body.parkingLogs[0]);
                             res.body.parkingLogs[0].currentParked.should.be.equal(secondLastInserted);
                             res.body.parkingLogs.length.should.be.equal(1);
                             //console.log(res.body.parkingLogs[0]);
@@ -710,7 +711,7 @@ describe('hooks prepareDatabase', function() {
                     .send(parkingLog)
                     .set('x-access-token', adminToken)
                     .then((res) => {
-                        console.log(parkingLog);
+                        //console.log(parkingLog);
                         res.should.have.status(201);
                         //console.log(res.body);
                         res.body.should.not.have.property('err');
@@ -725,7 +726,7 @@ describe('hooks prepareDatabase', function() {
                     .get('/api/v0/parkinglogs/')
                     .then((res) => {
                         res.should.have.status(200);
-                        console.log(res.body.parkingLogs);
+                        //console.log(res.body.parkingLogs);
                     })
             });
         });
@@ -758,20 +759,22 @@ function deleteAllUsers(callback) {
 }
 
 function addUsers(callback) {
-    function addAdminUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('humbug', 'humbugName', true, 'pwd')";
-        connection.query(query, callback);
-        console.log("addAdminUser");
-    }
-
-    function addNormalUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('ordinary', 'joe', false, 'pwd')";
-        connection.query(query, callback);
-        console.log("addNormalUser");
-    }
-    addAdminUser(addNormalUser(callback));
+    let asyncTasks = [];
+    asyncTasks.push(function(callback) {
+        User.addUser("humbug", "humbugName", true,"pwd", (err, row) => {
+            if (err) console.log("err ", err);
+            //else console.log(row);
+            callback();
+        });
+    });
+    asyncTasks.push(function(callback) {
+        User.addUser("ordinary", "joe", false, "pwd", callback);
+    });
+    async.series(asyncTasks, function(){
+        // All tasks are done now
+        callback();
+        console.log("all users added");
+    });
 }
 
 function deleteAllParkingLogData(callback) {

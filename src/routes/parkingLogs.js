@@ -4,13 +4,13 @@
 /* jshint node: true */
 "use strict";
 
-let express = require('express');
-let router = express.Router();
-let ParkingLog = require('../models/parkingLog.model');
-let authorize = require('./authorize');
+const express = require('express');
+const router = express.Router();
+const ParkingLog = require('../models/parkingLog.model');
+const authorize = require('./authorize');
 
-let config = require("config");
-let env = config.util.getEnv('NODE_ENV');
+const config = require("config");
+const env = config.util.getEnv('NODE_ENV');
 
 /**
  * Route to get all parking logs.

@@ -4,20 +4,27 @@
 
 process.env.NODE_ENV = "test";
 
-let server = require('../src/server');
-let connection = require("../src/dbconnection");
-let parkingLots = require("../src/routes/parkingLots");
+const server = require('../src/server');
+const connection = require("../src/dbconnection");
+const parkingLots = require("../src/routes/parkingLots");
+const User = require("../src/models/user.model");
+const utility = require("../src/models/utility");
+
+
 
 // Require the dev-dependencies
-let chai = require("chai");
-let chaiHttp = require("chai-http");
-let should = chai.should();
-let expect = chai.expect;
-let supertest = require('supertest');
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const should = chai.should();
+const expect = chai.expect;
+const supertest = require('supertest');
 // THIS HARDCODED ADRESS MIGHT CAUSE PROBLEMS!
-let api = supertest('http://localhost:3000');
+const api = supertest('http://localhost:3000');
 
-let config = require("config");
+const config = require("config");
+const bcrypt = require('bcrypt');
+const async = require("async");
+
 
 chai.use(chaiHttp);
 
@@ -26,6 +33,8 @@ console.log(config.util.getEnv('NODE_ENV'));
 
 let adminToken;
 let userToken;
+let admin;
+let normalUser;
 describe('hooks', function() {
     before((done) => {
         prepareDatabase(() => {
@@ -35,13 +44,7 @@ describe('hooks', function() {
 
     describe('/POST authenticate admin user for parkinglot tests', () => {
         it('Should authenticate an admin user', () => {
-            let admin = {
-                deviceId: "humbug",
-                name: "humbugName",
-                admin: true,
-                password: "pwd"
-            };
-
+            console.log(admin);
             return chai.request(server)
                 .post('/api/v0/auth')
                 .send(admin)
@@ -55,13 +58,6 @@ describe('hooks', function() {
 
     describe('/POST authenticate a normal user for parkinglot tests', () => {
         it('Should authenticate a normal user', () => {
-            let normalUser = {
-                deviceId: "ordinary",
-                name: "joe",
-                admin: false,
-                password: "pwd"
-            };
-
             //console.log("utenfor chaii request");
             return chai.request(server)
                 .post('/api/v0/auth')
@@ -390,20 +386,48 @@ function deleteAllUsers(callback) {
 }
 
 function addUsers(callback) {
-    function addAdminUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('humbug', 'humbugName', true, 'pwd')";
-        connection.query(query, callback);
-        console.log("addAdminUser");
-    }
+    let asyncTasks = [];
+    asyncTasks.push(function(callback) {
+        User.addUser("humbug", "humbugName", true,"pwd", (err, row) => {
+            if (err) console.log("err ", err);
+            //else console.log(row);
+            callback();
+        });
+    });
+    asyncTasks.push(function(callback) {
+        User.addUser("ordinary", "joe", false, "pwd", callback);
+    });
+    asyncTasks.push(function(callback) {
+        User.getUserById("humbug", (err, row) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                admin = utility.parseRowDataIntoSingleEntity(row);
+                admin.password = "pwd";
+            }
+            callback();
+        });
 
-    function addNormalUser(callback) {
-        let query =
-            "INSERT INTO user (deviceId, name, admin, password) VALUES ('ordinary', 'joe', false, 'pwd')";
-        connection.query(query, callback);
-        console.log("addNormalUser");
-    }
-    addAdminUser(addNormalUser(callback));
+    });
+    asyncTasks.push(function(callback) {
+       User.getUserById("ordinary", (err, row) => {
+           if (err) {
+               console.log(err);
+           }
+           else {
+               normalUser = utility.parseRowDataIntoSingleEntity(row);
+               normalUser.password = "pwd";
+           }
+           callback();
+       });
+    });
+    async.series(asyncTasks, function(){
+        // All tasks are done now
+        callback();
+        console.log("all users added");
+    });
+
 }
 
 // function authenticateUser() {
@@ -440,43 +464,4 @@ function deleteAllParkingLotData(callback) {
     let query = "DELETE FROM parkingLot";
     connection.query(query, callback);
     console.log("deleteAllParkingLotData");
-}
-
-function messUpDatabase(callback) {
-
-    function dropParkingLot(callback) {
-        let query = "DROP TABLE parkingLot";
-        connection.query(query, callback);
-        console.log("dropParkingLot");
-    }
-
-    function dropParkingLog(callback) {
-        let query = "DROP TABLE parkingLog";
-        connection.query(query, callback);
-        console.log("dropParkingLog");
-    }
-    dropParkingLog(dropParkingLot(callback));
-}
-
-
-function fixDatabase(callback) {
-
-    function createParkingLotTable(callback) {
-        let query = "CREATE TABLE parkingLot (id int(11) NOT NULL AUTO_INCREMENT, name varchar(50) NOT NULL, ";
-        query += "capacity int(11) NOT NULL, reservedSpaces int(11) NOT NULL,PRIMARY KEY (id)) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
-
-        connection.query(query, callback);
-        console.log("createParkingLotTable");
-    }
-
-    function createParkingLogTable(callback) {
-        let query = "CREATE TABLE parkingLog (id int (11) NOT NULL AUTO_INCREMENT, currentParked int (11) NOT NULL,"
-        query += "historicParkCount INT (11) NOT NULL, logDate datetime NOT NULL DEFAULT NOW(), parkingLot_id int NOT NULL,";
-        query += "PRIMARY KEY (id), FOREIGN KEY fk_parkingLot(parkingLot_id) REFERENCES parkingLot(id) ) ENGINE=InnoDB;";
-            connection.query(query, callback);
-        console.log("createParkingLogTable");
-    }
-
-    createParkingLotTable(createParkingLogTable(callback));
-
 }

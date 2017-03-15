@@ -3,12 +3,12 @@
  */
 /* jshint node: true */
 "use strict";
-let db = require("../dbconnection");
-let mysql = require("mysql");
-let async = require("async");
-let utility = require("./utility");
+const db = require("../dbconnection");
+const mysql = require("mysql");
+const async = require("async");
+const utility = require("./utility");
 
-let parkingLog = {
+const parkingLog = {
     /**
      * Returns all parkingLogs.
      */
