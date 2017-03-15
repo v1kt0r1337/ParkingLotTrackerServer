@@ -427,6 +427,9 @@ parkingLogs |
     **Content:** `{"Message":"Parking Lot Added"}`
     
 * **Error Response:**
+
+  * **Code:** 400 <br /> 
+    **Content:** `{"success":false, "The parking lots id in the request body is not defined"}`
   
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
@@ -479,6 +482,9 @@ parkingLogs |
     **Content:** `{"Message":"Parking Lot Added"}`
     
 * **Error Response:**
+
+  * **Code:** 400 <br />
+    **Content:** `{"success":false, "The parking lots id in the request body is not defined"}`
   
   * **Code:** 401 <br />
     **Content:** `{"success":false, "message":"The reason for failure"}`
@@ -683,6 +689,9 @@ parkingLogs |
   * **Code:** 201 <br />
     
 * **Error Response:**
+
+  * **Code:** 400 <br />
+    **Content:** `{"success":false, "message":"request body is missing parkingLot_id}`
   
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
@@ -737,6 +746,9 @@ parkingLogs |
     
 * **Error Response:**
   
+  * **Code:** 400 <br />
+    **Content:** `{"success":false, "message":"request body is missing parkingLot_id}`
+  
   * **Code:** 401 <br />
   **Content:** `{"success":false, "message":"The reason for failure"}`
 
@@ -788,14 +800,17 @@ parkingLogs |
     
 * **Error Response:**
   
-  * **Code:** 401 <br />
-    **Content:** `{"success":false, "message":"The reason for failure"}`
+    * **Code:** 400 <br />
+      **Content:** `{"success":false, "message":"request body is missing id and/or currentParked"}`
+      
+    * **Code:** 401 <br />
+      **Content:** `{"success":false, "message":"The reason for failure"}`
   
-  * **Code:** 204 <br />
-    **Content:** `{"success": false, "message": "Parking log not found"}`
+    * **Code:** 204 <br />
+      **Content:** `{"success": false, "message": "Parking log not found"}`
     
-  * **Code:** 500 <br />  
-    **Content:** `{"success":false,"message":"Internal Server Error."}`    
+    * **Code:** 500 <br />  
+      **Content:** `{"success":false,"message":"Internal Server Error."}`    
  
 * **Sample Call:**
 
@@ -920,10 +935,19 @@ $ NODE_ENV=dev nodejs src/server.js"
 
 ## Tests
 
+If adding new test files, make certain that the file serverErrorPaths.test.js is the last test file to run.
+This test file will drop the test database, so this database needs to be regenerated.
+
 To run tests
 ```sh
 $ npm test
 ```
+
+Warning, both these scripts will end up dropping the test database, the test database need to be regenerated or 
+the next tests will fail.
+To avoid this, comment out the code in serverErrorPaths.test.js. HOWEVER! Be sure the uncomment this code before next
+git commit.
+
 To run the complete test suite
 ```sh
 $ npm run coveralls
