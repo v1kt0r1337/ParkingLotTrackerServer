@@ -108,7 +108,7 @@ describe('hooks', function() {
                 api.post('/api/v0/parkinglots/')
                     .set('x-access-token', adminToken)
                     .send(parkingLot)
-                    .expect(500)
+                    .expect(400)
                     .end((err, res) => {
                         if (err) {
                             return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkinglots/: \n \n ${err.message}`))
@@ -234,7 +234,7 @@ describe('hooks', function() {
                 api.put('/api/v0/parkinglots')
                     .send(parkingLot)
                     .set('x-access-token', adminToken)
-                    .expect(500)
+                    .expect(400)
                     .end((err, res) => {
                         if (err) {
                             return reject(new Error(`apiHelper Error : Failed to PUT /api/v0/parkinglots: \n \n ${err.message}`))

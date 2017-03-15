@@ -43,6 +43,13 @@ router.get("/", function(req, res) {
  * Route for creating new parking lots.
  */
 router.post("/", function(req, res) {
+    if (!req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
+        res.status(400).send({
+            success: false,
+            message: "The parking lots id in the request body is not defined"
+        });
+        return;
+    }
     authorize.verify(req,res, true, function(req,res) {
         ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
             function(err, rows) {
@@ -100,14 +107,15 @@ router.get("/:id", function(req, res) {
  * All fields needs to be provided.
  */
 router.put("/", function(req, res) {
+    if (!req.body.id) {
+        res.status(400).send({
+            success: false,
+            message: "The parking lots id in the request body is not defined"
+        });
+        return;
+    }
     authorize.verify(req,res, true, function(req,res) {
-        if (!req.body.id) {
-            res.status(500).send({
-                success: false,
-                message: "The parking lots id in the request body is defined"
-            });
-            return;
-        }
+
         ParkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
             function (err, rows) {
                 if (err) {

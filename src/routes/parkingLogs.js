@@ -129,11 +129,14 @@ router.get("/:id", function(req, res) {
  * Route to create new parking logs.
  */
 router.post("/", function(req, res) {
+    if (!req.body.parkingLot_id) {
+        res.status(400).send({
+            success: false,
+            message: "request body is missing parkingLot_id"
+        });
+        return;
+    }
     authorize.verify(req,res, true, function(req,res) {
-        if (!req.body.parkingLot_id) {
-            res.json({"err": {"code":"Missing json body: parkingLot_id"}});
-            return;
-        }
         ParkingLog.addParkingLog(req.body.parkingLot_id, req.body.currentParked, req.body.logDate, function(err, rows)
         {
             if (err) {
@@ -160,15 +163,14 @@ router.post("/", function(req, res) {
  * Route to create new parking logs.
  */
 router.post("/increment", function(req, res) {
+    if (!req.body.parkingLot_id) {
+        res.status(400).send({
+            success: false,
+            message: "request body is missing parkingLot_id"
+        });
+        return;
+    }
     authorize.verify(req,res, true, function(req,res) {
-        // Should be code 400
-        if (!req.body.parkingLot_id) {
-            res.status(500).send({
-                success: false,
-                message: "request body is missing parkingLot_id"
-            });
-            return;
-        }
         ParkingLog.addIncrementedParkingLog(req.body.parkingLot_id, req.body.increment, req.body.logDate, function (err, rows) {
             if (err) {
                 let message = "Internal Server Error";
@@ -196,12 +198,14 @@ router.post("/increment", function(req, res) {
  * Only the currentParked value can be changed.
  */
 router.put("/", function(req, res) {
+    if (!req.body.id || !req.body.currentParked) {
+        res.status(400).send({
+            success: false,
+            message: "request body is missing id and/or currentParked"
+        });
+        return;
+    }
     authorize.verify(req,res, true, function(req,res) {
-        if (!req.body.id || !req.body.currentParked) {
-            res.json({"err": {"code": "Missing parameter: id and/or currentParked"}});
-            return;
-        }
-
         ParkingLog.updateParkingLog(req.body.id, req.body.currentParked, function (err, rows) {
             if (err) {
                 let message = "Internal Server Error";

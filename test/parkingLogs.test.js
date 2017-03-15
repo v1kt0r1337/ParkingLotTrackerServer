@@ -160,19 +160,18 @@ describe('hooks prepareDatabase', function() {
         it('it should NOT POST, lacks parkingLot_id field', () => {
             let parkingLog = {
                 "currentParked": 20,
-                "parkingLog": "2010-01-0 11:53:54"
             };
-
-            return chai.request(server)
-                .post('/api/v0/parkinglogs/')
-                .send(parkingLog)
-                .set('x-access-token', adminToken)
-                .then((res) => {
-                    //console.log(res);
-                    //console.log(parkingLog);
-                    res.should.have.status(200);
-                    res.body.should.have.property('err');
-                })
+            return new Promise((resolve, reject) => {
+                api.post('/api/v0/parkinglogs/')
+                    .send(parkingLog)
+                    .expect(400)
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : \n \n ${err.message}`));
+                        }
+                        return resolve();
+                    });
+            });
         });
     });
 
@@ -181,7 +180,6 @@ describe('hooks prepareDatabase', function() {
             let parkingLog = {
                 "currentParked": 800,
                 "parkingLot_id": parkinglot.id,
-                "parkingLog": "2009-01-0 11:53:54"
             };
             console.log(parkingLog);
             return chai.request(server)
@@ -213,11 +211,11 @@ describe('hooks prepareDatabase', function() {
                     })
                     .end((err, res) => {
                         if (err) {
-                            return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/: \n \n ${err.message}`))
+                            return reject(new Error(`apiHelper Error : \n \n ${err.message}`));
                         }
-                        return resolve()
-                    })
-            })
+                        return resolve();
+                    });
+            });
         });
     });
 
@@ -226,7 +224,6 @@ describe('hooks prepareDatabase', function() {
             let parkingLog = {
                 "currentParked": 700,
                 "parkingLot_id": parkinglot.id,
-                "parkingLog": "2008-01-0 11:53:54"
             };
             return new Promise((resolve, reject) => {
                 api.post('/api/v0/parkinglogs/')
@@ -379,15 +376,16 @@ describe('hooks prepareDatabase', function() {
             let parkingLog = {
                 "id": id
             };
-            return chai.request(server)
-                .put('/api/v0/parkinglogs/')
-                .send(parkingLog)
-                .set('x-access-token', adminToken)
-                .then((res) => {
-                    res.should.have.status(200);
-                    //console.log(res.body);
-                    res.body.should.property('err');
-                })
+            return new Promise((resolve, reject) => {
+                api.put('/api/v0/parkinglogs/')
+                    .expect(400)
+                    .end((err, res) => {
+                        if (err) {
+                            return reject(new Error(`apiHelper Error : \n \n ${err.message}`));
+                        }
+                        return resolve();
+                    });
+            });
         });
     });
 
@@ -419,11 +417,11 @@ describe('hooks prepareDatabase', function() {
                     })
                     .end((err, res) => {
                         if (err) {
-                            return reject(new Error(`apiHelper Error : Failed to DELETE /api/v0/parkingLog/: \n \n ${err.message}`))
+                            return reject(new Error(`apiHelper Error : \n \n ${err.message}`));
                         }
-                        return resolve()
-                    })
-            })
+                        return resolve();
+                    });
+            });
 
         });
     });
@@ -613,15 +611,14 @@ describe('hooks prepareDatabase', function() {
                 return new Promise((resolve, reject) => {
                     api.post('/api/v0/parkinglogs/increment')
                         .send(parkingLog)
-                        .set('x-access-token', adminToken)
-                        .expect(500)
+                        .expect(400)
                         .end((err, res) => {
                             if (err) {
-                                return reject(new Error(`apiHelper Error : Failed to POST /api/v0/parkingLog/increment: \n \n ${err.message}`))
+                                return reject(new Error(`apiHelper Error : \n \n ${err.message}`));
                             }
-                            return resolve()
-                        })
-                })
+                            return resolve();
+                        });
+                });
 
             });
         });
