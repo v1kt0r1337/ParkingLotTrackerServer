@@ -1,7 +1,6 @@
 /**
  * Created by archheretic on 03.02.17.
  */
-
 process.env.NODE_ENV = "test";
 
 const server = require('../src/server');

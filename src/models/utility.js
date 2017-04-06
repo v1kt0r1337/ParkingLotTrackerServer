@@ -1,6 +1,8 @@
 /**
  * Created by archheretic on 26.02.17.
  */
+/* jshint node: true */
+"use strict";
 const utility = {
     parseRowDataIntoSingleEntity: function(rowdata)
     {

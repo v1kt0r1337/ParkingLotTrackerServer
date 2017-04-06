@@ -36,9 +36,6 @@ router.get('/', function(req, res) {
 router.get('/:id', function(req, res) {
     //console.log(req.params.id);
     authorize.verify(req,res, false, function(req,res) {
-
-        console.log(req.decoded.deviceId);
-        console.log(req.params.id);
         if (req.decoded.deviceId != req.params.id) {
             res.status(401).send({
                 success: false,

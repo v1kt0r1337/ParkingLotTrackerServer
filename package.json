@@ -1,6 +1,6 @@
 {
   "name": "parkinglottrackerserver",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "main": "server.js",
   "repository": {
     "type": "git",
@@ -38,3 +38,4 @@
     "snyk-auth": "snyk auth $SNYK_API_KEY"
   }
 }
+0
