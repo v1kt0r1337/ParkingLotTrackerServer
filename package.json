@@ -38,4 +38,3 @@
     "snyk-auth": "snyk auth $SNYK_API_KEY"
   }
 }
-0
