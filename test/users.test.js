@@ -106,8 +106,6 @@ describe('hooks prepareDatabase', function() {
     });
 
 
-
-
     /**
      * Tests the prepareDatabase functions have executed correctly
      */

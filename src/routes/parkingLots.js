@@ -43,7 +43,7 @@ router.get("/", function(req, res) {
  * Route for creating new parking lots.
  */
 router.post("/", function(req, res) {
-    if (!req.body.name || !req.body.capacity || !req.body.reservedSpaces) {
+    if (!req.body.name || !req.body.capacity || !req.body.reservedSpaces || !req.body.lat || !req.body.lng) {
         res.status(400).send({
             success: false,
             message: "The parking lots id in the request body is not defined"
@@ -51,7 +51,7 @@ router.post("/", function(req, res) {
         return;
     }
     authorize.verify(req,res, true, function(req,res) {
-        ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces,
+        ParkingLot.addParkingLot(req.body.name, req.body.capacity, req.body.reservedSpaces, req.body.lat, req.body.lng,
             function(err, rows) {
                 if (err) {
                     let message = "Internal Server Error";
@@ -117,6 +117,7 @@ router.put("/", function(req, res) {
     authorize.verify(req,res, true, function(req,res) {
 
         ParkingLot.updateParkingLot(req.body.id, req.body.name, req.body.capacity, req.body.reservedSpaces,
+            req.body.lat, req.body.lng,
             function (err, rows) {
                 if (err) {
                     let message = "Internal Server Error";

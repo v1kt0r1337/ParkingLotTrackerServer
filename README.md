@@ -2,6 +2,7 @@
 [![Build Status][travis-image]][travis-url] 
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
+
 Server application for the ParkingLotTracker project.
 
 ## Table of Contents

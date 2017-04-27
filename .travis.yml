@@ -36,6 +36,8 @@ before_install:
       name varchar(50) NOT NULL,
       capacity int(11) NOT NULL,
       reservedSpaces int(11) NOT NULL,
+      lat DECIMAL(10, 8) NOT NULL,
+      lng DECIMAL(11, 8) NOT NULL,
       PRIMARY KEY (id)
       ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 

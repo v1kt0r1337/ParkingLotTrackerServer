@@ -36,7 +36,9 @@ describe('hooks', function() {
     let parkingLot = {
         "name": "fisk",
         "capacity": 77,
-        "reservedSpaces": 10
+        "reservedSpaces": 10,
+        "lat": 58.1644578,
+        "lng": 8.0005553
     };
     describe('hooks', function () {
         before((done) => {

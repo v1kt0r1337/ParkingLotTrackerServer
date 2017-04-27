@@ -170,7 +170,8 @@ function deleteAllParkingLotData(callback) {
 
 function addParkingLotData(callback) {
     let query =
-        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces, lat, lng) VALUES ('Student Organisasjonen', 100, 10)" +
+        "58.1644578, 8.0005553)";
     connection.query(query, callback);
     console.log("addParkingLotData");
 }

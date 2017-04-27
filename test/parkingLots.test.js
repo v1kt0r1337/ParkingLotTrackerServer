@@ -119,7 +119,9 @@ describe('hooks', function() {
             parkingLot = {
                 "name": "tessst",
                 "capacity": 100,
-                "reservedSpaces": 10
+                "reservedSpaces": 10,
+                "lat": 58.1644578,
+                "lng": 8.0005553
             };
             return chai.request(server)
                 .post('/api/v0/parkinglots/')
@@ -219,7 +221,7 @@ describe('hooks', function() {
     });
 
     describe('/PUT parkinglots', () => {
-        it('it should fail to PUT/UPDATE a parking lot due to missing field2', () => {
+        it('it should fail to PUT/UPDATE a parking lot due to missing field', () => {
             parkingLot = {
                 "name": "newName",
                 "capacity": 10,
@@ -247,7 +249,9 @@ describe('hooks', function() {
                 "id": id,
                 "name": "newName",
                 "capacity": 10,
-                "reservedSpaces": 8
+                "reservedSpaces": 8,
+                "lat": 58.1644579,
+                "lng": 8.0005554
             };
             return chai.request(server)
                 .put('/api/v0/parkinglots/')

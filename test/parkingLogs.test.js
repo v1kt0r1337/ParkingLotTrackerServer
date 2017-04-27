@@ -794,13 +794,15 @@ function addParkingLotData(callback) {
     let asyncTasks = [];
 
     let query1 =
-        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces, lat, lng) VALUES ('Student Organisasjonen', 100, 10, " +
+        "58.1644578, 8.0005553)";
     asyncTasks.push(function(callback) {
         connection.query(query1, callback);
     });
 
     let query2 =
-        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Hokus Pokus', 70, 5)" +
+        "58.1644528, 8.0005513)";
     asyncTasks.push(function(callback) {
         connection.query(query2, callback);
     });
