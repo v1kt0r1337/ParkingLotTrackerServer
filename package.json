@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=dev node src/server.js",
-    "test": "snyk test && mocha --timeout 10000",
+    "test": "mocha --timeout 10000",
     "nodejs": "NODE_ENV=dev nodejs src/server.js",
     "cover": "snyk test && istanbul cover _mocha",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
