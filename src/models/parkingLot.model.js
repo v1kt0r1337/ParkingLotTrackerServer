@@ -17,10 +17,10 @@ const parkingLot = {
     /**
      * Creates new parkingLot.
      */
-    addParkingLot: function(name, capacity, reservedSpaces, callback) {
-        let query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
-        let table = ["parkingLot", "name", "capacity", "reservedSpaces",
-            name, capacity, reservedSpaces];
+    addParkingLot: function(name, capacity, reservedSpaces, lat, lng, callback) {
+        let query = "INSERT INTO ??(??,??,??,??,??) VALUES (?,?,?,?,?)";
+        let table = ["parkingLot", "name", "capacity", "reservedSpaces", "lat", "lng",
+            name, capacity, reservedSpaces, lat, lng];
         query = mysql.format(query, table);
         db.query(query, callback);
     },
@@ -38,9 +38,9 @@ const parkingLot = {
     /**
      * Updates a parkingLot based on id.
      */
-    updateParkingLot : function(id, name, capacity, reservedSpaces, callback) {
-        let query = "UPDATE parkingLot SET name = ?, capacity = ?, reservedSpaces = ? WHERE id = ?";
-        let table = [name, capacity, reservedSpaces, id];
+    updateParkingLot : function(id, name, capacity, reservedSpaces, lat, lng, callback) {
+        let query = "UPDATE parkingLot SET name = ?, capacity = ?, reservedSpaces = ?, lat = ?, lng = ? WHERE id = ?";
+        let table = [name, capacity, reservedSpaces, lat, lng, id];
         query = mysql.format(query, table);
         db.query(query, callback);
     }

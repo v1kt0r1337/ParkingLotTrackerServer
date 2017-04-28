@@ -39,8 +39,6 @@ const async = require("async");
 
 chai.use(chaiHttp);
 
-console.log("This should be the last test file to run, all tests after this that requires the database will fail");
-
 let userToken;
 let adminToken;
 let normalUser;
@@ -48,8 +46,10 @@ let parkinglot;
 let parkinglog;
 
 describe('hooks prepareDatabase', function() {
-    before((done) => {
-        prepareDatabase(() => {
+     before((done) => {
+         console.log("== serverErrorPaths.test ==");
+         console.log("This should be the last test file to run, all tests after this that requires the database will fail");
+         prepareDatabase(() => {
             done();
         });
     });
@@ -216,7 +216,9 @@ describe('hooks prepareDatabase', function() {
                     "id": parkinglot.id,
                     "name": "newName",
                     "capacity": 1000,
-                    "reservedSpaces": 8
+                    "reservedSpaces": 8,
+                    "lat": 58.1644571,
+                    "lng": 8.0005553
                 };
                 return new Promise((resolve, reject) => {
                     api.put('/api/v0/parkinglots')
@@ -239,7 +241,9 @@ describe('hooks prepareDatabase', function() {
                 parkingLot = {
                     "name": "newName",
                     "capacity": 1000,
-                    "reservedSpaces": 8
+                    "reservedSpaces": 8,
+                    "lat": 58.1644571,
+                    "lng": 8.0005553
                 };
                 return new Promise((resolve, reject) => {
                     api.post('/api/v0/parkinglots')
@@ -514,7 +518,8 @@ function addParkingLotData(callback) {
     let asyncTasks = [];
 
     let query1 =
-        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces, lat, lng) VALUES ('Student Organisasjonen', 100, 10," +
+        " 58.1644578, 8.0005553)";
     asyncTasks.push(function(callback) {
         connection.query(query1, callback);
     });

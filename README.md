@@ -2,7 +2,10 @@
 [![Build Status][travis-image]][travis-url] 
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
+
 Server application for the ParkingLotTracker project.
+
+Version: 0.8.0
 
 ## Table of Contents
 
@@ -13,17 +16,17 @@ Server application for the ParkingLotTracker project.
     - [Authenticate user](#authenticate-user)
     - [GET all users](#get-all-users)
     - [GET a user](#get-a-user)
-    - [POST/Create new user](#post/create-new-user)
+    - [POST new user](#post-new-user)
     - [GET all parkinglots](#get-all-parkinglots)
     - [GET a parkinglot](#get-a-parkinglot)
-    - [POST/Create new parkinglot](#post/create-new-parkinglot)
-    - [PUT/Update parkinglot](#put/update-parkinglot)
+    - [POST new parkinglot](#post-new-parkinglot)
+    - [PUT parkinglot](#put-parkinglot)
     - [GET all parkinglogs](#get-all-parkinglogs)
     - [GET a parkinglog](#get-a-parkinglog)
     - [DELETE a parkinglog](#delete-a-parkinglog)
-    - [POST/Create new parkinglog](#post/create-new-parkinglog)
+    - [POST new parkinglog](#post-new-parkinglog)
     - [Increment parkinglog](#increment-parkinglog)
-    - [PUT/Update parkinglog](#put/update-parkinglog)
+    - [PUT parkinglog](#put-parkinglog)
     - [GET latest registered parkinglog](#get-latest-registered-parkinglog)
     - [GET a parkinglots latest registered parkinglog](#get-a-parkinglots-latest-registered-parkinglog)
 - [Troubleshoot](#troubleshoot)
@@ -38,9 +41,9 @@ $ npm install
 The database script is located at [scripts/database.sql](scripts/database.sql).
 
 To change the database settings go to [config](config).
- - [config/default](config/default) is the production database.
- - [config/dev](config/dev) is the development database.
- - [config/test](config/test) is for the test database.
+ - [config/default.json](config/default.json) is the production database.
+ - [config/dev.json](config/dev) is the development database.
+ - [config/test.json](config/test) is for the test database.
 
 To enable additional settings modify [src/dbconnection.js](src/dbconnection.js).
 
@@ -49,11 +52,11 @@ To find out which options that are available look at:
 - https://github.com/mysqljs/mysql#pool-options
 
 ## How to run
-To start on systems that uses node (Arch Linux)
+To start on systems that uses node
 ```sh
 $ npm start
 ```
-To start on systems that uses nodejs (Ubuntu)
+To start on systems that uses nodejs
 ```sh
 $ npm run nodejs
 ```
@@ -241,7 +244,7 @@ parkingLogs |
     });
   ```
 
-### POST/Create new user
+### POST new user
 
   Creates a new user
 
@@ -322,8 +325,8 @@ parkingLogs |
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{"parkingLots":[{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10}
-                                 ,{"id":2,"name":"Hokus Pokus Barnehage","capacity":70,"reservedSpaces":7}]}`
+    **Content:** `{"parkingLots":[{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10,"lat":58.1634301,"lng":8.0063132}
+                                 ,{"id":2,"name":"Hokus Pokus Barnehage","capacity":70,"reservedSpaces":7,"lat":58.1644578,"lng":8.0005553}]}`
     
 * **Error Response:**
   
@@ -373,7 +376,7 @@ parkingLogs |
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{"parkingLots":[{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10}]}`
+    **Content:** `{"parkingLots":[{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10,"lat":58.1634301,"lng":8.0063132}]}`
     
 * **Error Response:**
     
@@ -396,7 +399,7 @@ parkingLogs |
     });
   ```
 
-### POST/Create new parkinglot
+### POST new parkinglot
 
   Creates a new parkinglots
 
@@ -419,7 +422,7 @@ parkingLogs |
 
 * **Data Params**
 
-  `{"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10}`
+  `{"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10,"lat":58.1634301,"lng":8.0063132}`
 
 * **Success Response:**
 
@@ -444,14 +447,14 @@ parkingLogs |
       url: "/api/v0/parkinglots",
       dataType: "json",
       type : "POST",
-      Data: '{"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10}',
+      Data: '{"name":"Student Organisasjonen","capacity":100,"reservedSpaces":10,"lat":58.1634301,"lng":8.0063132}',
       success : function(r) {
         console.log(r);
       }
     });
   ```
 
-### PUT/Update parkinglot
+### PUT parkinglot
 
   Updates an existing parkinglot
 
@@ -474,12 +477,12 @@ parkingLogs |
 
 * **Data Params**
 
-  `{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":20}`
+  `{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":20,"lat":58.1634301,"lng":9.0063132}`
 
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{"Message":"Parking Lot Added"}`
+    **Content:** `{"Message":"Parking Lot Updated"}`
     
 * **Error Response:**
 
@@ -502,7 +505,7 @@ parkingLogs |
       url: "/api/v0/parkinglots",
       dataType: "json",
       type : "PUT",
-      Data: '{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":20}',
+      Data: '{"id":1,"name":"Student Organisasjonen","capacity":100,"reservedSpaces":20,"lat":58.1634301,"lng":9.0063132}',
       success : function(r) {
         console.log(r);
       }
@@ -660,7 +663,7 @@ parkingLogs |
     });
   ```
 
-### POST/Create new parkinglog
+### POST new parkinglog
 
   Creates a new parkinglog
 
@@ -769,7 +772,7 @@ parkingLogs |
     });
   ```
 
-### PUT/Update parkinglog
+### PUT parkinglog
 
   Updates an existing parkinglog
 
@@ -955,11 +958,11 @@ $ npm run coveralls
 
 These script uses the test database.
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=release-0.7
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=release-0.8
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=release-0.7
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=release-0.7
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=release-0.8
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=release-0.8
 
 [snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/badge.svg
 [snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer

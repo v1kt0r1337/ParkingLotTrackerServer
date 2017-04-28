@@ -19,8 +19,9 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 let parkinglot;
-describe('hooks', function() {
+describe('hooks parkingLog.model.test', function() {
     before((done) => {
+        console.log("== parkingLog.model.test ==");
         prepareDatabase(() => {
             done();
         });
@@ -36,7 +37,7 @@ describe('hooks', function() {
                 else {
                     data = parseRowData(rows);
                 }
-                //console.log("getParkingLots rows: " + data);
+                console.log("getParkingLots rows: " + data);
                 data.should.be.not.empty;
                 secondRow = parseRowData(data);
                 parkingLot = JSON.parse(data)[0];
@@ -102,6 +103,9 @@ describe('hooks', function() {
                 firstRow = parseRowData(data);
                 firstRow = JSON.parse(data)[0];
                 assert.notEqual(firstRow, undefined);
+                console.log(firstRow.parkingLot_id);
+                console.log(parkingLog.parkingLot_id);
+
                 firstRow.parkingLot_id.should.be.equal(parkingLog.parkingLot_id);
                 expect(firstRow.currentParked).to.equal(parkingLog.currentParked);
                 secondRow = JSON.parse(data)[2];
@@ -170,7 +174,8 @@ function deleteAllParkingLotData(callback) {
 
 function addParkingLotData(callback) {
     let query =
-        "INSERT INTO parkingLot (name, capacity, reservedSpaces) VALUES ('Student Organisasjonen', 100, 10)";
+        "INSERT INTO parkingLot (name, capacity, reservedSpaces, lat, lng) VALUES ('Student Organisasjonen', 100, 10, "
+        + "58.1644578, 8.0005553)";
     connection.query(query, callback);
     console.log("addParkingLotData");
 }
