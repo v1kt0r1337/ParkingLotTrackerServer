@@ -34,6 +34,7 @@ let adminToken;
 let userToken;
 describe('hooks prepareDatabase', function() {
     before((done) => {
+        console.log("== users.test ==");
         prepareDatabase(() => {
             done();
         });

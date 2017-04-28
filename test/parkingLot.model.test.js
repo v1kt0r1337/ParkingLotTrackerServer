@@ -16,9 +16,9 @@ const should = chai.should();
 const expect = chai.expect;
 const assert = chai.assert;
 
-
-describe('hooks', function() {
+describe('hooks parkingLot.model.test', function() {
     before((done) => {
+        console.log("== parkingLot.model.test ==");
         prepareDatabase(() => {
             done();
         });
@@ -42,7 +42,7 @@ describe('hooks', function() {
     };
     describe('hooks', function () {
         before((done) => {
-            ParkingLot.addParkingLot(parkingLot.name, parkingLot.capacity, parkingLot.reservedSpaces, (err) => {
+            ParkingLot.addParkingLot(parkingLot.name, parkingLot.capacity, parkingLot.reservedSpaces, parkingLot.lat, parkingLot.lng, (err) => {
                 done();
             })
         });
@@ -94,7 +94,7 @@ describe('hooks', function() {
 
         describe('hooks', function () {
             before((done) => {
-                    ParkingLot.updateParkingLot(parkingLot.id, "lilleputt", 5, 1, (err) => {
+                    ParkingLot.updateParkingLot(parkingLot.id, "lilleputt", 5, 1, 58.1644588, 8.0001553, (err) => {
                         done();
                     })
             });

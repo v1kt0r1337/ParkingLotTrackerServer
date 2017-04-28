@@ -36,6 +36,7 @@ let admin;
 let normalUser;
 describe('hooks', function() {
     before((done) => {
+        console.log("== parkingLots.test ==");
         prepareDatabase(() => {
             done();
         });
@@ -139,7 +140,9 @@ describe('hooks', function() {
             parkingLot = {
                 "name": "tessst2",
                 "capacity": 100,
-                "reservedSpaces": 10
+                "reservedSpaces": 10,
+                "lat": 58.1644578,
+                "lng": 8.0005553
             };
             return new Promise((resolve, reject) => {
                 api.post('/api/v0/parkinglots/')
@@ -165,7 +168,9 @@ describe('hooks', function() {
             parkingLot = {
                 "name": "tessst2",
                 "capacity": 100,
-                "reservedSpaces": 10
+                "reservedSpaces": 10,
+                "lat": 58.1644578,
+                "lng": 8.0005553
             };
             return new Promise((resolve, reject) => {
             api.post('/api/v0/parkinglots/')
@@ -300,7 +305,9 @@ describe('hooks', function() {
                 "id": id,
                 "name": "crackadoodle",
                 "capacity": 10,
-                "reservedSpaces": 8
+                "reservedSpaces": 8,
+                "lat": 58.1644571,
+                "lng": 8.0005553
             };
             return new Promise((resolve, reject) => {
                 api.put('/api/v0/parkinglots/')
@@ -328,7 +335,9 @@ describe('hooks', function() {
                 "id": id,
                 "name": "hackadoodle",
                 "capacity": 10,
-                "reservedSpaces": 8
+                "reservedSpaces": 8,
+                "lat": 58.1644571,
+                "lng": 8.0005553
             };
             return new Promise((resolve, reject) => {
                 api.put('/api/v0/parkinglots/')

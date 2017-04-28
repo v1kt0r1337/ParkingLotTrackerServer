@@ -18,11 +18,11 @@ const expect = chai.expect;
 const config = require("config");
 const assert = chai.assert;
 
-
 chai.use(chaiHttp);
 
 describe('hooks prepareDatabase', function() {
     before((done) => {
+        console.log("== user.model.test ==");
         prepareDatabase(() => {
             done();
         });
