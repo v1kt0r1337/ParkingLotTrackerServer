@@ -1,6 +1,6 @@
 {
   "name": "parkinglottrackerserver",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "main": "server.js",
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
     "start": "NODE_ENV=dev node src/server.js",
     "test": "mocha --timeout 10000",
     "nodejs": "NODE_ENV=dev nodejs src/server.js",
-    "cover": "snyk test && istanbul cover _mocha",
+    "cover": "istanbul cover _mocha",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "snyk-auth": "snyk auth $SNYK_API_KEY"
   }

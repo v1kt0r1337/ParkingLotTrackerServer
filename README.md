@@ -1,11 +1,16 @@
 # ParkingLotTrackerServer
+[![Github Version][version-image]][version-url]
 [![Build Status][travis-image]][travis-url] 
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 
 Server application for the ParkingLotTracker project.
 
-Version: 0.8.0
+### Related projects
+Raspberry Pi Parking Lot Tracker: https://github.com/Archheretic/ParkingLotTracker
+
+Mobile app: https://github.com/Archheretic/ParkingLotTrackerMobileApp
+
 
 ## Table of Contents
 
@@ -958,11 +963,14 @@ $ npm run coveralls
 
 These script uses the test database.
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=release-0.8
+[version-image]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer.svg
+[version-url]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer
+
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=release-0.8.1
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=release-0.8
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=release-0.8
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=release-0.8.1
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=release-0.8.1
 
 [snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/badge.svg
 [snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer
