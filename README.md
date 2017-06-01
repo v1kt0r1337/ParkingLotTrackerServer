@@ -1,4 +1,5 @@
 # ParkingLotTrackerServer
+[![Github Version][version-image]][version-url]
 [![Build Status][travis-image]][travis-url] 
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
@@ -957,6 +958,9 @@ $ npm run coveralls
 ```
 
 These script uses the test database.
+
+[version-image]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer.svg
+[version-url]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer
 
 [travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=release-0.8
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
