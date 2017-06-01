@@ -966,11 +966,11 @@ These script uses the test database.
 [version-image]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer.svg
 [version-url]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer
 
-[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=release-0.8.1
+[travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=hotfix-0.8.1
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
 
-[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=release-0.8.1
-[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=release-0.8.1
+[coveralls-image]: https://coveralls.io/repos/github/Archheretic/ParkingLotTrackerServer/badge.svg?branch=hotfix-0.8.1
+[coveralls-url]: https://coveralls.io/github/Archheretic/ParkingLotTrackerServer?branch=hotfix-0.8.1
 
 [snyk-image]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer/badge.svg
 [snyk-url]: https://snyk.io/test/github/Archheretic/ParkingLotTrackerServer
