@@ -36,6 +36,10 @@ Mobile app: https://github.com/Archheretic/ParkingLotTrackerMobileApp
     - [GET a parkinglots latest registered parkinglog](#get-a-parkinglots-latest-registered-parkinglog)
 - [Troubleshoot](#troubleshoot)
 - [Tests](#tests)
+- [Contributing](#contributing)
+- [Versioning](#versioning)
+- [License](#license)
+
 
 ## Installation
 
@@ -962,6 +966,31 @@ $ npm run coveralls
 ```
 
 These script uses the test database.
+
+## Contributing
+ 
+This project welcomes contributions from the community. Contributions are
+accepted using GitHub pull requests. If you're not familiar with making
+GitHub pull requests, please refer to the
+[GitHub documentation "Creating a pull request"](https://help.github.com/articles/creating-a-pull-request/).
+ 
+For a good pull request, we ask you provide the following:
+ 
+1. Try to include a clear description of your pull request in the description.
+   It should include the basic "what" and "why"s for the request.
+2. The tests should pass as best as you can. See the [Running tests](#running-tests)
+   section on hwo to run the different tests. GitHub will automatically run
+   the tests as well (soon to be implemented), to act as a safety net.
+3. The pull request should include tests for the change. A new feature should
+   have tests for the new feature and bug fixes should include a test that fails
+   without the corresponding code change and passes after they are applied.
+4. If the pull request is a new feature, please be sure to include all
+   appropriate documentation additions in the `Readme.md` file as well.
+ 
+## Versioning
+ 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/Archheretic/ParkingLotTrackerMobileApp/tags).
+
 
 [version-image]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer.svg
 [version-url]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer
