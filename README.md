@@ -1,10 +1,11 @@
 # ParkingLotTrackerServer
-[![Github Version][version-image]][version-url]
 [![Build Status][travis-image]][travis-url] 
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 
 Server application for the ParkingLotTracker project.
+
+v0.8.1
 
 ### Related projects
 Raspberry Pi Parking Lot Tracker: https://github.com/Archheretic/ParkingLotTracker
@@ -990,10 +991,6 @@ For a good pull request, we ask you provide the following:
 ## Versioning
  
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/Archheretic/ParkingLotTrackerMobileApp/tags).
-
-
-[version-image]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer.svg
-[version-url]: https://badge.fury.io/gh/Archheretic%2FParkingLotTrackerServer
 
 [travis-image]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer.svg?branch=hotfix-0.8.1
 [travis-url]: https://travis-ci.org/Archheretic/ParkingLotTrackerServer
